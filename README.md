@@ -523,11 +523,8 @@ import space.Meters
 ## How to use Terra interactively
 To use Terra interactively, run mvn scala:console in the terra directory:
 
-git clone https://github.com/....../terra
+git clone https://github.com/hunterpayne/terra.git terra/
 cd terra
 mvn scala:console
 
 scala> import org.terra.standard._
-
-
-
