@@ -39,7 +39,7 @@ package object double extends TypeScope[DoubleTuple] {
     override def getClassTagTL: ClassTag[TL] =
       DoubleTag.asInstanceOf[ClassTag[TL]]
 
-    object DoubleConverters extends Converters {
+    object DoubleConverters extends Converters[DoubleTuple] {
       class IdConverter[A, B] extends HasConverter[A, B] {
         override def conv(in: A): B = in.asInstanceOf[B]
       }

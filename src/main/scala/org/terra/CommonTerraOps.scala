@@ -36,7 +36,7 @@ package object common extends TypeScope[CommonTuple] {
 
     val converters = CommonConverters
 
-    object CommonConverters extends Converters {
+    object CommonConverters extends Converters[CommonTuple] {
 
       implicit val doubleConverter = new HasConverter[Double, Long] {
         override def conv(in: Double): Long = scala.math.round(in)
@@ -109,7 +109,7 @@ package object common extends TypeScope[CommonTuple] {
         override def conv(in: Long): TT = in
       }
       implicit val ltcConverter = new HasConverter[Long, TC] {
-        override def conv(in: Long): TC = BigDecimal(in.toDouble)
+        override def conv(in: Long): TC = BigDecimal(in)
       }
       implicit val bdtcConverter = new HasConverter[BigDecimal, TC] {
         override def conv(in: BigDecimal): TC = in

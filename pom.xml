@@ -16,7 +16,8 @@
 
   <properties>
     <!-- Resource identity sequence. -->
-    <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+    <!--    <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format> -->
+    <maven.build.timestamp.format></maven.build.timestamp.format>
     
     <!-- Streaming release version. -->
     <release.epoch>1.0.0</release.epoch>
@@ -75,7 +76,6 @@
       <scope>provided</scope>
       <optional>${notavailable.scalanat}</optional>
     </dependency>
-    -->
     <dependency>
       <groupId>org.scala-js</groupId>
       <artifactId>scalajs-library_${version.scala.epoch}</artifactId>
@@ -83,12 +83,14 @@
       <scope>provided</scope>
       <optional>${notavailable.scalajs}</optional>
     </dependency>
+    -->
     <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_${version.scalatest.scala.epoch}</artifactId>
       <version>${version.scalatest}</version>
       <scope>test</scope>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatestjs_${version.scalajs.library}</artifactId>
@@ -96,6 +98,7 @@
       <scope>test</scope>
       <optional>${notavailable.scalajs}</optional>
     </dependency>
+    -->
     <dependency>
       <groupId>org.scalacheck</groupId>
       <artifactId>scalacheck_${version.scala.epoch}</artifactId>

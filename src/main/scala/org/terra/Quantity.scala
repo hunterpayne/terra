@@ -363,9 +363,6 @@ abstract class Quantity[A <: Quantity[A, T, C], T, C <: TypeContext](
    * @param f Double => Double function
    * @return
    */
-  def map(f: T ⇒ T): A = {
-    //val t: T = f(value)
-    unit(f(value))
-  }
+  def map(f: T ⇒ T): A = unit(f(value))
 }
 

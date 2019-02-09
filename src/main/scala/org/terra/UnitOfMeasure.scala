@@ -124,12 +124,13 @@ trait UnitConverter[T, C <: TypeContext] { uom: UnitOfMeasure[_, T, C] ⇒
    */
   protected def converterTo(implicit ops: TerraOps[C]): T ⇒ T = {
     implicit val ensureT: HasEnsureType[T] = makeEnsureType
+    implicit val ensureCT: HasEnsureType[C#T] = ops.converters.ensureT
     implicit val otherEnsureT = ops.converters.ensureT
     implicit val cTag: ClassTag[C#T] = ops.getClassTagT
     implicit val tag: ClassTag[T] = getTag
     value ⇒ {
       ops.ensureType[T](ops.div[C#T](
-        ops.ensureType[C#T](value), 
+        ops.ensureType[C#T](value),
         convFactor))
     }
   }
@@ -139,6 +140,7 @@ trait UnitConverter[T, C <: TypeContext] { uom: UnitOfMeasure[_, T, C] ⇒
    * @return
    */
   protected def converterFrom(implicit ops: TerraOps[C]): T ⇒ T = {
+    implicit val ensureCT: HasEnsureType[C#T] = ops.converters.ensureT
     implicit val ensureT: HasEnsureType[T] = makeEnsureType
     implicit val otherEnsureT = ops.converters.ensureT
     implicit val tag: ClassTag[T] = getTag
