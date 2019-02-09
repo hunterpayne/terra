@@ -13,7 +13,7 @@ trait MassSymbols[Tuple <: TypeContext] {
 
   implicit val ops: TerraOps[Tuple]
 
-  type AreaDensity = AreaDensityOps[Tuple]
+  type AreaDensity = AreaDensityLike[Tuple]
   lazy val KilogramsPerSquareMeter =
     ops.areaDensityOps.KilogramsPerSquareMeter
   lazy val KilogramsPerHectare = ops.areaDensityOps.KilogramsPerHectare
