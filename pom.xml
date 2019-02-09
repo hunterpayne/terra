@@ -22,7 +22,8 @@
     <!-- Streaming release version. -->
     <release.epoch>1.0.0</release.epoch>
     <release.stamp>${maven.build.timestamp}</release.stamp>
-    <revision>${release.epoch}.${release.stamp}</revision>
+    <!--    <revision>${release.epoch}.${release.stamp}</revision> -->
+    <revision>${release.epoch}</revision>
 
     <!-- Must override in each cross-version module. -->
     <version.scala.epoch>2.11</version.scala.epoch>
