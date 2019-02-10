@@ -74,10 +74,12 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
       def minus(x: T, y: T) = x - y
       def times(x: T, y: T) = x * y
       def negate(x: T) = -x
-      def toInt(x: T) = x.toInt()
-      def toLong(x: T) = x.toLong()
-      def toFloat(x: T) = x.toFloat()
-      def compare(x: T, y: T) = if (x == y) 0 else if (x.toDouble() > y.toDouble()) 1 else -1
+      def toInt(x: T) = toDouble(x).toInt
+      def toLong(x: T) = toDouble(x).toLong
+      def toFloat(x: T) = toDouble(x).toFloat
+      def compare(x: T, y: T) = 
+        if (toDouble(x) == toDouble(y)) 0 
+        else if (toDouble(x) > toDouble(y)) 1 else -1
       def parseString(str: String): Option[T] = Some(str.asInstanceOf[T])
     }
 

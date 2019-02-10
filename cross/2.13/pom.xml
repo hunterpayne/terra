@@ -5,13 +5,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.kletz</groupId>
+    <groupId>org.terra</groupId>
     <artifactId>terra</artifactId>
     <version>1.0-SNAPSHOT</version>
     <relativePath>../..</relativePath>
   </parent>
   
-  <groupId>org.kletz</groupId>
+  <groupId>org.terra</groupId>
   <artifactId>terra_2.13</artifactId>
   <version>${revision}</version>
   <packaging>jar</packaging>
@@ -19,11 +19,9 @@
   <description>Produce cross-scala version build for Scala 2.13.</description>
   
   <properties>
-    <version.scala.epoch>2.13.0-M3</version.scala.epoch>
-    <version.scala.release>2.13.0-M3</version.scala.release>
-    <version.scalatest.scala.epoch>2.13.0-M2</version.scalatest.scala.epoch>
-    <version.scalajstest.scala.epoch>2.13.0-M4</version.scalajstest.scala.epoch>
-    <version.scalamacro.scala.epoch>2.13.0-M3</version.scalamacro.scala.epoch>
-    <notavailable.scalanat>true</notavailable.scalanat>
+    <version.scala.simple.epoch>2.13</version.scala.simple.epoch>
+    <version.scala.epoch>2.13.0-M5</version.scala.epoch>
+    <version.scala.release>2.13.0-M5</version.scala.release>
+    <version.scalajs.library>sjs${version.scalajs.epoch}_2.13.0-M4</version.scalajs.library>
   </properties>
 </project>
