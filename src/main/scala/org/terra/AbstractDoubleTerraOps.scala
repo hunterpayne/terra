@@ -103,7 +103,9 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
     with VolumeOps[C]
     with TemperatureOps[C]
     with ThermalCapacityOps[C]
-    with MoneyOps[C] {
+    with MoneyOps[C] 
+    with EmployeeOps[C]
+    with LaborOps[C] {
 
   val doubleNumeric: Numeric[Double] = n
   val longNumeric: Numeric[Long] = nl
@@ -257,16 +259,21 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
   val thermalCapacityOps: ThermalCapacityOps[C] = this
 
   val moneyOps: MoneyOps[C] = this
+  val employeeOps: EmployeeOps[C] = this
+  val laborOps: LaborOps[C] = this
 
   def div[T](dividend: T, divisor: T)(
     implicit e: HasEnsureType[T], tag: ClassTag[T]): T =
     dividend match {
-      case b: Byte => ensureType[T](b / divisor.asInstanceOf[Byte])
-      case s: Short => ensureType[T](s / divisor.asInstanceOf[Short])
-      case i: Int => ensureType[T](i / divisor.asInstanceOf[Int])
+      case b: Byte => 
+        ensureType[T](b.toDouble / divisor.asInstanceOf[Byte].toDouble)
+      case s: Short => 
+        ensureType[T](s.toDouble / divisor.asInstanceOf[Short].toDouble)
+      case i: Int => 
+        ensureType[T](i.toDouble / divisor.asInstanceOf[Int].toDouble)
       case l: Long => {
         implicit val num: Numeric[T] = nt[T]
-        ensureType[T](l / num.toLong(divisor))
+        ensureType[T](l.toDouble / num.toDouble(divisor))
       }
       case f: Float => ensureType[T](f / divisor.asInstanceOf[Float])
       case d: Double => ensureType[T](d / divisor.asInstanceOf[Double])

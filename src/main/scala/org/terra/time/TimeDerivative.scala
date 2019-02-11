@@ -68,13 +68,15 @@ trait TimeIntegral[A <: Quantity[A, TD, C] with TimeDerivative[_, TD, TI, C], TI
 
   implicit val tttdConverter: HasConverter[C#TT, TD] = 
     terraOps.converters.tttConverter2.asInstanceOf[HasConverter[C#TT, TD]]
-  implicit val tdttConverter: HasConverter[TD, C#TT] =
-    terraOps.converters.tttConverter.asInstanceOf[HasConverter[TD, C#TT]]
+  //implicit val tdtConverter: HasConverter[TD, C#TT] =
+    //terraOps.converters.tttConverter.asInstanceOf[HasConverter[TD, C#TT]]
   implicit val ttdConverter: HasConverter[C#T, TD] =
     new HasConverter[C#T, TD] {
       // use a casted identity function
       def conv(in: C#T): TD = in.asInstanceOf[TD]
     }
+  def ensureTD: HasEnsureType[TD] =
+    terraOps.converters.ensureT.asInstanceOf[HasEnsureType[TD]]
 
   /**
     * Returns the Time Derivative which represents a change of the underlying quantity equal to this
@@ -84,13 +86,9 @@ trait TimeIntegral[A <: Quantity[A, TD, C] with TimeDerivative[_, TD, TI, C], TI
     * @return
     */
   def /(that: Time)(implicit ops: TerraOps[C]): A = {
-
-    // this very opinioniated line of code says that all derivative types
-    // are always C#T's and never any other kind of type
-    implicit val ensureTD: HasEnsureType[TD] =
-      terraOps.converters.ensureT.asInstanceOf[HasEnsureType[TD]]
-    val amtTime: C#TT = this.time / that
-    timeDerived * ops.ensureType[TD](ops.gconvTT[TD](amtTime))
+    implicit val ensureTDVal: HasEnsureType[TD] = ensureTD
+    val amtTime: C#T = this.time / that
+    timeDerived * ops.ensureType[TD](amtTime)    ///ops.ensureType[TD](ops.gconvTT[TD](amtTime))
   }
   def per(that: Time)(
     implicit ops: TerraOps[C], e: HasConverter[C#TT, TD]): A = /(that)
@@ -102,9 +100,8 @@ trait TimeIntegral[A <: Quantity[A, TD, C] with TimeDerivative[_, TD, TI, C], TI
     * @return
     */
   def /(that: A)(implicit ops: TerraOps[C]): Time = {
-    val ratio: TD = timeDerived / that
-    val tt: C#TT = ops.gconvTotal[TD, C#TT](ratio)
-    that.time * tt
+    val ratio: C#T = timeDerived / that
+    that.time * ops.convT(ratio)
   }
 
   /**

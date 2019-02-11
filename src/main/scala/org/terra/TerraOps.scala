@@ -212,6 +212,8 @@ trait TerraOps[C <: TypeContext] {
   val thermalCapacityOps: ThermalCapacityOps[C]
 
   val moneyOps: MoneyOps[C]
+  val employeeOps: EmployeeOps[C]
+  val laborOps: LaborOps[C]
 
   def div[T](dividend: T, divisor: T)(
     implicit e: HasEnsureType[T], tag: ClassTag[T]): T

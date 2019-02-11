@@ -69,8 +69,6 @@ final class DataRateLike[C <: TypeContext](
 }
 
 trait DataRateUnit[C <: TypeContext] extends UnitOfMeasure[DataRateLike[C], C#T, C] with UnitConverter[C#T, C] {
-  //def apply[A](a: A)(implicit num: Numeric[A], ops: TerraOps[C]) =
-    //new DataRateLike[C](ops.convDouble(num.toDouble(a)), this)
   def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
     new DataRateLike[C](t, this)
 }
