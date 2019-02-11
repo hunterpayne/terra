@@ -278,8 +278,9 @@ case class QuantityVector[A <: Quantity[A, T, C], T, C <: TypeContext](
 
   def angle(coordinateX: Int = 0, coordinateY: Int = 1, unit: AngleUnit[C])(
     implicit ops: TerraOps[C]): Angle = {
-    implicit val ensure: HasEnsureType[T] = 
-      unit.makeEnsureType.asInstanceOf[HasEnsureType[T]]
+    implicit val ensure: HasEnsureType[C#T] = ops.converters.ensureT
+    implicit val tag: ClassTag[C#T] = ops.getClassTagT
+    //unit.makeEnsureType.asInstanceOf[HasEnsureType[T]]
     Radians(
       ops.atanT(coordinates(coordinateY) / coordinates(coordinateX))) in unit
   }
@@ -324,7 +325,11 @@ case class QuantityVector[A <: Quantity[A, T, C], T, C <: TypeContext](
   def times[B <: Quantity[B, T, C], C1 <: Quantity[C1, T, C]](quantTimes: A ⇒ C1): QuantityVector[C1, T, C] = map[C1](quantTimes)
 
   def divide(that: T): SVectorType = map[A](_ / that)
-  def divide(that: A): ValueVector[T, C] = map[T](a => a / that)
+  def divide(that: A): ValueVector[T, C] = 
+    map[T](a => {
+      implicit val e: HasEnsureType[T] = a.makeEnsureType
+      ops.ensureType[T](a / that)
+    })
   def /(that: A) = divide(that)
 
   def divide[C1 <: Quantity[C1, T, C]](quantDiv: A ⇒ C1)(implicit ops: TerraOps[C]): QuantityVector[C1, T, C] = map[C1](quantDiv(_))

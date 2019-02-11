@@ -151,9 +151,8 @@ final class MoneyLike[C <: TypeContext](
    */
   def /[A <: Quantity[A, T, C], T](that: Price[A, T, C])(
     implicit ops: TerraOps[C]): A = {
-    implicit val e: HasConverter[C#TC, T] = 
-      that.counter.makeFromCurrencyConverter
-    that.quantity * ops.gconvTC[T](divide(that.money))
+    implicit val e: HasEnsureType[T] = that.counter.makeEnsureType
+    that.quantity * ops.ensureType[T](divide(that.money))
   }
 
   /**

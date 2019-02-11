@@ -27,8 +27,6 @@ case class InformationLike[C <: TypeContext](
 
   override implicit val tttdConverter: HasConverter[C#TT, C#T] =
     ops.converters.tttlConverter.asInstanceOf[HasConverter[C#TT, C#T]]
-  override implicit val tdttConverter: HasConverter[C#T, C#TT] =
-    ops.converters.tttConverter
   //override implicit val ttdConverter: HasConverter[C#T, TD]
   override def makeEnsureType(implicit ops: TerraOps[C]): HasEnsureType[C#TL] =
     ops.converters.ensureTL

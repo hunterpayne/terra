@@ -20,9 +20,14 @@ package org.terra
 trait Ratio[A <: Quantity[A, T, C], B <: Quantity[B, T, C], T, C <: TypeContext] {
   def base: A
   def counter: B
-  def convertToBase(q: B)(implicit ops: TerraOps[C]): A = base * (q / counter)
-  def convertToCounter(q: A)(implicit ops: TerraOps[C]): B = 
-    counter * (q / base)
+  def convertToBase(q: B)(implicit ops: TerraOps[C]): A = {
+    implicit val e: HasEnsureType[T] = base.makeEnsureType
+    base * ops.ensureType[T](q / counter)
+  }
+  def convertToCounter(q: A)(implicit ops: TerraOps[C]): B = {
+    implicit val e: HasEnsureType[T] = base.makeEnsureType
+    counter * ops.ensureType[T](q / base)
+  }
 }
 
 trait LikeRatio[A <: Quantity[A, T, C], T, C <: TypeContext] 

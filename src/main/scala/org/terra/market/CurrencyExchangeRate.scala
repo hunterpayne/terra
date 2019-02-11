@@ -59,9 +59,9 @@ case class CurrencyExchangeRate[C <: TypeContext](
     * @return
     */
   override def convertToBase(m: Money)(implicit ops: TerraOps[C]): Money = 
-    base * (m / counter)
+    base * ops.convCurrency(m / counter)
   override def convertToCounter(m: Money)(implicit ops: TerraOps[C]): Money = 
-    counter * (m / base)
+    counter * ops.convCurrency(m / base)
 
   /**
    * Returns the rate formatted in as standard FX Quote"

@@ -6,6 +6,12 @@ import scala.reflect.ClassTag
 
 import org.terra.time.{ TimeLike, TimeDerivative }
 
+/**
+  * An employee class representing a person providing labor for some effort.
+  * This class uses the whole number type (like Information) which means for
+  * some uses, accuracy can be an issue.
+  * @author Hunter Payne
+  */
 case class EmployeeLike[C <: TypeContext](
   val value: C#TL, val unit: EmployeeUnit[C])(implicit ops: TerraOps[C])
     extends Quantity[EmployeeLike[C], C#TL, C] 

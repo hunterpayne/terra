@@ -99,8 +99,7 @@ trait InformationSymbols[Tuple <: TypeContext] {
     type PrimaryUnitT = PrimaryUnit[Tuple#TL, Tuple]
     type UnitOfMeasureT = UnitOfMeasure[InformationT, Tuple#TL, Tuple]
     implicit object InformationNumeric
-        extends AbstractQuantityNumericL[InformationT, Tuple](
-      Information) //.asInstanceOf[UnitOfMeasureT with PrimaryUnitT])
+        extends AbstractQuantityNumericL[InformationT, Tuple](Information)
   }
 
   type DataRate = DataRateLike[Tuple]

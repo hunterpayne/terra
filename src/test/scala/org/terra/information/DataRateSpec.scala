@@ -194,7 +194,7 @@ class DataRateSpec
     BytesPerSecond(1) * Seconds(1) should be(Bytes(1))
   }
 
-  it should "return a dimensionless ration when divided by a DataRate" in {
+  it should "return a dimensionless ratio when divided by a DataRate" in {
     BytesPerSecond(10) / BytesPerSecond(4) should be(2.5)
   }
 

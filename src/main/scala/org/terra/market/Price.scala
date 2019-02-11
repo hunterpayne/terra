@@ -35,11 +35,11 @@ case class Price[A <: Quantity[A, T, C], T, C <: TypeContext](
   def counter: A = quantity
   def convertToBase(q: A)(implicit ops: TerraOps[C]): MoneyLike[C] = {
     implicit val e: HasConverter[T, C#TC] = quantity.makeToCurrencyConverter
-    base * ops.gconvTotal[T, C#TC](q / counter)
+    base * ops.convCurrency(q / counter)
   }
   def convertToCounter(q: MoneyLike[C])(implicit ops: TerraOps[C]): A = {
-    implicit val e: HasConverter[C#TC, T] = quantity.makeFromCurrencyConverter
-    counter * ops.gconvTotal[C#TC, T](q / base)
+    implicit val e: HasEnsureType[T] = counter.makeEnsureType
+    counter * ops.ensureType[T](q / base)
   }
 
   // TODO Add verification that money amounts are the same OR convert

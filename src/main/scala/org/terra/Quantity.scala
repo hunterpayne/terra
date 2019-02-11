@@ -112,11 +112,13 @@ abstract class Quantity[A <: Quantity[A, T, C], T, C <: TypeContext](
    * @param that Quantity
    * @return Double
    */
-  def divide(that: A)(implicit ops: TerraOps[C]): T = {
-    implicit val ensure: HasEnsureType[T] = makeEnsureType
-    ops.div[T](this.value, that.to(unit))
+  def divide(that: A)(implicit ops: TerraOps[C]): C#T = {
+    implicit val ensure: HasEnsureType[C#T] = ops.converters.ensureT
+    implicit val tag: ClassTag[C#T] = ops.getClassTagT
+    ops.div[C#T](
+      ops.ensureType[C#T](this.value), ops.ensureType[C#T](that.to(unit)))
   }
-  def /(that: A)(implicit ops: TerraOps[C]): T = divide(that)
+  def /(that: A)(implicit ops: TerraOps[C]): C#T = divide(that)
 
   /**
    * Returns the remainder of a division by a number
@@ -156,7 +158,7 @@ abstract class Quantity[A <: Quantity[A, T, C], T, C <: TypeContext](
    */
   def divideAndRemainder(that: A)(implicit ops: TerraOps[C]): (T, A) = {
     implicit val ensure: HasEnsureType[T] = makeEnsureType
-    (ops.floorT[T](divide(that)), remainder(that.to(unit)))
+    (ops.floorT[T](ops.ensureType[T](divide(that))), remainder(that.to(unit)))
   }
   def /%(that: A)(implicit ops: TerraOps[C]) = divideAndRemainder(that)
 

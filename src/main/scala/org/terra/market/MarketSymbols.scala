@@ -153,4 +153,61 @@ trait MarketSymbols[Tuple <: TypeContext] {
       implicit context: MoneyContext = defaultMoneyContext): PseudoMoneyStr =
       apply(s)
   }
+
+  type Employee = EmployeeLike[Tuple]
+  lazy val People = ops.employeeOps.People
+  lazy val Employee = ops.employeeOps.Employee
+
+  object EmployeeConversions {
+
+    import ops.employeeOps.{ EmployeeConversions => Convs }
+
+    lazy val person = Convs.person
+
+    implicit class EmployeeConversions[A](a: A)(implicit na: Numeric[A])
+      extends Convs.EmployeeConversions[A](a)
+
+    implicit object EmployeeNumeric
+        extends AbstractQuantityNumericL[EmployeeLike[Tuple], Tuple](Employee)
+  }
+
+  type Labor = LaborLike[Tuple]
+  lazy val PersonHours = ops.laborOps.PersonHours
+  lazy val PersonDays = ops.laborOps.PersonDays
+  lazy val PersonWeeks = ops.laborOps.PersonWeeks
+  //lazy val PersonMonths = ops.laborOps.PersonMonths
+  lazy val PersonYears = ops.laborOps.PersonYears
+  lazy val Labor = ops.laborOps.Labor
+
+  object LaborConversions {
+
+    import ops.laborOps.{ LaborConversions => Convs }
+
+    lazy val workHour = Convs.workHour
+    lazy val manHour = Convs.workHour
+    lazy val womanHour = Convs.workHour
+    lazy val personHour = Convs.workHour
+    lazy val workDay = Convs.workDay
+    lazy val manDay = Convs.workDay
+    lazy val womanDay = Convs.workDay
+    lazy val personDay = Convs.workDay
+    lazy val workWeek = Convs.workWeek
+    lazy val manWeek = Convs.workWeek
+    lazy val womanWeek = Convs.workWeek
+    lazy val personWeek = Convs.workWeek
+    //lazy val workMonth = Convs.workMonth
+    //lazy val personMonth = Convs.workMonth
+    lazy val workYear = Convs.workYear
+    lazy val manYear = Convs.workYear
+    lazy val womanYear = Convs.workYear
+    lazy val personYear = Convs.workYear
+    
+    implicit class LaborConversions[A](a: A)(implicit num: Numeric[A])
+        extends Convs.LaborConversions[A](a)
+
+    implicit object LaborNumeric
+        extends AbstractQuantityNumeric[LaborLike[Tuple], Tuple](Labor)
+  }
+
+  type Wage = PricePer[Labor]
 }
