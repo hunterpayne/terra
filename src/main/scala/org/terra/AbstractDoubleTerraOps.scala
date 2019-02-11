@@ -434,6 +434,38 @@ trait TypeScope[Tuple <: TypeContext] {
   lazy val Gross = ops.dimensionlessOps.Gross
   lazy val Dimensionless = ops.dimensionlessOps.Dimensionless
 
+  /**
+    * Provides implicit conversions that allow Numerics to lead in * and / by 
+    * Time operations
+    * {{{
+    *    1.5 * Kilometers(10) should be(Kilometers(15))
+    * }}}
+    *
+    * @param d Double
+    */
+  abstract class QuantityHelper[T, D](d: D, numeric: Numeric[D]) {
+
+    type Time = TimeLike[Tuple]
+    type Frequency = FrequencyLike[Tuple]
+
+    def times[A <: Quantity[A, T, Tuple]](that: A): A = {
+      implicit val e: HasEnsureType[T] = that.makeEnsureType
+      that * ops.ensureType[T](d)
+    }
+    def times[A <: Quantity[A, T, Tuple]](
+      that: SVector[A, T, Tuple]): SVector[A, T, Tuple] =
+      if (that.coordinates.isEmpty) {
+        SVector[A, T, Tuple]()
+      } else {
+        implicit val e: HasEnsureType[T] = that.coordinates(0).makeEnsureType
+        that * ops.ensureType[T](d)
+      }
+    def div(that: Time): Frequency = {
+      implicit val n = numeric
+      Each(d) / that
+    }
+  }
+
   object DimensionlessConversions {
 
     import ops.dimensionlessOps.{ DimensionlessConversions => Convs }

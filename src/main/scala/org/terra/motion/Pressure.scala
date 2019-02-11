@@ -31,7 +31,6 @@ final class PressureLike[C <: TypeContext](val value: C#T, val unit: PressureUni
   import ops.forceOps.Newtons
 
   type PressureChange = PressureChangeLike[C]
-  type Time = TimeLike[C]
   type Area = AreaLike[C]
   type Force = ForceLike[C]
 

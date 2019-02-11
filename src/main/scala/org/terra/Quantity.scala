@@ -87,6 +87,14 @@ abstract class Quantity[A <: Quantity[A, T, C], T, C <: TypeContext](
   def times(that: T)(implicit ops: TerraOps[C]): A =
     unit(num.times(this.value, that))
   def *(that: T)(implicit ops: TerraOps[C]): A = times(that)
+  //def *(that: Double)(implicit ops: TerraOps[C]): A = {
+    //implicit val ensure: HasEnsureType[T] = makeEnsureType
+    //times(ops.ensureType[T](that))
+  //}
+  //def *(that: BigDecimal)(implicit ops: TerraOps[C]): A = {
+    //implicit val ensure: HasEnsureType[T] = makeEnsureType
+    //times(ops.ensureType[T](that))
+  //}
 
   /**
    * Divide this quantity by some number

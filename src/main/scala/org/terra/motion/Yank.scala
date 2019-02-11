@@ -30,7 +30,6 @@ final class YankLike[C <: TypeContext](val value: C#T, val unit: YankUnit[C])(
   import ops.timeOps.Seconds
 
   type Momentum = MomentumLike[C]
-  type TimeSquared = TimeSquaredLike[C]
 
   def dimension: Dimension[YankLike[C], C#T, C] = Yank
 

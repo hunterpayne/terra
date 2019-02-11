@@ -174,7 +174,6 @@ package object standard extends TypeScope[StandardTuple] {
     override def rconvT(d: TT): T = d
   }
 
-
   implicit val ops = StandardTerraOps
 
   trait SymbolMixin {
@@ -203,4 +202,121 @@ package object standard extends TypeScope[StandardTuple] {
       with org.terra.thermal.ThermalSymbols[StandardTuple]
   object market extends SymbolMixin
       with org.terra.market.MarketSymbols[StandardTuple]
+
+  implicit class QuantityDoubleT(d: Double)
+      extends QuantityHelper[StandardTuple#T, Double](
+    d, Numeric.DoubleIsFractional) {
+
+    def *[A <: Quantity[A, StandardTuple#T, StandardTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, StandardTuple#T, StandardTuple]](
+      that: SVector[A, StandardTuple#T, StandardTuple]): 
+        SVector[A, StandardTuple#T, StandardTuple] =
+      times(that)
+    def /(that: Time): Frequency = div(that)
+    def per(that: Time): Frequency = div(that)
+  }
+
+  implicit class QuantityDoubleTL(d: Double) 
+      extends QuantityHelper[StandardTuple#TL, Double](
+    d, Numeric.DoubleIsFractional) {
+    def *[A <: Quantity[A, StandardTuple#TL, StandardTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, StandardTuple#TL, StandardTuple]](
+      that: SVector[A, StandardTuple#TL, StandardTuple]): 
+        SVector[A, StandardTuple#TL, StandardTuple] =
+      times(that)
+  }
+
+  implicit class QuantityLongT(l: Long)
+      extends QuantityHelper[StandardTuple#T, Long](l, Numeric.LongIsIntegral) {
+
+    def *[A <: Quantity[A, StandardTuple#T, StandardTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, StandardTuple#T, StandardTuple]](
+      that: SVector[A, StandardTuple#T, StandardTuple]): 
+        SVector[A, StandardTuple#T, StandardTuple] = 
+      times(that)
+    def /(that: Time): Frequency = div(that)
+    def per(that: Time): Frequency = div(that)
+  }
+
+  implicit class QuantityLongTL(l: Long) 
+    extends QuantityHelper[StandardTuple#TL, Long](l, Numeric.LongIsIntegral) {
+
+    def *[A <: Quantity[A, StandardTuple#TL, StandardTuple]](that: A): A =
+      times(that)
+    def *[A <: Quantity[A, StandardTuple#TL, StandardTuple]](
+      that: SVector[A, StandardTuple#TL, StandardTuple]): 
+        SVector[A, StandardTuple#TL, StandardTuple] =
+      times(that)
+  }
+
+  //implicit class QuantityLongTT(l: Long) extends QuantityDoubleTT(l.toDouble)
+
+  implicit class QuantityIntT(i: Int) 
+      extends QuantityHelper[StandardTuple#T, Int](i, Numeric.IntIsIntegral) {
+
+    def *[A <: Quantity[A, StandardTuple#T, StandardTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, StandardTuple#T, StandardTuple]](
+      that: SVector[A, StandardTuple#T, StandardTuple]): 
+        SVector[A, StandardTuple#T, StandardTuple] =
+      times(that)
+    def /(that: Time): Frequency = div(that)
+    def per(that: Time): Frequency = div(that)
+  }
+
+  implicit class QuantityIntTL(i: Int) 
+      extends QuantityHelper[StandardTuple#TL, Int](i, Numeric.IntIsIntegral) {
+
+    def *[A <: Quantity[A, StandardTuple#TL, StandardTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, StandardTuple#TL, StandardTuple]](
+      that: SVector[A, StandardTuple#TL, StandardTuple]): 
+        SVector[A, StandardTuple#TL, StandardTuple] =
+      times(that)
+  }
+
+  //implicit class QuantityIntTT(i: Int) extends QuantityDoubleTT(i.toDouble)
+
+  implicit class QuantityBigDecimalT(bd: BigDecimal) 
+      extends QuantityHelper[StandardTuple#T, BigDecimal](
+    bd, Numeric.BigDecimalIsFractional) {
+
+    def *[A <: Quantity[A, StandardTuple#T, StandardTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, StandardTuple#T, StandardTuple]](
+      that: SVector[A, StandardTuple#T, StandardTuple]): 
+        SVector[A, StandardTuple#T, StandardTuple] =
+      times(that)
+    def /(that: Time): Frequency = div(that)
+    def per(that: Time): Frequency = div(that)
+  }
+
+  implicit class QuantityBigDecimalTL(bd: BigDecimal) 
+      extends QuantityHelper[StandardTuple#TL, BigDecimal](
+    bd, Numeric.BigDecimalIsFractional) {
+
+    def *[A <: Quantity[A, StandardTuple#TL, StandardTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, StandardTuple#TL, StandardTuple]](
+      that: SVector[A, StandardTuple#TL, StandardTuple]): 
+        SVector[A, StandardTuple#TL, StandardTuple] =
+      times(that)
+  }
+  
+  implicit class QuantityBigDecimalTC(bd: BigDecimal) 
+      extends QuantityHelper[StandardTuple#TC, BigDecimal](
+    bd, Numeric.BigDecimalIsFractional) {
+
+    def *[A <: Quantity[A, StandardTuple#TC, StandardTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, StandardTuple#TC, StandardTuple]](
+      that: SVector[A, StandardTuple#TC, StandardTuple]): 
+        SVector[A, StandardTuple#TC, StandardTuple] =
+      times(that)
+  }
+
+  //implicit class QuantityBigDecimalTT(i: Int) extends QuantityHelper(i.toDouble)
 }

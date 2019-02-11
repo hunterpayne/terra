@@ -9,6 +9,10 @@
 package org.terra
 package time
 
+trait HasTimeType[C <: TypeContext] {
+  type Time = TimeLike[C]
+}
+
 /**
   * Represents a rate of change over time of the integral quantity
   *
@@ -17,9 +21,10 @@ package time
   *
   * @tparam A The type of quantity changing
   */
-trait TimeDerivative[A <: Quantity[A, TI, C] with TimeIntegral[_, TI, TD, C], TD, TI, C <: TypeContext] {
+trait TimeDerivative[A <: Quantity[A, TI, C] with TimeIntegral[_, TI, TD, C], TD, TI, C <: TypeContext] extends HasTimeType[C] {
+
   protected[terra] def timeIntegrated: A
-  protected[terra] def time: TimeLike[C]
+  protected[terra] def time: Time
   val terraOps: TerraOps[C]
   
   implicit val tttiConverter: HasConverter[C#TT, TI] = 
@@ -31,16 +36,19 @@ trait TimeDerivative[A <: Quantity[A, TI, C] with TimeIntegral[_, TI, TD, C], TD
     * @param that Time
     * @return
     */
-  def *(that: TimeLike[C])(implicit ops: TerraOps[C]): A = {
+  def *(that: Time)(implicit ops: TerraOps[C]): A = {
     import ops.converters._
-    val perTime: TimeLike[C] = that / this.time.toSeconds
+    val perTime: Time = that / this.time.toSeconds
     timeIntegrated * ops.gconvTotal[C#TT, TI](perTime.toSeconds.asInstanceOf[C#TT])
   }
 }
 
-trait SecondTimeDerivative[A <: SecondTimeIntegral[_, C], C <: TypeContext] { self: TimeDerivative[_, C#T, C#T, C] ⇒
-  protected[terra] def time: TimeLike[C]
-  def *(that: TimeSquaredLike[C])(implicit ops: TerraOps[C]): A
+trait SecondTimeDerivative[A <: SecondTimeIntegral[_, C], C <: TypeContext] 
+  extends HasTimeType[C] { self: TimeDerivative[_, C#T, C#T, C] ⇒
+
+  type TimeSquared = TimeSquaredLike[C]
+  protected[terra] def time: Time
+  def *(that: TimeSquared)(implicit ops: TerraOps[C]): A
 }
 
 /**
@@ -51,10 +59,12 @@ trait SecondTimeDerivative[A <: SecondTimeIntegral[_, C], C <: TypeContext] { se
   *
   * @tparam A The Quantity type for the TimeDerivative for which this is the base
   */
-trait TimeIntegral[A <: Quantity[A, TD, C] with TimeDerivative[_, TD, TI, C], TI, TD, C <: TypeContext] {
-  protected def timeDerived: A
-  protected def time: TimeLike[C]
+trait TimeIntegral[A <: Quantity[A, TD, C] with TimeDerivative[_, TD, TI, C], TI, TD, C <: TypeContext] 
+  extends HasTimeType[C] {
+
+  protected def time: Time
   val terraOps: TerraOps[C]
+  protected def timeDerived: A
 
   implicit val tttdConverter: HasConverter[C#TT, TD] = 
     terraOps.converters.tttConverter2.asInstanceOf[HasConverter[C#TT, TD]]
@@ -73,7 +83,7 @@ trait TimeIntegral[A <: Quantity[A, TD, C] with TimeDerivative[_, TD, TI, C], TI
     * @param that Time
     * @return
     */
-  def /(that: TimeLike[C])(implicit ops: TerraOps[C]): A = {
+  def /(that: Time)(implicit ops: TerraOps[C]): A = {
 
     // this very opinioniated line of code says that all derivative types
     // are always C#T's and never any other kind of type
@@ -82,7 +92,7 @@ trait TimeIntegral[A <: Quantity[A, TD, C] with TimeDerivative[_, TD, TI, C], TI
     val amtTime: C#TT = this.time / that
     timeDerived * ops.ensureType[TD](ops.gconvTT[TD](amtTime))
   }
-  def per(that: TimeLike[C])(
+  def per(that: Time)(
     implicit ops: TerraOps[C], e: HasConverter[C#TT, TD]): A = /(that)
 
   /**
@@ -91,7 +101,7 @@ trait TimeIntegral[A <: Quantity[A, TD, C] with TimeDerivative[_, TD, TI, C], TI
     * @param that Derivative
     * @return
     */
-  def /(that: A)(implicit ops: TerraOps[C]): TimeLike[C] = {
+  def /(that: A)(implicit ops: TerraOps[C]): Time = {
     val ratio: TD = timeDerived / that
     val tt: C#TT = ops.gconvTotal[TD, C#TT](ratio)
     that.time * tt
@@ -111,10 +121,12 @@ trait TimeIntegral[A <: Quantity[A, TD, C] with TimeDerivative[_, TD, TI, C], TI
   }
 }
 
-trait SecondTimeIntegral[A <: SecondTimeDerivative[_, C], C <: TypeContext] { 
+trait SecondTimeIntegral[A <: SecondTimeDerivative[_, C], C <: TypeContext] {
   self: TimeIntegral[_, C#T, C#T, C] ⇒
 
-  def /(that: A)(implicit ops: TerraOps[C]): TimeSquaredLike[C]
-  def /(that: TimeSquaredLike[C])(implicit ops: TerraOps[C]): A
-  def per(that: TimeSquaredLike[C])(implicit ops: TerraOps[C]): A = /(that)
+  type TimeSquared = TimeSquaredLike[C]
+
+  def /(that: A)(implicit ops: TerraOps[C]): TimeSquared
+  def /(that: TimeSquared)(implicit ops: TerraOps[C]): A
+  def per(that: TimeSquared)(implicit ops: TerraOps[C]): A = /(that)
 }

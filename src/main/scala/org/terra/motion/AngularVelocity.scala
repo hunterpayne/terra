@@ -35,7 +35,6 @@ final class AngularVelocityLike[C <: TypeContext](
 
   type Length = LengthLike[C]
   type Angle = AngleLike[C]
-  type Time = TimeLike[C]
   type Velocity = VelocityLike[C]
   type AngularAcceleration = AngularAccelerationLike[C]
 

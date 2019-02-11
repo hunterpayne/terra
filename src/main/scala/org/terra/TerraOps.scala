@@ -91,39 +91,6 @@ trait TerraOps[C <: TypeContext] {
   def getClassTagTT: ClassTag[TT]
   def getClassTagTC: ClassTag[TC]
 
-  /*
-  trait Converters {
-    implicit val ttlConverter: HasConverter[T, TL]
-    implicit val tttConverter: HasConverter[T, TT]
-    implicit val ttcConverter: HasConverter[T, TC]
-    implicit val tltConverter: HasConverter[TL, T]
-    implicit val tlttConverter: HasConverter[TL, TT]
-    implicit val tltcConverter: HasConverter[TL, TC]
-    implicit val tttlConverter: HasConverter[TT, TL]
-    implicit val tttConverter2: HasConverter[TT, T]
-    implicit val tttcConverter: HasConverter[TT, TC]
-    implicit val tctConverter: HasConverter[TC, T]
-    implicit val tctlConverter: HasConverter[TC, TL]
-    implicit val tcttConverter: HasConverter[TC, TT]
-
-    implicit val dtConverter: HasConverter[Double, T]
-    implicit val dtlConverter: HasConverter[Double, TL]
-    implicit val dttConverter: HasConverter[Double, TT]
-    implicit val dtcConverter: HasConverter[Double, TC]
-
-    implicit val ltConverter: HasConverter[Long, T]
-    implicit val ltlConverter: HasConverter[Long, TL]
-    implicit val lttConverter: HasConverter[Long, TT]
-    implicit val ltcConverter: HasConverter[Long, TC]
-    implicit val bdtcConverter: HasConverter[BigDecimal, TC]
-
-    implicit val ensureT: HasEnsureType[T]
-    implicit val ensureTL: HasEnsureType[TL]
-    implicit val ensureTT: HasEnsureType[TT]
-    implicit val ensureTC: HasEnsureType[TC]
-  }
-*/
-
   // scope to import containing the implicitly defined HasConverter
   // definations
   val converters: Converters[C]

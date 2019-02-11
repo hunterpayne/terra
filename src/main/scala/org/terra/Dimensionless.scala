@@ -28,26 +28,25 @@ final class DimensionlessLike[C <: TypeContext](
     with TimeIntegral[FrequencyLike[C], C#T, C#T, C] {
 
   type T = C#T
+  type Frequency = FrequencyLike[C]
+  type Dimensionless = DimensionlessLike[C]
 
   import ops.dimensionlessOps._
   import ops.frequencyOps.Hertz
   import ops.timeOps.Seconds
-  type Frequency = FrequencyLike[C]
-  type Time = TimeLike[C]
 
   implicit val tagT = getTag
 
   protected def timeDerived = Hertz(toEach)
   protected[terra] def time = Seconds(1)
 
-  val dimension: Dimension[DimensionlessLike[C], C#T, C] = Dimensionless
+  val dimension: Dimension[Dimensionless, C#T, C] = Dimensionless
 
-  def *(that: DimensionlessLike[C])(
-    implicit ops: TerraOps[C]): DimensionlessLike[C] = this * that.toEach
-  def *[B <: Quantity[B, T, C]](that: Quantity[B, T, C])(
-    implicit ops: TerraOps[C]): Quantity[B, T, C] =
+  def *(that: Dimensionless)(implicit ops: TerraOps[C]): Dimensionless = 
+    this * that.toEach
+  def *[B <: Quantity[B, T, C]](that: B)(implicit ops: TerraOps[C]): B =
     that * toEach
-  def +(that: T)(implicit ops: TerraOps[C]): DimensionlessLike[C] = {
+  def +(that: T)(implicit ops: TerraOps[C]): Dimensionless = {
     implicit val tagT = getTag
     plus(Each(that))
   }
@@ -68,9 +67,11 @@ trait DimensionlessUnit[C <: TypeContext]
     extends UnitOfMeasure[DimensionlessLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
 
+  type Dimensionless = DimensionlessLike[C]
+
   def apply(t: C#T)(
-    implicit tag: ClassTag[C#T], ops: TerraOps[C]): DimensionlessLike[C] =
-    new DimensionlessLike[C](t, this)
+    implicit tag: ClassTag[C#T], ops: TerraOps[C]): Dimensionless =
+    new Dimensionless(t, this)
 }
 
 trait DimensionlessOps[C <: TypeContext] {
@@ -79,15 +80,17 @@ trait DimensionlessOps[C <: TypeContext] {
   implicit val ops: TerraOps[C]
   implicit val tag = ops.getClassTagT
 
+  type Dimensionless = DimensionlessLike[C]
+
   trait DimensionlessUnitT extends DimensionlessUnit[C]
 
   object Dimensionless extends Dimension[DimensionlessLike[C], C#T, C] {
 
     def apply[A](a: A, unit: DimensionlessUnit[C])(
-      implicit num: Numeric[A]): DimensionlessLike[C] =
-      new DimensionlessLike[C](ops.convDouble(num.toDouble(a)), unit)
-    def apply(t: C#T, unit: DimensionlessUnit[C]): DimensionlessLike[C] =
-      new DimensionlessLike[C](t, unit)
+      implicit num: Numeric[A]): Dimensionless =
+      new Dimensionless(ops.convDouble(num.toDouble(a)), unit)
+    def apply(t: C#T, unit: DimensionlessUnit[C]): Dimensionless =
+      new Dimensionless(t, unit)
     def apply(value: Any) = parse(value)
     def name = "Dimensionless"
     def primaryUnit = Each
@@ -167,7 +170,7 @@ trait DimensionlessOps[C <: TypeContext] {
       * @param d Dimensionless
       * @return
       */
-    implicit def dimensionlessToT(d: DimensionlessLike[C]): Double = 
+    implicit def dimensionlessToT(d: Dimensionless): Double = 
       ops.num.toDouble(d.toEach)
   }
 }

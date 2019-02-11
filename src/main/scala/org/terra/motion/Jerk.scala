@@ -31,7 +31,6 @@ final class JerkLike[C <: TypeContext](val value: C#T, val unit: JerkUnit[C])(
   import ops.timeOps.Seconds
   import ops.accelerationOps.MetersPerSecondSquared
 
-  type TimeSquared = TimeSquaredLike[C]
   type Velocity = VelocityLike[C]
 
   def dimension: Dimension[JerkLike[C], C#T, C] = Jerk

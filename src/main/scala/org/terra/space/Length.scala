@@ -54,9 +54,7 @@ final class LengthLike[C <: TypeContext](val value: C#T, val unit: LengthUnit[C]
   type ElectricalConductance = ElectricalConductanceLike[C]
   type ElectricalResistance = ElectricalResistanceLike[C]
   type Resistivity = ResistivityLike[C]
-  type TimeSquared = TimeSquaredLike[C]
   type Acceleration = AccelerationLike[C]
-  type Time = TimeLike[C]
   type Length = LengthLike[C]
 
   def dimension: Dimension[LengthLike[C], C#T, C] = Length

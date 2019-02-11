@@ -8,15 +8,18 @@
 
 package org.terra
 
+import scala.math.BigDecimal
 import scala.math.BigDecimal.RoundingMode
-import scala.util.{Failure, Try}
+import scala.util.{ Failure, Try }
 import scala.reflect.ClassTag
 
-import org.scalatest.{FlatSpec, Matchers, TryValues}
+import org.scalatest.{ FlatSpec, Matchers, TryValues }
 
 import standard._
-//import standard.thermal.{ Celsius, Fahrenheit }
-import standard.time.{ Hertz, Hours, Minutes }
+import standard.thermal.{ Celsius, Fahrenheit }
+import standard.time.{ Hertz, Hours, Minutes, Seconds, Time }
+import standard.mass.{ Kilograms, Mass }
+import standard.space.{ Length, Meters }
 
 /**
  * @author  garyKeorkunian
@@ -35,7 +38,6 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     def dimension = Thingee
     def toThangs = to(Thangs)
     def toKilothangs = to(Kilothangs)
-    //def fromDouble(d: Double)(implicit n: Numeric[Double]): Double = d
   }
 
   object Thingee extends Dimension[Thingee, Double, Tuple] {
@@ -50,7 +52,6 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
   trait ThingeeUnit extends UnitOfMeasure[Thingee, Double, Tuple] with UnitConverter[Double, Tuple] {
     def apply(t: Double)(implicit tag: ClassTag[Double], ops: TerraOps[Tuple]) =
       Thingee(t, this)
-    //def fromDouble(d: Double)(implicit n: Numeric[Double]): Double = d
   }
 
   object Thangs extends ThingeeUnit with PrimaryUnit[Double, Tuple] with SiUnit {
@@ -179,7 +180,6 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     y == x should be(right = false)
   }
 
-  /*
   it should "not equal an equivalent value of a different type" in {
     val x = Kilothangs(2.1)
     val y = Kilograms(2.1)
@@ -187,7 +187,6 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     x == y should be(right = false)
     x != y should be(right = true)
   }
-*/
 
   it should "approx a like value that is within an implicitly defined tolerance" in {
     implicit val tol = Thangs(.1)
@@ -489,7 +488,6 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     x.toKilothangs should be(1.5)
   }
 
-  /*
   it should "in a unit and return a like value in that unit" in {
     // The `in` method is only useful for Quantities that implement quantity classes for each unit
     val x = Fahrenheit(212)
@@ -498,7 +496,6 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     val y = Seconds(3600)
     (y in Hours) should be(Hours(1))
   }
-   */
 
   it should "toString and return a string formatted for the valueUnit" in {
     val x = Thangs(10)
@@ -546,13 +543,14 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
 
   behavior of "SquantifiedDouble"
 
-/*
   it should "multiply by a Quantity value and return the product as a like value" in {
-    val l = 10.22 * Thangs(1000)
-    l.getClass should be(classOf[Thingee])
-    (l to Thangs) should be(10220)
+    // lifts only work for real Terra quantities and not stubbed out mock 
+    // quantities
+    //val l: Thingee = 10.22d * Thangs(1000)
+    //l.getClass should be(classOf[Thingee])
+    //(l to Thangs) should be(10220)
 
-    val m = 10D * Kilograms(50)
+    val m = 10l * Kilograms(50)
     m.getClass should be(classOf[Mass])
     (m to Kilograms) should be(500)
   }
@@ -561,11 +559,9 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     10D / Seconds(1) should be(Hertz(10))
     10D per Seconds(1) should be(Hertz(10))
   }
- */
 
   behavior of "SquantifiedLong"
 
-/*
   it should "multiply by a Quantity value and return the product as a like value" in {
     val l = 10L * Thangs(1000)
     l.getClass should be(classOf[Thingee])
@@ -577,18 +573,21 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
   }
 
   it should "divide by a Time value and return a Frequency" in {
+    import DimensionlessConversions._
     10L / Seconds(1) should be(Hertz(10))
     10L per Seconds(1) should be(Hertz(10))
   }
- */
+
   behavior of "SquantifiedBigDecimal"
-/*
+
   it should "multiply by a Quantity value and return the product as a like value" in {
     val multiple = BigDecimal(10)
 
-    val l = multiple * Thangs(1000)
-    l.getClass should be(classOf[Thingee])
-    (l to Thangs) should be(10000)
+    // lifts only work for real Terra quantities and not stubbed out mock 
+    // quantities
+    //val l = multiple * Thangs(1000)
+    //l.getClass should be(classOf[Thingee])
+    //(l to Thangs) should be(10000)
 
     val m = multiple * Kilograms(50)
     m.getClass should be(classOf[Mass])
@@ -599,7 +598,7 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     BigDecimal(10) / Seconds(1) should be(Hertz(10))
     BigDecimal(10) per Seconds(1) should be(Hertz(10))
   }
- */
+
   behavior of "QuantityNumeric"
 
   it should "provide Numeric support" in {
@@ -628,20 +627,17 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
 
   behavior of "Dimension"
 
-/*
   it should "Parse a String into a Quantity based on the supplied Type parameter" in {
-    import org.terra.mass.Mass
-    import org.terra.space.Length
-    import org.terra.time.Time
-
-    def parse[A <: Quantity[A]: Dimension](s: String): Try[A] = {
-      implicitly[Dimension[A]].parseString(s)
-    }
 
     implicit val length = Length
     implicit val time = Time
     implicit val thingee = Thingee
     implicit val mass = Mass
+
+    def parse[A <: Quantity[A, Double, StandardTuple]](
+      s: String)(implicit e: Dimension[A, Double, StandardTuple]): Try[A] = {
+      implicitly[Dimension[A, Double, StandardTuple]].parseString(s)
+    }
 
     val l = parse[Length]("100 m")
     val t = parse[Time]("100 m")
@@ -656,18 +652,17 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
   }
 
   it should "Parse a Tuple with a Double into a Quantity based on the supplied Type parameter" in {
-    import org.terra.mass.Mass
-    import org.terra.space.Length
-    import org.terra.time.Time
-
-    def parse[A <: Quantity[A]: Dimension](t: (Double,  String)): Try[A] = {
-      implicitly[Dimension[A]].parseTuple[Double](t)
-    }
 
     implicit val length = Length
     implicit val time = Time
     implicit val thingee = Thingee
     implicit val mass = Mass
+
+    def parse[A <: Quantity[A, Double, StandardTuple]](
+      t: (Double, String))(
+      implicit e: Dimension[A, Double, StandardTuple]): Try[A] = {
+      implicitly[Dimension[A, Double, StandardTuple]].parseTuple[Double](t)
+    }
 
     val l = parse[Length]((100d, "m"))
     val t = parse[Time]((100d, "m"))
@@ -682,18 +677,17 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
   }
 
   it should "Parse a Tuple with an Int into a Quantity based on the supplied Type parameter" in {
-    import org.terra.mass.Mass
-    import org.terra.space.Length
-    import org.terra.time.Time
-
-    def parse[A <: Quantity[A]: Dimension](t: (Int,  String)): Try[A] = {
-      implicitly[Dimension[A]].parseTuple[Int](t)
-    }
 
     implicit val length = Length
     implicit val time = Time
     implicit val thingee = Thingee
     implicit val mass = Mass
+
+    def parse[A <: Quantity[A, Double, StandardTuple]](
+      t: (Int, String))(
+      implicit e: Dimension[A, Double, StandardTuple]): Try[A] = {
+      implicitly[Dimension[A, Double, StandardTuple]].parseTuple[Int](t)
+    }
 
     val l = parse[Length]((100, "m"))
     val t = parse[Time]((100, "m"))
@@ -722,5 +716,4 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     timeInMinutes.hashCode() shouldBe timeInSeconds.hashCode()
 
   }
- */
 }

@@ -29,7 +29,7 @@ import mass.MassLike
   */
 case class FrequencyLike[C <: TypeContext](
   val value: C#T, val unit: FrequencyUnit[C])(
-  implicit ops: TerraOps[C])
+  implicit val ops: TerraOps[C])
     extends Quantity[FrequencyLike[C], C#T, C]
     with TimeDerivative[DimensionlessLike[C], C#T, C#T, C] {
 

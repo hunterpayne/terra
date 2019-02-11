@@ -31,7 +31,6 @@ final class AngleLike[C <: TypeContext](val value: C#T, val unit: AngleUnit[C])(
   import ops.timeOps.Seconds
 
   type Length = LengthLike[C]
-  type Time = TimeLike[C]
   type AngularVelocity = AngularVelocityLike[C]
 
   def dimension: Dimension[AngleLike[C], C#T, C] = Angle

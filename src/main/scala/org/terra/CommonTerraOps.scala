@@ -206,4 +206,121 @@ package object common extends TypeScope[CommonTuple] {
       with org.terra.thermal.ThermalSymbols[CommonTuple]
   object market extends SymbolMixin
       with org.terra.market.MarketSymbols[CommonTuple] 
+
+  implicit class QuantityDoubleT(d: Double)
+      extends QuantityHelper[CommonTuple#T, Double](
+    d, Numeric.DoubleIsFractional) {
+
+    def *[A <: Quantity[A, CommonTuple#T, CommonTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, CommonTuple#T, CommonTuple]](
+      that: SVector[A, CommonTuple#T, CommonTuple]): 
+        SVector[A, CommonTuple#T, CommonTuple] =
+      times(that)
+    def /(that: Time): Frequency = div(that)
+    def per(that: Time): Frequency = div(that)
+  }
+
+  implicit class QuantityDoubleTL(d: Double) 
+      extends QuantityHelper[CommonTuple#TL, Double](
+    d, Numeric.DoubleIsFractional) {
+    def *[A <: Quantity[A, CommonTuple#TL, CommonTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, CommonTuple#TL, CommonTuple]](
+      that: SVector[A, CommonTuple#TL, CommonTuple]): 
+        SVector[A, CommonTuple#TL, CommonTuple] =
+      times(that)
+  }
+
+  implicit class QuantityLongT(l: Long)
+      extends QuantityHelper[CommonTuple#T, Long](l, Numeric.LongIsIntegral) {
+
+    def *[A <: Quantity[A, CommonTuple#T, CommonTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, CommonTuple#T, CommonTuple]](
+      that: SVector[A, CommonTuple#T, CommonTuple]): 
+        SVector[A, CommonTuple#T, CommonTuple] = 
+      times(that)
+    def /(that: Time): Frequency = div(that)
+    def per(that: Time): Frequency = div(that)
+  }
+
+  implicit class QuantityLongTL(l: Long) 
+    extends QuantityHelper[CommonTuple#TL, Long](l, Numeric.LongIsIntegral) {
+
+    def *[A <: Quantity[A, CommonTuple#TL, CommonTuple]](that: A): A =
+      times(that)
+    def *[A <: Quantity[A, CommonTuple#TL, CommonTuple]](
+      that: SVector[A, CommonTuple#TL, CommonTuple]): 
+        SVector[A, CommonTuple#TL, CommonTuple] =
+      times(that)
+  }
+
+  //implicit class QuantityLongTT(l: Long) extends QuantityDoubleTT(l.toDouble)
+
+  implicit class QuantityIntT(i: Int) 
+      extends QuantityHelper[CommonTuple#T, Int](i, Numeric.IntIsIntegral) {
+
+    def *[A <: Quantity[A, CommonTuple#T, CommonTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, CommonTuple#T, CommonTuple]](
+      that: SVector[A, CommonTuple#T, CommonTuple]): 
+        SVector[A, CommonTuple#T, CommonTuple] =
+      times(that)
+    def /(that: Time): Frequency = div(that)
+    def per(that: Time): Frequency = div(that)
+  }
+
+  implicit class QuantityIntTL(i: Int) 
+      extends QuantityHelper[CommonTuple#TL, Int](i, Numeric.IntIsIntegral) {
+
+    def *[A <: Quantity[A, CommonTuple#TL, CommonTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, CommonTuple#TL, CommonTuple]](
+      that: SVector[A, CommonTuple#TL, CommonTuple]): 
+        SVector[A, CommonTuple#TL, CommonTuple] =
+      times(that)
+  }
+
+  //implicit class QuantityIntTT(i: Int) extends QuantityDoubleTT(i.toDouble)
+
+  implicit class QuantityBigDecimalT(bd: BigDecimal) 
+      extends QuantityHelper[CommonTuple#T, BigDecimal](
+    bd, Numeric.BigDecimalIsFractional) {
+
+    def *[A <: Quantity[A, CommonTuple#T, CommonTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, CommonTuple#T, CommonTuple]](
+      that: SVector[A, CommonTuple#T, CommonTuple]): 
+        SVector[A, CommonTuple#T, CommonTuple] =
+      times(that)
+    def /(that: Time): Frequency = div(that)
+    def per(that: Time): Frequency = div(that)
+  }
+
+  implicit class QuantityBigDecimalTL(bd: BigDecimal) 
+      extends QuantityHelper[CommonTuple#TL, BigDecimal](
+    bd, Numeric.BigDecimalIsFractional) {
+
+    def *[A <: Quantity[A, CommonTuple#TL, CommonTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, CommonTuple#TL, CommonTuple]](
+      that: SVector[A, CommonTuple#TL, CommonTuple]): 
+        SVector[A, CommonTuple#TL, CommonTuple] =
+      times(that)
+  }
+  
+  implicit class QuantityBigDecimalTC(bd: BigDecimal) 
+      extends QuantityHelper[CommonTuple#TC, BigDecimal](
+    bd, Numeric.BigDecimalIsFractional) {
+
+    def *[A <: Quantity[A, CommonTuple#TC, CommonTuple]](that: A): A = 
+      times(that)
+    def *[A <: Quantity[A, CommonTuple#TC, CommonTuple]](
+      that: SVector[A, CommonTuple#TC, CommonTuple]): 
+        SVector[A, CommonTuple#TC, CommonTuple] =
+      times(that)
+  }
+
+  //implicit class QuantityBigDecimalTT(i: Int) extends QuantityHelper(i.toDouble)
 }

@@ -28,7 +28,6 @@ final class AngularAccelerationLike[C <: TypeContext](
 
   type Torque = TorqueLike[C]
   type MomentOfInertia = MomentOfInertiaLike[C]
-  type Time = TimeLike[C]
   type AngularVelocity = AngularVelocityLike[C]
   type Length = LengthLike[C]
   type Acceleration = AccelerationLike[C]

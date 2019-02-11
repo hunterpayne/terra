@@ -34,8 +34,6 @@ final class MomentumLike[C <: TypeContext](val value: C#T, val unit: MomentumUni
 
   type Velocity = VelocityLike[C]
   type Mass = MassLike[C]
-  type TimeSquared = TimeSquaredLike[C]
-  type Time = TimeLike[C]
   type Yank = YankLike[C]
 
   def dimension: Dimension[MomentumLike[C], C#T, C] = Momentum

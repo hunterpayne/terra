@@ -38,7 +38,6 @@ final class VelocityLike[C <: TypeContext](
   import ops.momentumOps.NewtonSeconds
 
   type Mass = MassLike[C]
-  type TimeSquared = TimeSquaredLike[C]
   type Jerk = JerkLike[C]
   type Momentum = MomentumLike[C]
 

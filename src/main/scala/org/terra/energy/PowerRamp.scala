@@ -32,7 +32,6 @@ final class PowerRampLike[C <: TypeContext](
   import ops.powerOps.Watts
   import ops.timeOps.Hours
 
-  type TimeSquared = TimeSquaredLike[C]
   type Energy = EnergyLike[C]
 
   def dimension: Dimension[PowerRampLike[C], C#T, C] = PowerRamp

@@ -41,8 +41,6 @@ final class AccelerationLike[C <: TypeContext](
   type Length = LengthLike[C]
   type Mass = MassLike[C]
   type Force = ForceLike[C]
-  type Time = TimeLike[C]
-  type TimeSquared = TimeSquaredLike[C]
   type Velocity = VelocityLike[C]
 
   def dimension: Dimension[AccelerationLike[C], C#T, C] = Acceleration

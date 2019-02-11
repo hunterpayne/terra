@@ -143,8 +143,7 @@ trait MassSymbols[Tuple <: TypeContext] {
         extends Convs.MassStringConversions(s)
 
     implicit object MassNumeric
-        extends AbstractQuantityNumeric[MassLike[Tuple], Tuple](
-      Mass)
+        extends AbstractQuantityNumeric[MassLike[Tuple], Tuple](Mass)
   }
 
   val Mass = ops.massOps.Mass

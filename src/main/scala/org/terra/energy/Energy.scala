@@ -55,7 +55,6 @@ final class EnergyLike[C <: TypeContext](
   type Angle = AngleLike[C]
   type Length = LengthLike[C]
   type Volume = VolumeLike[C]
-  type TimeSquared = TimeSquaredLike[C]
   type Power = PowerLike[C]
   type PowerRamp = PowerRampLike[C]
   type ElectricCharge = ElectricChargeLike[C]
