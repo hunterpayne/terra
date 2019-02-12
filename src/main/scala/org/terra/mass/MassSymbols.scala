@@ -168,4 +168,25 @@ trait MassSymbols[Tuple <: TypeContext] {
   }
 
   val MomentOfInertia = ops.momentOfInertiaOps.MomentOfInertia
+
+  type MolarMass = MolarMassLike[Tuple]
+  lazy val KilogramsPerMole = ops.molarMassOps.KilogramsPerMole
+  lazy val GramsPerMole= ops.molarMassOps.GramsPerMole
+
+  object MolarMassConversions {
+    import ops.molarMassOps.{ MolarMassConversions => Convs }
+
+    lazy val kilogramPerMole = Convs.kilogramPerMole
+    lazy val gramPerMole = Convs.gramPerMole
+
+    implicit class MolarMassConversions[A](a: A)(
+      implicit num: Numeric[A])
+        extends Convs.MolarMassConversions[A](a)
+
+    implicit object MolarMassNumeric
+        extends AbstractQuantityNumeric[MolarMassLike[Tuple], Tuple](
+      MolarMass)
+  }
+
+  val MolarMass = ops.molarMassOps.MolarMass
 }
