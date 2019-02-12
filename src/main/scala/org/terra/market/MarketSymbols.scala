@@ -210,4 +210,7 @@ trait MarketSymbols[Tuple <: TypeContext] {
   }
 
   type Wage = PricePer[Labor]
+  object Wage {
+    def apply(m: Money, l: Labor): Wage = new Wage(m, l)
+  }
 }

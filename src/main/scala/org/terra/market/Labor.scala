@@ -17,6 +17,8 @@ final class LaborLike[C <: TypeContext](
     extends Quantity[LaborLike[C], C#T, C]
     with TimeIntegral[EmployeeLike[C], C#T, C#TL, C] {
 
+  type Money = MoneyLike[C]
+
   import ops.laborOps._
   import ops.employeeOps.People
   import ops.timeOps.Hours
@@ -28,6 +30,7 @@ final class LaborLike[C <: TypeContext](
   override def ensureTD: HasEnsureType[C#TL] = terraOps.converters.ensureTL
 
   def dimension: Dimension[LaborLike[C], C#T, C] = Labor
+  def *(that: Price[LaborLike[C], C#T, C]): Money = that * this
 
   override implicit val num: Numeric[C#T] = ops.num
 

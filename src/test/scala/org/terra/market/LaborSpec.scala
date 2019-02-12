@@ -63,6 +63,12 @@ class LaborSpec
     PersonHours(10) / PersonHours(4) should be(2.5)
   }
 
+  it should "compute a total amount of payment at a given wage" in {
+    val wage = new Wage(USD(30), People(1) * Hours(1))
+    wage * PersonHours(20) should be(USD(600))
+    PersonHours(20) * wage should be(USD(600))
+  }
+
   behavior of "LaborConversions"
 
   it should "provide aliases for single unit values" in {

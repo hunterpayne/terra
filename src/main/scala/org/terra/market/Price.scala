@@ -50,11 +50,12 @@ case class Price[A <: Quantity[A, T, C], T, C <: TypeContext](
     new PriceT(this.money - that.money, quantity)
   def -(that: PriceT): PriceT = minus(that)
 
-  def times(that: Double)(implicit ops: TerraOps[C]): PriceT = 
-    new PriceT(this.money * ops.convCurrency(that), quantity)
-  def *(that: Double)(implicit ops: TerraOps[C]): PriceT = 
-    new PriceT(this.money * ops.convCurrency(that), quantity)
-  def times(that: C#TC)(implicit ops: TerraOps[C]): PriceT = 
+  //def times(that: Double)(implicit ops: TerraOps[C]): PriceT =
+    //new PriceT(this.money * ops.convCurrency(that), quantity)
+  // TODO Double???
+  //def *(that: Double)(implicit ops: TerraOps[C]): PriceT =
+    //new PriceT(this.money * ops.convCurrency(that), quantity)
+  def times(that: C#TC)(implicit ops: TerraOps[C]): PriceT =
     new PriceT(this.money * that, quantity)
   def *(that: C#TC)(implicit ops: TerraOps[C]): PriceT = 
     new PriceT(this.money * that, quantity)
@@ -81,7 +82,7 @@ case class Price[A <: Quantity[A, T, C], T, C <: TypeContext](
    * @param that Quantity
    * @return
    */
-  def *(that: A): MoneyLike[C] = convertToBase(that)
+  def *(that: A): Money = convertToBase(that)
 
   /**
    * Returns the Quantity that will cost that)
