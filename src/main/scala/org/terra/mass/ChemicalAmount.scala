@@ -12,6 +12,7 @@ package mass
 import scala.reflect.ClassTag
 
 import space.VolumeLike
+import time.TimeIntegral
 
 /**
  * @author  garyKeorkunian
@@ -22,15 +23,29 @@ import space.VolumeLike
 final class ChemicalAmountLike[C <: TypeContext](
   val value: C#T, val unit: ChemicalAmountUnit[C])(
   implicit ops: TerraOps[C])
-    extends Quantity[ChemicalAmountLike[C], C#T, C] {
+    extends Quantity[ChemicalAmountLike[C], C#T, C] 
+    with TimeIntegral[CatalyticActivityLike[C], C#T, C#T, C] {
 
   import ops.chemicalAmountOps._
+  import ops.concentrationOps.MolesPerCubicMeter
+  import ops.catalyticActivityOps.Katals
+  import ops.timeOps.Seconds
 
   type Volume = VolumeLike[C]
+  type Mass = MassLike[C]
+  type MolarMass = MolarMassLike[C]
+  type Concentration = ConcentrationLike[C]
 
   def dimension: Dimension[ChemicalAmountLike[C], C#T, C] = ChemicalAmount
 
-  def /(that: Volume) = ??? // returns SubstanceConcentration
+  protected def timeDerived = Katals(toMoles)
+  protected[terra] def time = Seconds(1)
+
+  def *(that: MolarMass)(implicit ops: TerraOps[C]): Mass = that * this
+  def /(that: Volume)(implicit ops: TerraOps[C]): Concentration = {
+    implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
+    MolesPerCubicMeter(ops.div[C#T](toMoles, that.toCubicMeters))
+  }
 
   def toMoles = to(Moles)
   def toPoundMoles = to(PoundMoles)

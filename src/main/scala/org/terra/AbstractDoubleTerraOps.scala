@@ -68,6 +68,8 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
     with MassOps[C]
     with MomentOfInertiaOps[C]
     with MolarMassOps[C]
+    with ConcentrationOps[C]
+    with CatalyticActivityOps[C]
     with AccelerationOps[C]
     with AngularAccelerationOps[C]
     with AngularVelocityOps[C]
@@ -218,6 +220,8 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
   val massOps: MassOps[C] = this
   val momentOfInertiaOps: MomentOfInertiaOps[C] = this
   val molarMassOps: MolarMassOps[C] = this
+  val concentrationOps: ConcentrationOps[C] = this
+  val catalyticActivityOps: CatalyticActivityOps[C] = this
 
   val accelerationOps: AccelerationOps[C] = this
   val angularAccelerationOps: AngularAccelerationOps[C] = this

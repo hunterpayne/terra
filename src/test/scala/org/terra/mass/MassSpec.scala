@@ -199,6 +199,10 @@ class MassSpec extends FlatSpec with Matchers {
     Kilograms(1) / Moles(1) should be(KilogramsPerMole(1))
   }
 
+  it should "return ChemicalAmount when divided by MolarMass" in {
+    Kilograms(1) / KilogramsPerMole(1) should be(Moles(1))
+  }
+
   behavior of "MassConversions"
 
   it should "provide aliases for single unit values" in {

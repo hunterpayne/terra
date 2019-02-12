@@ -13,6 +13,7 @@ import org.scalatest.{ FlatSpec, Matchers }
 
 import standard._
 import standard.mass._
+import standard.time.Seconds
 
 /**
  * @author  garyKeorkunian
@@ -44,6 +45,18 @@ class ChemicalAmountSpec extends FlatSpec with Matchers {
   it should "return properly formatted strings for all supported Units of Measure" in {
     Moles(1).toString(Moles) should be("1.0 mol")
     PoundMoles(1).toString(PoundMoles) should be("1.0 lb-mol")
+  }
+
+  it should "when multiplied by a MolarMass return a Mass" in {
+    Moles(1) * KilogramsPerMole(1) should be(Kilograms(1))
+  }    
+
+  it should "return CatalyticActivity when divided by Time" in {
+    Moles(1) / Seconds(1) should be(Katals(1))
+  }
+
+  it should "return Time when divided by CatalyticActivity" in {
+    Moles(1) / Katals(1) should be(Seconds(1))
   }
 
   behavior of "ChemicalAmountConversions"

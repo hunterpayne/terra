@@ -171,7 +171,7 @@ trait MassSymbols[Tuple <: TypeContext] {
 
   type MolarMass = MolarMassLike[Tuple]
   lazy val KilogramsPerMole = ops.molarMassOps.KilogramsPerMole
-  lazy val GramsPerMole= ops.molarMassOps.GramsPerMole
+  lazy val GramsPerMole = ops.molarMassOps.GramsPerMole
 
   object MolarMassConversions {
     import ops.molarMassOps.{ MolarMassConversions => Convs }
@@ -189,4 +189,62 @@ trait MassSymbols[Tuple <: TypeContext] {
   }
 
   val MolarMass = ops.molarMassOps.MolarMass
+
+  type Concentration = ConcentrationLike[Tuple]
+  lazy val MolesPerCubicMeter = ops.concentrationOps.MolesPerCubicMeter
+
+  object ConcentrationConversions {
+    import ops.concentrationOps.{ ConcentrationConversions => Convs }
+
+    lazy val molePerCubicMeter = Convs.molePerCubicMeter
+
+    implicit class ConcentrationConversions[A](a: A)(
+      implicit num: Numeric[A])
+        extends Convs.ConcentrationConversions[A](a)
+
+    implicit object ConcentrationNumeric
+        extends AbstractQuantityNumeric[ConcentrationLike[Tuple], Tuple](
+      Concentration)
+  }
+
+  val Concentration = ops.concentrationOps.Concentration
+
+  type CatalyticActivity = CatalyticActivityLike[Tuple]
+  lazy val Katals = ops.catalyticActivityOps.Katals
+  lazy val Decikatals = ops.catalyticActivityOps.Decikatals
+  lazy val Centikatals = ops.catalyticActivityOps.Centikatals
+  lazy val Millikatals = ops.catalyticActivityOps.Millikatals
+  lazy val Microkatals = ops.catalyticActivityOps.Microkatals
+  lazy val Nanokatals = ops.catalyticActivityOps.Nanokatals
+  lazy val Decakatals = ops.catalyticActivityOps.Decakatals
+  lazy val Hectokatals = ops.catalyticActivityOps.Hectokatals
+  lazy val Kilokatals = ops.catalyticActivityOps.Kilokatals
+  lazy val Megakatals = ops.catalyticActivityOps.Megakatals
+  lazy val Gigakatals = ops.catalyticActivityOps.Gigakatals
+
+  object CatalyticActivityConversions {
+    import ops.catalyticActivityOps.{ CatalyticActivityConversions => Convs }
+
+    lazy val katal = Convs.katal
+    lazy val decikatal = Convs.decikatal
+    lazy val centikatal = Convs.centikatal
+    lazy val millikatal = Convs.millikatal
+    lazy val microkatal = Convs.microkatal
+    lazy val nanokatal = Convs.nanokatal
+    lazy val decakatal = Convs.decakatal
+    lazy val hectokatal = Convs.hectokatal
+    lazy val kilokatal = Convs.kilokatal
+    lazy val megakatal = Convs.megakatal
+    lazy val gigakatal = Convs.gigakatal
+
+    implicit class CatalyticActivityConversions[A](a: A)(
+      implicit num: Numeric[A])
+        extends Convs.CatalyticActivityConversions[A](a)
+
+    implicit object CatalyticActivityNumeric
+        extends AbstractQuantityNumeric[CatalyticActivityLike[Tuple], Tuple](
+      CatalyticActivity)
+  }
+
+  val CatalyticActivity = ops.catalyticActivityOps.CatalyticActivity
 }

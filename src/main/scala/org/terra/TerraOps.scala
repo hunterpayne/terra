@@ -170,6 +170,8 @@ trait TerraOps[C <: TypeContext] {
   val massOps: MassOps[C]
   val momentOfInertiaOps: MomentOfInertiaOps[C]
   val molarMassOps: MolarMassOps[C]
+  val concentrationOps: ConcentrationOps[C]
+  val catalyticActivityOps: CatalyticActivityOps[C]
 
   val accelerationOps: AccelerationOps[C]
   val angularAccelerationOps: AngularAccelerationOps[C]

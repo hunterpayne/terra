@@ -42,6 +42,7 @@ final class MassLike[C <: TypeContext](val value: C#T, val unit: MassUnit[C])(
   import ops.areaDensityOps.KilogramsPerSquareMeter
   import ops.momentOfInertiaOps.KilogramsMetersSquared
   import ops.molarMassOps.KilogramsPerMole
+  import ops.chemicalAmountOps.Moles
 
   type Acceleration = AccelerationLike[C]
   type Energy = EnergyLike[C]
@@ -87,6 +88,10 @@ final class MassLike[C <: TypeContext](val value: C#T, val unit: MassUnit[C])(
   def /(that: ChemicalAmount)(implicit ops: TerraOps[C]): MolarMass = {
     implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
     KilogramsPerMole(ops.div[C#T](this.toKilograms, that.toMoles))
+  }
+  def /(that: MolarMass)(implicit ops: TerraOps[C]): ChemicalAmount = {
+    implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
+    Moles(ops.div[C#T](this.toKilograms, that.toKilogramsPerMole))
   }
 
   /**
