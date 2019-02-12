@@ -1,20 +1,18 @@
 
-package org.terra
-package time
+package org.terra.classic
 
 import org.scalatest.{ FlatSpec, Matchers }
 
-import standard._
-import standard.time._
-import standard.space.{ Meters, SquareMeters }
-import standard.motion.{ MetersPerSecond, MetersPerSecondCubed, MetersPerSecondSquared }
-import standard.radio.SquareMeterSeconds
+import time._
+import space.{ Meters, SquareMeters }
+import motion.{ MetersPerSecond, MetersPerSecondCubed, MetersPerSecondSquared }
+import radio.SquareMeterSeconds
+
+import org.terra.QuantityParseException
 
 import scala.concurrent.duration.{ DAYS, Duration, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS }
 
 /**
- * @author  garyKeorkunian
- * @since   0.1
  *
  */
 class TimeSpec extends FlatSpec with Matchers {
@@ -63,7 +61,7 @@ class TimeSpec extends FlatSpec with Matchers {
   }
 
   it should "return Time when added to Time" in {
-    Seconds(60) + Minutes(1) should be(Minutes(2))
+    Seconds(60) + Minutes(1) should be(Seconds(120))
     Minutes(15) + Hours(1.75) should be(Hours(2))
   }
 

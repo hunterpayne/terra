@@ -32,10 +32,11 @@ import space.Meters
 // etc...
 ```
 
-There are three versions of the Quantity classes to use and you choose which
+There are four versions of the Quantity classes to use and you choose which
 one you use by importing either:
 * import org.terra.standard._ or
 * import org.terra.common._ or
+* import org.terra.classic._ or
 * import org.terra.double._
 
 Then you import the rest of your normal Quantity, Dimension and Unit classes
@@ -477,7 +478,7 @@ northAmericanSales: org.terra.standard.market.Money = 635.1047619047619047619047
 ## How Terra works
 
 Terra is a rewrite of the Squants library so that you can redefine the
-way in which math is performed.  There are three default implementations to
+way in which math is performed.  There are four default implementations to
 give users nice default versions of the Dimensions and their types.  Terra
 defines four kinds of types that are used by the library:
 * T -- usually a Double, the main type used by the library
@@ -489,6 +490,7 @@ Information
 They are:
 * Standard which uses Doubles, Long, BigDecimal and Double for its four types
 * Common which uses Doubles, Long, BigDecimal and Long for its four types
+* Classic which uses Doubles, Double, BigDecimal and Long for its four types
 * Double which uses all Doubles
 
 To use the standard version of the library, use these imports:
@@ -503,6 +505,15 @@ import space.Meters
 To use the common version of the library, use these imports:
 ```scala
 import org.terra.common._
+import time.Seconds
+import space.Meters
+// etc...
+```
+
+
+To use the classic version of the library, use these imports:
+```scala
+import org.terra.classic._
 import time.Seconds
 import space.Meters
 // etc...
