@@ -490,7 +490,7 @@ Information
 They are:
 * Standard which uses Doubles, Long, BigDecimal and Double for its four types
 * Common which uses Doubles, Long, BigDecimal and Long for its four types
-* Classic which uses Doubles, Double, BigDecimal and Long for its four types
+* Classic which uses Doubles, Double, BigDecimal and Double for its four types
 * Double which uses all Doubles
 
 To use the standard version of the library, use these imports:
