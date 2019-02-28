@@ -57,6 +57,7 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
     with ResistivityOps[C]
     with EnergyOps[C]
     with EnergyDensityOps[C]
+    with EnergyAreaDensityOps[C]
     with MolarEnergyOps[C]
     with PowerOps[C]
     with PowerDensityOps[C]
@@ -101,6 +102,7 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
     with SpectralIntensityOps[C]
     with SpectralIrradianceOps[C]
     with SpectralPowerOps[C]
+    with AbsorbedDoseOps[C]
     with AngleOps[C]
     with AreaOps[C]
     with LengthOps[C]
@@ -217,6 +219,7 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
   val powerDensityOps: PowerDensityOps[C] = this
   val powerRampOps: PowerRampOps[C] = this
   val specificEnergyOps: SpecificEnergyOps[C] = this
+  val energyAreaDensityOps: EnergyAreaDensityOps[C] = this
 
   val areaDensityOps: AreaDensityOps[C] = this
   val chemicalAmountOps: ChemicalAmountOps[C] = this
@@ -260,6 +263,7 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
   val spectralIntensityOps: SpectralIntensityOps[C] = this
   val spectralIrradianceOps: SpectralIrradianceOps[C] = this
   val spectralPowerOps: SpectralPowerOps[C] = this
+  val absorbedDoseOps: AbsorbedDoseOps[C] = this
 
   val angleOps: AngleOps[C] = this
   val areaOps: AreaOps[C] = this

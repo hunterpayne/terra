@@ -65,7 +65,7 @@ final class MassLike[C <: TypeContext](val value: C#T, val unit: MassUnit[C])(
   protected def time = Seconds(1)
 
   def *(that: SpecificEnergy)(implicit ops: TerraOps[C]): Energy = {
-    Joules(ops.num.times(this.toKilograms, that.toGrays))
+    Joules(ops.num.times(this.toKilograms, that.toJoulesPerKilogram))
   }
   def *(that: Velocity): Momentum = Momentum(this, that)
   def *(that: Acceleration)(implicit ops: TerraOps[C]): Force = {

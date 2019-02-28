@@ -18,7 +18,7 @@ import mass.MassLike
  * @author  garyKeorkunian
  * @since   0.1
  *
- * @param value value in [[org.terra.energy.Grays]]
+ * @param value value in [[org.terra.energy.JoulesPerKilogram]]
  */
 final class SpecificEnergyLike[C <: TypeContext](
   val value: C#T, val unit: SpecificEnergyUnit[C])(
@@ -36,13 +36,10 @@ final class SpecificEnergyLike[C <: TypeContext](
 
   def dimension: Dimension[SpecificEnergyLike[C], C#T, C] = SpecificEnergy
 
-  def *(that: Mass)(implicit ops: TerraOps[C]): Energy = 
-    Joules(ops.num.times(this.toGrays, that.toKilograms))
-  def /(that: Time) = ??? // returns AbsorbedEnergyRate
+  def *(that: Mass)(implicit ops: TerraOps[C]): Energy =
+    Joules(ops.num.times(this.toJoulesPerKilogram, that.toKilograms))
 
-  def toGrays = to(Grays)
-  def toRads = to(Rads)
-  def toErgsPerGram = to(ErgsPerGram)
+  def toJoulesPerKilogram = to(JoulesPerKilogram)
 }
 
 trait SpecificEnergyUnit[C <: TypeContext] 
@@ -64,35 +61,22 @@ trait SpecificEnergyOps[C <: TypeContext] {
       new SpecificEnergyLike[C](ops.convDouble(n.toDouble(a)), unit)
     def apply(value: Any) = parse(value)
     def name = "SpecificEnergy"
-    def primaryUnit = Grays
-    def siUnit = Grays
-    def units = Set(Grays, Rads, ErgsPerGram)
+    def primaryUnit = JoulesPerKilogram
+    def siUnit = JoulesPerKilogram
+    def units = Set(JoulesPerKilogram)
   }
 
-  object Grays extends SpecificEnergyUnitT with PrimaryUnit[C#T, C] 
+  object JoulesPerKilogram extends SpecificEnergyUnitT with PrimaryUnit[C#T, C] 
       with SiUnit {
-    val symbol = "Gy"
-  }
-
-  object Rads extends SpecificEnergyUnitT with UnitConverter[C#T, C] {
-    val symbol = "rad"
-    val conversionFactor = 0.01
-  }
-
-  object ErgsPerGram extends SpecificEnergyUnitT with UnitConverter[C#T, C] {
-    val symbol = "erg/g"
-    val conversionFactor = 0.0001
+    val symbol = 
+      ops.energyOps.Joules.symbol + "/" + ops.massOps.Kilograms.symbol
   }
 
   object SpecificEnergyConversions {
-    lazy val gray = Grays(1)
-    lazy val rad = Rads(1)
-    lazy val ergsPerGram = ErgsPerGram(1)
+    lazy val joulePerKilogram = JoulesPerKilogram(1)
 
     implicit class SpecificEnergyConversions[A](a: A)(implicit num: Numeric[A]) {
-      def grays = Grays(a)
-      def rads = Rads(a)
-      def ergsPerGram = ErgsPerGram(a)
+      def joulesPerKilogram = JoulesPerKilogram(a)
     }
   }
 }

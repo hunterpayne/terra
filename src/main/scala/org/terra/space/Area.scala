@@ -14,7 +14,7 @@ import scala.reflect.ClassTag
 import electro.{ MagneticFluxLike, MagneticFluxDensityLike }
 import mass.{ AreaDensityLike, MassLike }
 import photo.{ LuminanceLike, IlluminanceLike, LuminousIntensityLike, LuminousFluxLike }
-import energy.PowerLike
+import energy.{ EnergyLike, EnergyAreaDensityLike, PowerLike }
 import motion.{ PressureLike, ForceLike }
 import radio._
 import time.TimeLike
@@ -59,6 +59,8 @@ final class AreaLike[C <: TypeContext](val value: C#T, val unit: AreaUnit[C])(
   type MagneticFluxDensity = MagneticFluxDensityLike[C]
   type MagneticFlux = MagneticFluxLike[C]
   type Radiance = RadianceLike[C]
+  type Energy = EnergyLike[C]
+  type EnergyAreaDensity = EnergyAreaDensityLike[C]
 
   def dimension: Dimension[AreaLike[C], C#T, C] = Area
 
@@ -90,6 +92,8 @@ final class AreaLike[C <: TypeContext](val value: C#T, val unit: AreaUnit[C])(
     WattsPerSteradian(ops.num.times(this.toSquareMeters, that.toWattsPerSteradianPerSquareMeter))
   def *(that: Time)(implicit ops: TerraOps[C]): AreaTime = 
     SquareMeterSeconds(ops.num.times(this.toSquareMeters, ops.rconvT(that.toSeconds)))
+  def *(that: EnergyAreaDensity)(implicit ops: TerraOps[C]): Energy = 
+    that * this
 
   def /(that: Length)(implicit ops: TerraOps[C]): Length = {
     implicit val e: HasEnsureType[C#T] = ops.converters.ensureT

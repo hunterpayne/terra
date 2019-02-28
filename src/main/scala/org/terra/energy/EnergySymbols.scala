@@ -211,17 +211,13 @@ trait EnergySymbols[Tuple <: TypeContext] {
   }
 
   type SpecificEnergy = SpecificEnergyLike[Tuple]
-  lazy val Grays = ops.specificEnergyOps.Grays
-  lazy val Rads = ops.specificEnergyOps.Rads
-  lazy val ErgsPerGram = ops.specificEnergyOps.ErgsPerGram
+  lazy val JoulesPerKilogram = ops.specificEnergyOps.JoulesPerKilogram
   lazy val SpecificEnergy = ops.specificEnergyOps.SpecificEnergy
 
   object SpecificEnergyConversions {
     import ops.specificEnergyOps.{ SpecificEnergyConversions => Convs }
 
-    lazy val gray = Convs.gray
-    lazy val rad = Convs.rad
-    lazy val ergsPerGram = Convs.ergsPerGram
+    lazy val joulePerKilogram = Convs.joulePerKilogram
 
     implicit class SpecificEnergyConversions[A](a: A)(implicit num: Numeric[A])
         extends Convs.SpecificEnergyConversions[A](a)
@@ -229,6 +225,23 @@ trait EnergySymbols[Tuple <: TypeContext] {
     implicit object SpecificEnergyNumeric
         extends AbstractQuantityNumeric[SpecificEnergyLike[Tuple], Tuple](
       SpecificEnergy)
+  }
+
+  type EnergyAreaDensity = EnergyAreaDensityLike[Tuple]
+  lazy val JoulesPerSquareMeter = ops.energyAreaDensityOps.JoulesPerSquareMeter
+  lazy val EnergyAreaDensity = ops.energyAreaDensityOps.EnergyAreaDensity
+
+  object EnergyAreaDensityConversions {
+    import ops.energyAreaDensityOps.{ EnergyAreaDensityConversions => Convs }
+
+    lazy val joulePerSquareMeter = Convs.joulePerSquareMeter
+
+    implicit class EnergyAreaDensityConversions[A](a: A)(implicit num: Numeric[A])
+        extends Convs.EnergyAreaDensityConversions[A](a)
+
+    implicit object EnergyAreaDensityNumeric
+        extends AbstractQuantityNumeric[EnergyAreaDensityLike[Tuple], Tuple](
+      EnergyAreaDensity)
   }
 
   object KineticEnergy extends KineticEnergy[Tuple]

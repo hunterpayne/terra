@@ -16,14 +16,14 @@ import org.terra.energy.EnergyLike
 import org.terra.time.TimeLike
 
 /**
- * Its important to note that while Dose and SpecificEnergy are simliar 
+ * Its important to note that while Dose and AbsorbedDose are simliar 
  * measures (both are energy/mass dimensions), they are decidedly different
  * and no conversions between the two dimensions should be directly possible
- * through implicit conversions EVER.  This is because SpecificEnergy is used to
+ * through implicit conversions EVER.  This is because AbsorbedDose is used to
  * measure absorbed dose which just measures energy deposited into a mass of
  * material while Dose is used to measure equivalent/effective/committed doses
  * which are measures of the damage done to biological tissues.  Since this
- * is an easy and disasterous mistake to make, it is critical that Squants
+ * is an easy and disasterous mistake to make, it is critical that Terra
  * doesn't allow any sort of magic conversions that allow this mistake.
  * @author  Hunter Payne
  *
@@ -46,7 +46,6 @@ final class DoseLike[C <: TypeContext](val value: C#T, val unit: DoseUnit[C])(
     implicit val opsArg = ops
     Joules(ops.num.times(this.toSieverts, that.toKilograms))
   }
-  def /(that: Time) = ??? // returns AbsorbedEnergyRate
 
   def toSieverts = to(Sieverts)
   def toRems = to(Rems)

@@ -12,6 +12,7 @@ package space
 import org.scalatest.{ FlatSpec, Matchers }
 import standard._
 import standard.space._
+import standard.energy.{ Joules, JoulesPerSquareMeter }
 import standard.mass.{ Kilograms, KilogramsPerSquareMeter }
 import standard.motion.{ Newtons, Pascals }
 import standard.photo.{ Candelas, CandelasPerSquareMeter, Lumens, Lux }
@@ -113,6 +114,10 @@ class AreaSpec extends FlatSpec with Matchers {
 
   it should "return AreaTime when multiplied by Time" in {
     SquareMeters(4) * Seconds(1) should be(SquareMeterSeconds(4))
+  }
+
+  it should "return Energy when multiplied by EnergyAreaDensity" in {
+    SquareMeters(10) * JoulesPerSquareMeter(1) should be(Joules(10))
   }
 
   behavior of "AreaConversion"

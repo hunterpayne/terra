@@ -42,7 +42,7 @@ final class EnergyLike[C <: TypeContext](
   import ops.irradianceOps.WattsPerSquareMeter
   import ops.forceOps.Newtons
   import ops.lengthOps.Meters
-  import ops.specificEnergyOps.Grays
+  import ops.specificEnergyOps.JoulesPerKilogram
   import ops.massOps.Kilograms
   import ops.energyDensityOps.JoulesPerCubicMeter
   import ops.volumeOps.CubicMeters
@@ -50,6 +50,7 @@ final class EnergyLike[C <: TypeContext](
   import ops.temperatureOps.Kelvin
   import ops.molarEnergyOps.JoulesPerMole
   import ops.torqueOps.NewtonMeters
+  import ops.energyAreaDensityOps.JoulesPerSquareMeter
 
   type Area = AreaLike[C]
   type Angle = AngleLike[C]
@@ -70,6 +71,7 @@ final class EnergyLike[C <: TypeContext](
   type Torque = TorqueLike[C]
   type MolarEnergy = MolarEnergyLike[C]
   type ChemicalAmount = ChemicalAmountLike[C]
+  type EnergyAreaDensity = EnergyAreaDensityLike[C]
 
   def dimension: Dimension[EnergyLike[C], C#T, C] = Energy
 
@@ -91,11 +93,11 @@ final class EnergyLike[C <: TypeContext](
   }
   def /(that: Mass)(implicit ops: TerraOps[C]): SpecificEnergy = {
     implicit val ensureT: HasEnsureType[C#T] = ops.converters.ensureT
-    Grays(ops.div[C#T](this.toJoules, that.toKilograms))
+    JoulesPerKilogram(ops.div[C#T](this.toJoules, that.toKilograms))
   }
   def /(that: SpecificEnergy)(implicit ops: TerraOps[C]): Mass = {
     implicit val ensureT: HasEnsureType[C#T] = ops.converters.ensureT
-    Kilograms(ops.div[C#T](this.toJoules, that.toGrays))
+    Kilograms(ops.div[C#T](this.toJoules, that.toJoulesPerKilogram))
   }
   def /(that: Volume)(implicit ops: TerraOps[C]): EnergyDensity = {
     implicit val ensureT: HasEnsureType[C#T] = ops.converters.ensureT
@@ -132,7 +134,10 @@ final class EnergyLike[C <: TypeContext](
     implicit val ensureT: HasEnsureType[C#T] = ops.converters.ensureT
     NewtonMeters(ops.div[C#T](toJoules, that.toRadians))
   }
-  def /(that: Area)(implicit ops: TerraOps[C]) = ??? // Insolation, Energy Area Density
+  def /(that: Area)(implicit ops: TerraOps[C]): EnergyAreaDensity = {
+    implicit val ensureT: HasEnsureType[C#T] = ops.converters.ensureT
+    JoulesPerSquareMeter(ops.div[C#T](this.toJoules, that.toSquareMeters))
+  }
 
   def /(that: TimeSquared)(implicit ops: TerraOps[C]): PowerRamp =
     this / that.time1 / that.time2

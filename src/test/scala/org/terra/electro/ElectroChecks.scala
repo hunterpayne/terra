@@ -66,11 +66,11 @@ object ElectroChecks extends Properties("Electro") with QuantityChecks {
       Meters(meters).plusOrMinus(Meters(tol)).contains(Joules(newtons * meters) / Newtons(newtons))
   }
 
-  property("Joules = Kilograms * Grays") = forAll(posNum, posNum) { (kilograms: TestData, grays: TestData) ⇒
-    Joules(kilograms * grays) =~ Kilograms(kilograms) * Grays(grays) &&
-      Joules(kilograms * grays) =~ Grays(grays) * Kilograms(kilograms) &&
-      Kilograms(kilograms).plusOrMinus(Kilograms(tol)).contains(Joules(kilograms * grays) / Grays(grays)) &&
-      Grays(grays).plusOrMinus(Grays(tol)).contains(Joules(kilograms * grays) / Kilograms(kilograms))
+  property("Joules = Kilograms * JoulesPerKilogram") = forAll(posNum, posNum) { (kilograms: TestData, grays: TestData) ⇒
+    Joules(kilograms * grays) =~ Kilograms(kilograms) * JoulesPerKilogram(grays) &&
+      Joules(kilograms * grays) =~ JoulesPerKilogram(grays) * Kilograms(kilograms) &&
+      Kilograms(kilograms).plusOrMinus(Kilograms(tol)).contains(Joules(kilograms * grays) / JoulesPerKilogram(grays)) &&
+      JoulesPerKilogram(grays).plusOrMinus(JoulesPerKilogram(tol)).contains(Joules(kilograms * grays) / Kilograms(kilograms))
   }
 
   property("Siemens = SiemensPerMeter * Meters") = forAll(posNum, posNum) { (conductivity: TestData, length: TestData) ⇒

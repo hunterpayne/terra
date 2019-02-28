@@ -163,6 +163,7 @@ trait TerraOps[C <: TypeContext] {
   val powerDensityOps: PowerDensityOps[C]
   val powerRampOps: PowerRampOps[C]
   val specificEnergyOps: SpecificEnergyOps[C]
+  val energyAreaDensityOps: EnergyAreaDensityOps[C]
 
   val areaDensityOps: AreaDensityOps[C]
   val chemicalAmountOps: ChemicalAmountOps[C]
@@ -206,6 +207,7 @@ trait TerraOps[C <: TypeContext] {
   val spectralIntensityOps: SpectralIntensityOps[C]
   val spectralIrradianceOps: SpectralIrradianceOps[C]
   val spectralPowerOps: SpectralPowerOps[C]
+  val absorbedDoseOps: AbsorbedDoseOps[C]
 
   val angleOps: AngleOps[C]
   val areaOps: AreaOps[C]

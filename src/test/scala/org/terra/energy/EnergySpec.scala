@@ -18,7 +18,7 @@ import standard.time.Hours
 import standard.radio.{ Irradiance, WattsPerSquareMeter, BecquerelsPerSquareMeterSecond }
 import standard.thermal.{ JoulesPerKelvin, Kelvin }
 import standard.mass.{ Kilograms, Moles }
-import standard.space.{ CubicMeters, Meters }
+import standard.space.{ CubicMeters, Meters, SquareMeters }
 import standard.motion.{ MetersPerSecond, NewtonSeconds, Newtons }
 
 /**
@@ -174,11 +174,11 @@ class EnergySpec extends FlatSpec with Matchers {
   }
 
   it should "return Mass when divided by SpecificEnergy" in {
-    Joules(1) / Grays(1) should be(Kilograms(1))
+    Joules(1) / JoulesPerKilogram(1) should be(Kilograms(1))
   }
 
   it should "return SpecificEnergy when divided by Mass" in {
-    Joules(1) / Kilograms(1) should be(Grays(1))
+    Joules(1) / Kilograms(1) should be(JoulesPerKilogram(1))
   }
 
   it should "return Volume when divided by EnergyDensity" in {
@@ -199,6 +199,10 @@ class EnergySpec extends FlatSpec with Matchers {
 
   it should "return MolarEnergy when divided by ChemicalAmount" in {
     Joules(10) / Moles(2) should be(JoulesPerMole(5))
+  }
+
+  it should "return EnergyAreaDensity when divided by Area" in {
+    Joules(10) / SquareMeters(2) should be(JoulesPerSquareMeter(5))
   }
 
   behavior of "KineticEnergyCalculations"

@@ -213,4 +213,25 @@ trait RadioSymbols[Tuple <: TypeContext] {
       SpectralPower)
   }
   val SpectralPower = ops.spectralPowerOps.SpectralPower
+
+  type AbsorbedDose = AbsorbedDoseLike[Tuple]
+  lazy val Grays = ops.absorbedDoseOps.Grays
+  lazy val Rads = ops.absorbedDoseOps.Rads
+  lazy val ErgsPerGram = ops.absorbedDoseOps.ErgsPerGram
+  lazy val AbsorbedDose = ops.absorbedDoseOps.AbsorbedDose
+
+  object AbsorbedDoseConversions {
+    import ops.absorbedDoseOps.{ AbsorbedDoseConversions => Convs }
+
+    lazy val gray = Convs.gray
+    lazy val rad = Convs.rad
+    lazy val ergsPerGram = Convs.ergsPerGram
+
+    implicit class AbsorbedDoseConversions[A](a: A)(implicit num: Numeric[A])
+        extends Convs.AbsorbedDoseConversions[A](a)
+
+    implicit object AbsorbedDoseNumeric
+        extends AbstractQuantityNumeric[AbsorbedDoseLike[Tuple], Tuple](
+      AbsorbedDose)
+  }
 }

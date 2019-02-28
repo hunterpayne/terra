@@ -23,7 +23,7 @@ object EnergyChecks extends Properties("Energy") with QuantityChecks {
   implicit val tolEnergy = Joules(tol)
   implicit val tolLength = Meters(tol)
   implicit val tolForce = Newtons(tol)
-  implicit val tolSpecificEnergy = Grays(tol)
+  implicit val tolSpecificEnergy = JoulesPerKilogram(tol)
   implicit val tolMass = Kilograms(tol)
   implicit val tolEnergyDensity = JoulesPerCubicMeter(tol)
   implicit val tolTemp = Kelvin(tol)
@@ -60,11 +60,11 @@ object EnergyChecks extends Properties("Energy") with QuantityChecks {
       Newtons(newtons) =~ (Joules(newtons * meters) / Meters(meters))
   }
 
-  property("Joules = Kilograms * Grays") = forAll(posNum, posNum) { (kilograms: TestData, grays: TestData) ⇒
-    Joules(kilograms * grays) =~ (Kilograms(kilograms) * Grays(grays)) &&
-      Joules(kilograms * grays) =~ (Grays(grays) * Kilograms(kilograms)) &&
-      Grays(grays) =~ (Joules(kilograms * grays) / Kilograms(kilograms)) &&
-      Kilograms(kilograms) =~ (Joules(kilograms * grays) / Grays(grays))
+  property("Joules = Kilograms * JoulesPerKilogram") = forAll(posNum, posNum) { (kilograms: TestData, grays: TestData) ⇒
+    Joules(kilograms * grays) =~ (Kilograms(kilograms) * JoulesPerKilogram(grays)) &&
+      Joules(kilograms * grays) =~ (JoulesPerKilogram(grays) * Kilograms(kilograms)) &&
+      JoulesPerKilogram(grays) =~ (Joules(kilograms * grays) / Kilograms(kilograms)) &&
+      Kilograms(kilograms) =~ (Joules(kilograms * grays) / JoulesPerKilogram(grays))
   }
 
   property("Joules = CubicMeters * JoulesPerCubicMeter") = forAll(posNum, posNum) { (cubicMeters: TestData, jpcm: TestData) ⇒
