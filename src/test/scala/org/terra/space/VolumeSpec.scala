@@ -13,7 +13,7 @@ import org.scalatest.{ FlatSpec, Matchers }
 import standard._
 import standard.space._
 import standard.energy.{ Joules, JoulesPerCubicMeter }
-import standard.mass.{ Kilograms, KilogramsPerCubicMeter }
+import standard.mass.{ Kilograms, KilogramsPerCubicMeter, Moles }
 import standard.motion.CubicMetersPerSecond
 import standard.time.Seconds
 
@@ -169,6 +169,14 @@ class VolumeSpec extends FlatSpec with Matchers {
 
   it should "return Length when cube rooted" in {
     CubicMeters(27).cubeRoot should be(Meters(3))
+  }
+
+  it should "return SpecificVolume when divided by Mass" in {
+    CubicMeters(1) / Kilograms(1) should be(CubicMetersPerKilogram(1))
+  }
+
+  it should "return MolarVolume when divided by ChemicalAmount" in {
+    CubicMeters(1) / Moles(1) should be(CubicMetersPerMole(1))
   }
 
   behavior of "VolumeConversions"

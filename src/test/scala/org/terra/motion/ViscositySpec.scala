@@ -31,7 +31,7 @@ class ViscositySpec extends FlatSpec with Matchers with CustomMatchers {
     Viscosity("10.22 P").get should be(Poise(10.22))
     Viscosity("10.22 cP").get should be(CentiPoise(10.22))
     Viscosity("10.22 zz").failed.get should be(QuantityParseException("Unable to parse Viscosity", "10.22 zz"))
-    Viscosity("zz N").failed.get should be(QuantityParseException("Unable to parse Viscosity", "zz N"))
+    Viscosity("zz Pa·s").failed.get should be(QuantityParseException("Unable to parse Viscosity", "zz Pa·s"))
   }
 
   it should "properly convert to all supported Units of Measure" in {

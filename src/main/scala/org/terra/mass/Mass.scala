@@ -164,7 +164,7 @@ trait MassOps[C <: TypeContext] {
     def units = Set(Nanograms, Micrograms, Milligrams, Grams, Kilograms, Tonnes, Ounces, Pounds, Kilopounds, Megapounds,
       Stone, TroyGrains, Pennyweights, TroyOunces, TroyPounds, Tolas, Carats, SolarMasses,
       ElectronVoltMass, MilliElectronVoltMass, KiloElectronVoltMass, MegaElectronVoltMass,
-      GigaElectronVoltMass, TeraElectronVoltMass, PetaElectronVoltMass, ExaElectronVoltMass)
+      GigaElectronVoltMass, TeraElectronVoltMass, PetaElectronVoltMass, ExaElectronVoltMass, Slugs)
     def dimensionSymbol = "M"
   }
 
@@ -296,6 +296,12 @@ trait MassOps[C <: TypeContext] {
     val conversionFactor = ElectronVoltMass.conversionFactor * MetricSystem.Exa
     val symbol = "EeV/c²"
   }
+
+  object Slugs extends MassUnitT {
+    val conversionFactor = 14.59390
+    val symbol = "slug"
+  }
+
   /**
     * Implicit conversions for [[org.terra.mass.MassLike]]
     *
@@ -329,6 +335,8 @@ trait MassOps[C <: TypeContext] {
     lazy val TeV = TeraElectronVoltMass(1)
     lazy val PeV = PetaElectronVoltMass(1)
     lazy val EeV = ExaElectronVoltMass(1)
+
+    lazy val slug = Slugs(1)
 
     implicit class MassConversions[A](a: A)(implicit n: Numeric[A]) {
       def ng = Nanograms(a)
@@ -365,6 +373,7 @@ trait MassOps[C <: TypeContext] {
       def TeV = TeraElectronVoltMass(a)
       def PeV = PetaElectronVoltMass(a)
       def EeV = ExaElectronVoltMass(a)
+      def slugs = Slugs(a)
     }
 
     implicit class MassStringConversions(val s: String) {

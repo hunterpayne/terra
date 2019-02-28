@@ -106,6 +106,8 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
     with LengthOps[C]
     with SolidAngleOps[C]
     with VolumeOps[C]
+    with MolarVolumeOps[C]
+    with SpecificVolumeOps[C]
     with TemperatureOps[C]
     with ThermalCapacityOps[C]
     with MoneyOps[C] 
@@ -264,6 +266,8 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
   val lengthOps: LengthOps[C] = this
   val solidAngleOps: SolidAngleOps[C] = this
   val volumeOps: VolumeOps[C] = this
+  val molarVolumeOps: MolarVolumeOps[C] = this
+  val specificVolumeOps: SpecificVolumeOps[C] = this
 
   val temperatureOps: TemperatureOps[C] = this
   val thermalCapacityOps: ThermalCapacityOps[C] = this

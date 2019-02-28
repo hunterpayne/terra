@@ -34,9 +34,10 @@ final class VolumeLike[C <: TypeContext](val value: C#T, val unit: VolumeUnit[C]
   import ops.volumeFlowOps.CubicMetersPerSecond
   import ops.massOps.Kilograms
   import ops.energyOps.Joules
-  import ops.lengthOps.Meters
   import ops.areaOps.{ SquareUsMiles, SquareYards, SquareFeet, SquareInches, SquareMeters }
   import ops.lengthOps.{ UsMiles, Yards, Feet, Inches, Meters }
+  import ops.specificVolumeOps.CubicMetersPerKilogram
+  import ops.molarVolumeOps.CubicMetersPerMole
 
   type Mass = MassLike[C]
   type Density = DensityLike[C]
@@ -45,6 +46,8 @@ final class VolumeLike[C <: TypeContext](val value: C#T, val unit: VolumeUnit[C]
   type Area = AreaLike[C]
   type Length = LengthLike[C]
   type ChemicalAmount = ChemicalAmountLike[C]
+  type SpecificVolume = SpecificVolumeLike[C]
+  type MolarVolume = MolarVolumeLike[C]
 
   def dimension: Dimension[VolumeLike[C], C#T, C] = Volume
 
@@ -78,8 +81,14 @@ final class VolumeLike[C <: TypeContext](val value: C#T, val unit: VolumeUnit[C]
     }
   }
 
-  def /(that: Mass)(implicit ops: TerraOps[C]) = ??? // returns SpecificVolume (inverse of Density)
-  def /(that: ChemicalAmount)(implicit ops: TerraOps[C]) = ??? // return MolarVolume
+  def /(that: Mass)(implicit ops: TerraOps[C]): SpecificVolume = {
+    implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
+    CubicMetersPerKilogram(ops.div[C#T](toCubicMeters, that.toKilograms))
+  }
+  def /(that: ChemicalAmount)(implicit ops: TerraOps[C]): MolarVolume = {
+    implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
+    CubicMetersPerMole(ops.div[C#T](toCubicMeters, that.toMoles))
+  }
 
   def cubeRoot = {
     implicit val e: HasEnsureType[C#T] = ops.converters.ensureT

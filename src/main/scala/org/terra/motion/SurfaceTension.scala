@@ -65,7 +65,7 @@ trait SurfaceTensionOps[C <: TypeContext] {
     val symbol = Newtons.symbol + "/" + Meters.symbol
   }
 
-  object PoundsPerFoot extends SurfaceTensionUnitT {
+  object PoundsPerFoot extends SurfaceTensionUnitT with UnitConverter[C#T, C] {
     val symbol = Pounds.symbol + "/" + Feet.symbol
     val conversionFactor = PoundForce.conversionFactor / Feet.conversionFactor
   }

@@ -27,7 +27,7 @@ class SurfaceTensionSpec extends FlatSpec with Matchers with CustomMatchers {
     SurfaceTension("10.22 N/m").get should be(NewtonsPerMeter(10.22))
     SurfaceTension("10.22 lb/ft").get should be(PoundsPerFoot(10.22))
     SurfaceTension("10.22 zz").failed.get should be(QuantityParseException("Unable to parse SurfaceTension", "10.22 zz"))
-    SurfaceTension("zz N").failed.get should be(QuantityParseException("Unable to parse SurfaceTension", "zz N"))
+    SurfaceTension("zz N/m").failed.get should be(QuantityParseException("Unable to parse SurfaceTension", "zz N/m"))
   }
 
   it should "properly convert to all supported Units of Measure" in {

@@ -247,4 +247,43 @@ trait SpaceSymbols[Tuple <: TypeContext] {
         extends AbstractQuantityNumeric[VolumeLike[Tuple], Tuple](Volume)
   }
   val Volume = ops.volumeOps.Volume
+
+  type SpecificVolume = SpecificVolumeLike[Tuple]
+  lazy val CubicMetersPerKilogram = ops.specificVolumeOps.CubicMetersPerKilogram
+  lazy val MillilitresPerGram = ops.specificVolumeOps.MillilitresPerGram
+  lazy val CubicFeetPerPound = ops.specificVolumeOps.CubicFeetPerPound
+  lazy val CubicFeetPerSlug = ops.specificVolumeOps.CubicFeetPerSlug
+
+  object SpecificVolumeConversions {
+    import ops.specificVolumeOps.{ SpecificVolumeConversions => Convs }
+
+    lazy val cubicMeterPerKilogram = Convs.cubicMeterPerKilogram
+    lazy val millilitrePerGram = Convs.millilitrePerGram
+    lazy val cubicFootPerPound = Convs.cubicFootPerPound
+    lazy val cubicFootPerSlug = Convs.cubicFootPerSlug
+
+    implicit class SpecificVolumeConversions[A](a: A)(implicit n: Numeric[A])
+        extends Convs.SpecificVolumeConversions[A](a)
+
+    implicit object SpecificVolumeNumeric
+        extends AbstractQuantityNumeric[SpecificVolumeLike[Tuple], Tuple](
+      SpecificVolume)
+  }
+  val SpecificVolume = ops.specificVolumeOps.SpecificVolume
+
+  type MolarVolume = MolarVolumeLike[Tuple]
+  lazy val CubicMetersPerMole = ops.molarVolumeOps.CubicMetersPerMole
+
+  object MolarVolumeConversions {
+    import ops.molarVolumeOps.{ MolarVolumeConversions => Convs }
+
+    lazy val cubicMeterPerMole = Convs.cubicMeterPerMole
+    implicit class MolarVolumeConversions[A](a: A)(implicit n: Numeric[A])
+        extends Convs.MolarVolumeConversions[A](a)
+
+    implicit object MolarVolumeNumeric
+        extends AbstractQuantityNumeric[MolarVolumeLike[Tuple], Tuple](
+      MolarVolume)
+  }
+  val MolarVolume = ops.molarVolumeOps.MolarVolume
 }

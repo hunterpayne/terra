@@ -104,6 +104,7 @@ trait MassSymbols[Tuple <: TypeContext] {
   lazy val TeraElectronVoltMass = ops.massOps.TeraElectronVoltMass
   lazy val PetaElectronVoltMass = ops.massOps.PetaElectronVoltMass
   lazy val ExaElectronVoltMass = ops.massOps.ExaElectronVoltMass
+  lazy val Slugs = ops.massOps.Slugs
 
   object MassConversions {
     import ops.massOps.{ MassConversions => Convs }
@@ -135,6 +136,7 @@ trait MassSymbols[Tuple <: TypeContext] {
     lazy val TeV = Convs.TeV
     lazy val PeV = Convs.PeV
     lazy val EeV = Convs.EeV
+    lazy val slug = Convs.slug
 
     implicit class MassConversions[A](a: A)(implicit n: Numeric[A])
         extends Convs.MassConversions[A](a)

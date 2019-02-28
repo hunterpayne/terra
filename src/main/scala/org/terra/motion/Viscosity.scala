@@ -77,17 +77,18 @@ trait ViscosityOps[C <: TypeContext] {
     val symbol = Pascals.symbol + "·" + Seconds.symbol
   }
 
-  object KilogramsPerMeterSecond extends ViscosityUnitT {
+  object KilogramsPerMeterSecond extends ViscosityUnitT 
+      with UnitConverter[C#T, C] {
     val symbol = Kilograms.symbol + "/" + Meters.symbol + "·" + Seconds.symbol
     val conversionFactor = 1.0
   }
 
-  object Poise extends ViscosityUnitT {
+  object Poise extends ViscosityUnitT with UnitConverter[C#T, C] {
     val symbol = "P"
     val conversionFactor = 0.1
   }
 
-  object CentiPoise extends ViscosityUnitT {
+  object CentiPoise extends ViscosityUnitT with UnitConverter[C#T, C] {
     val symbol = "cP"
     val conversionFactor = 0.001
   }

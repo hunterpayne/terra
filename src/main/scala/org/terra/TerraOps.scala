@@ -212,6 +212,8 @@ trait TerraOps[C <: TypeContext] {
   val lengthOps: LengthOps[C]
   val solidAngleOps: SolidAngleOps[C]
   val volumeOps: VolumeOps[C]
+  val molarVolumeOps: MolarVolumeOps[C]
+  val specificVolumeOps: SpecificVolumeOps[C]
 
   val temperatureOps: TemperatureOps[C]
   val thermalCapacityOps: ThermalCapacityOps[C]
