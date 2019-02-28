@@ -318,6 +318,25 @@ trait MotionSymbols[Tuple <: TypeContext] {
   }
   val Yank = ops.yankOps.Yank
 
+  type SurfaceTension = SurfaceTensionLike[Tuple]
+  lazy val NewtonsPerMeter = ops.surfaceTensionOps.NewtonsPerMeter
+  lazy val PoundsPerFoot = ops.surfaceTensionOps.PoundsPerFoot
+
+  object SurfaceTensionConversions {
+    import ops.surfaceTensionOps.{ SurfaceTensionConversions => Convs }
+
+    lazy val newtonPerMeter = Convs.newtonPerMeter
+    lazy val poundPerFoot = Convs.poundPerFoot
+
+    implicit class SurfaceTensionConversions[A](a: A)(implicit n: Numeric[A])
+        extends Convs.SurfaceTensionConversions[A](a)
+
+    implicit object SurfaceTensionNumeric
+        extends AbstractQuantityNumeric[SurfaceTensionLike[Tuple], Tuple](
+      SurfaceTension)
+  }
+  val SurfaceTension = ops.surfaceTensionOps.SurfaceTension
+
   lazy val SpeedOfLight = MetersPerSecond(2.99792458e8)
   lazy val EquatorGravity = MetersPerSecondSquared(9.7903)
   lazy val StandardEarthGravity = MetersPerSecondSquared(9.80665)

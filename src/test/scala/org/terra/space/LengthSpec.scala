@@ -14,7 +14,7 @@ import standard._
 import standard.space._
 import standard.electro.{ OhmMeters, Ohms, Siemens, SiemensPerMeter }
 import standard.energy.Joules
-import standard.motion.{ MetersPerSecond, Newtons }
+import standard.motion._
 import standard.time.Seconds
 
 /**
@@ -195,6 +195,10 @@ class LengthSpec extends FlatSpec with Matchers {
 
   it should "return Resistivity when multiplied by ElectricalResistance" in {
     Meters(1) * Ohms(1) should be(OhmMeters(1))
+  }
+
+  it should "return Force when multiplied by SurfaceTension" in {
+    Meters(1) * NewtonsPerMeter(1) should be(Newtons(1))
   }
 
   it should "return Velocity when divided by Time" in {

@@ -186,6 +186,7 @@ trait TerraOps[C <: TypeContext] {
   val velocityOps: VelocityOps[C]
   val volumeFlowOps: VolumeFlowOps[C]
   val yankOps: YankOps[C]
+  val surfaceTensionOps: SurfaceTensionOps[C]
 
   val illuminanceOps: IlluminanceOps[C]
   val luminanceOps: LuminanceOps[C]

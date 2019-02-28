@@ -13,7 +13,7 @@ import scala.reflect.ClassTag
 
 import org.terra.electro._
 import org.terra.energy.{ PowerLike, EnergyLike }
-import org.terra.motion.{ VelocityLike, AccelerationLike, ForceLike }
+import org.terra.motion.{ VelocityLike, AccelerationLike, ForceLike, SurfaceTensionLike }
 import org.terra.radio.{ RadiantIntensityLike, SpectralIntensityLike, SpectralPowerLike }
 import org.terra.time.{ SecondTimeIntegral, TimeIntegral, TimeSquaredLike, TimeLike }
 
@@ -56,6 +56,7 @@ final class LengthLike[C <: TypeContext](val value: C#T, val unit: LengthUnit[C]
   type Resistivity = ResistivityLike[C]
   type Acceleration = AccelerationLike[C]
   type Length = LengthLike[C]
+  type SurfaceTension = SurfaceTensionLike[C]
 
   def dimension: Dimension[LengthLike[C], C#T, C] = Length
 
@@ -82,13 +83,15 @@ final class LengthLike[C <: TypeContext](val value: C#T, val unit: LengthUnit[C]
   def *(that: Force)(implicit ops: TerraOps[C]): Energy = 
     Joules(ops.num.times(this.toMeters, that.toNewtons))
   def *(that: SpectralIntensity)(implicit ops: TerraOps[C]): RadiantIntensity = 
-    WattsPerSteradian(ops.num.times(this.toMeters, that.toWattsPerSteradianPerMeter))
+    WattsPerSteradian(
+      ops.num.times(this.toMeters, that.toWattsPerSteradianPerMeter))
   def *(that: SpectralPower)(implicit ops: TerraOps[C]): Power = 
     Watts(ops.num.times(this.toMeters, that.toWattsPerMeter))
   def *(that: Conductivity)(implicit ops: TerraOps[C]): ElectricalConductance = 
     Siemens(ops.num.times(this.toMeters, that.toSiemensPerMeter))
   def *(that: ElectricalResistance)(implicit ops: TerraOps[C]): Resistivity =
     OhmMeters(ops.num.times(this.toMeters, that.toOhms))
+  def *(that: SurfaceTension)(implicit ops: TerraOps[C]): Force = that * this
 
   def /(that: TimeSquared)(implicit ops: TerraOps[C]): Acceleration = 
     this / that.time1 / that.time2

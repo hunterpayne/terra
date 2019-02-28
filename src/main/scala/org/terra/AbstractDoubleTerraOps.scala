@@ -83,6 +83,7 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
     with VelocityOps[C]
     with VolumeFlowOps[C]
     with YankOps[C]
+    with SurfaceTensionOps[C]
     with IlluminanceOps[C]
     with LuminanceOps[C]
     with LuminousEnergyOps[C]
@@ -236,6 +237,7 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
   val velocityOps: VelocityOps[C] = this
   val volumeFlowOps: VolumeFlowOps[C] = this
   val yankOps: YankOps[C] = this
+  val surfaceTensionOps: SurfaceTensionOps[C] = this
 
   val illuminanceOps: IlluminanceOps[C] = this
   val luminanceOps: LuminanceOps[C] = this
@@ -434,8 +436,8 @@ trait TypeScope[Tuple <: TypeContext] {
 
   implicit val ops: TerraOps[Tuple]
 
-  type QuantitySeries[A <: Quantity[A, T, C], T, C <: TypeContext] =
-    IndexedSeq[QuantityRange[A, T, C]]
+  type QuantitySeries[A <: Quantity[A, T, Tuple], T] =
+    IndexedSeq[QuantityRange[A, T, Tuple]]
 
   /* Quantity Types brought into scope with by importing packages extending 
    * this trait */

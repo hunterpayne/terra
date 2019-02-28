@@ -102,6 +102,10 @@ class ForceSpec extends FlatSpec with Matchers with CustomMatchers {
     Newtons(1) / Seconds(1) should be(NewtonsPerSecond(1))
   }
 
+  it should "return SurfaceTension when divided by Length" in {
+    Newtons(1) / Meters(1) should be(NewtonsPerMeter(1))
+  }
+
   behavior of "ForceConversions"
 
   it should "provide aliases for single unit values" in {

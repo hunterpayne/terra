@@ -37,6 +37,7 @@ final class ForceLike[C <: TypeContext](val value: C#T, val unit: ForceUnit[C])(
   import ops.massOps.Kilograms
   import ops.pressureOps.Pascals
   import ops.areaOps.SquareMeters
+  import ops.surfaceTensionOps.NewtonsPerMeter
 
   type Torque = TorqueLike[C]
   type Length = LengthLike[C]
@@ -45,6 +46,7 @@ final class ForceLike[C <: TypeContext](val value: C#T, val unit: ForceUnit[C])(
   type Acceleration = AccelerationLike[C]
   type Pressure = PressureLike[C]
   type Area = AreaLike[C]
+  type SurfaceTension = SurfaceTensionLike[C]
 
   def dimension: Dimension[ForceLike[C], C#T, C] = Force
 
@@ -56,7 +58,10 @@ final class ForceLike[C <: TypeContext](val value: C#T, val unit: ForceUnit[C])(
    * dimensionally equivalent */
   def *(that: Length)(implicit ops: TerraOps[C]): Energy = 
     Joules(ops.num.times(this.toNewtons, that.toMeters))
-  def /(that: Length)(implicit ops: TerraOps[C]) = ??? // return SurfaceTension
+  def /(that: Length)(implicit ops: TerraOps[C]): SurfaceTension = {
+    implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
+    NewtonsPerMeter(ops.div[C#T](this.toNewtons, that.toMeters))
+  }
   def /(that: Mass)(implicit ops: TerraOps[C]): Acceleration = {
     implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
     MetersPerSecondSquared(ops.div[C#T](this.toNewtons, that.toKilograms))
