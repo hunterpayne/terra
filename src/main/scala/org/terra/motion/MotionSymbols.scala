@@ -337,6 +337,29 @@ trait MotionSymbols[Tuple <: TypeContext] {
   }
   val SurfaceTension = ops.surfaceTensionOps.SurfaceTension
 
+  type Viscosity = ViscosityLike[Tuple]
+  lazy val PascalSeconds = ops.viscosityOps.PascalSeconds
+  lazy val KilogramsPerMeterSecond = ops.viscosityOps.KilogramsPerMeterSecond
+  lazy val Poise = ops.viscosityOps.Poise
+  lazy val CentiPoise = ops.viscosityOps.CentiPoise
+
+  object ViscosityConversions {
+    import ops.viscosityOps.{ ViscosityConversions => Convs }
+
+    lazy val pascalSecond = Convs.pascalSecond
+    lazy val kilogramPerMeterSecond = Convs.kilogramPerMeterSecond
+    lazy val poise = Convs.poise
+    lazy val centipoise = Convs.centipoise
+
+    implicit class ViscosityConversions[A](a: A)(implicit n: Numeric[A])
+        extends Convs.ViscosityConversions[A](a)
+
+    implicit object ViscosityNumeric
+        extends AbstractQuantityNumeric[ViscosityLike[Tuple], Tuple](
+      Viscosity)
+  }
+  val Viscosity = ops.viscosityOps.Viscosity
+
   lazy val SpeedOfLight = MetersPerSecond(2.99792458e8)
   lazy val EquatorGravity = MetersPerSecondSquared(9.7903)
   lazy val StandardEarthGravity = MetersPerSecondSquared(9.80665)

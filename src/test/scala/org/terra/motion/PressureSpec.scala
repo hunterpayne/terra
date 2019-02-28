@@ -14,6 +14,7 @@ import org.scalatest.{ Matchers, FlatSpec }
 import standard._
 import standard.motion._
 import standard.space.SquareMeters
+import standard.time.Seconds
 
 /**
  * @author  garyKeorkunian
@@ -69,6 +70,14 @@ class PressureSpec extends FlatSpec with Matchers {
 
   it should "return Force when multiplied by Area" in {
     Pascals(1) * SquareMeters(1) should be(Newtons(1))
+  }
+
+  it should "return PressureChange when divided by Time" in {
+    Pascals(1) / Seconds(1) should be(PascalsPerSecond(1))
+  }
+
+  it should "return Viscosity when multiplied by Time" in {
+    Pascals(1) * Seconds(1) should be(PascalSeconds(1))
   }
 
   behavior of "PressureConversions"

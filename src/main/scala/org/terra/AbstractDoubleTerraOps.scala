@@ -84,6 +84,7 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
     with VolumeFlowOps[C]
     with YankOps[C]
     with SurfaceTensionOps[C]
+    with ViscosityOps[C]
     with IlluminanceOps[C]
     with LuminanceOps[C]
     with LuminousEnergyOps[C]
@@ -238,6 +239,7 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
   val volumeFlowOps: VolumeFlowOps[C] = this
   val yankOps: YankOps[C] = this
   val surfaceTensionOps: SurfaceTensionOps[C] = this
+  val viscosityOps: ViscosityOps[C] = this
 
   val illuminanceOps: IlluminanceOps[C] = this
   val luminanceOps: LuminanceOps[C] = this

@@ -12,7 +12,7 @@ package motion
 import scala.reflect.ClassTag
 
 import space.AreaLike
-import time.{ TimeIntegral, TimeLike }
+import time.{ TimeIntegral, TimeDerivative, TimeLike }
 
 /**
  * @author  garyKeorkunian
@@ -23,16 +23,19 @@ import time.{ TimeIntegral, TimeLike }
 final class PressureLike[C <: TypeContext](val value: C#T, val unit: PressureUnit[C])(
   implicit ops: TerraOps[C])
     extends Quantity[PressureLike[C], C#T, C]
+    with TimeDerivative[ViscosityLike[C], C#T, C#T, C]
     with TimeIntegral[PressureChangeLike[C], C#T, C#T, C] {
 
   import ops.pressureOps._
   import ops.pressureChangeOps.PascalsPerSecond
   import ops.timeOps.Seconds
   import ops.forceOps.Newtons
+  import ops.viscosityOps.PascalSeconds
 
   type PressureChange = PressureChangeLike[C]
   type Area = AreaLike[C]
   type Force = ForceLike[C]
+  type Viscosity = ViscosityLike[C]
 
   def dimension: Dimension[PressureLike[C], C#T, C] = Pressure
 
@@ -40,14 +43,17 @@ final class PressureLike[C <: TypeContext](val value: C#T, val unit: PressureUni
     implicit val opsArg = ops
     PascalsPerSecond(toPascals)
   }
-  override protected def time: Time = {
+  override protected[terra] def time: Time = {
     implicit val opsArg = ops
     Seconds(1)
+  }
+  protected[terra] def timeIntegrated: Viscosity = {
+    implicit val opsArg = ops
+    PascalSeconds(toPascals)
   }
 
   def *(that: Area)(implicit ops: TerraOps[C]): Force = 
     Newtons(ops.num.times(this.toPascals, that.toSquareMeters))
-  def *(that: Time)(implicit ops: TerraOps[C]) = ??? // returns DynamicViscosity
 
   def toPascals              = to(Pascals)
   def toBars                 = to(Bars)
