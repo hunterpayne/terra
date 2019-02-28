@@ -11,7 +11,7 @@ package mass
 
 import scala.reflect.ClassTag
 
-import space.VolumeLike
+import space.{ VolumeLike, SpecificVolumeLike }
 
 /**
  * @author  garyKeorkunian
@@ -26,14 +26,22 @@ final class DensityLike[C <: TypeContext](
 
   import ops.densityOps._
   import ops.massOps.Kilograms
+  import ops.specificVolumeOps.CubicMetersPerKilogram
 
   type Volume = VolumeLike[C]
   type Mass = MassLike[C]
+  type SpecificVolume = SpecificVolumeLike[C]
 
   def dimension: Dimension[DensityLike[C], C#T, C] = Density
 
   def *(that: Volume)(implicit ops: TerraOps[C]): Mass = 
     Kilograms(ops.num.times(this.value, that.toCubicMeters))
+
+  def inv(implicit ops: TerraOps[C]): SpecificVolume = {
+    implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
+    CubicMetersPerKilogram(ops.div[C#T](
+      ops.convDouble(1.0), toKilogramsPerCubicMeter))
+  }
 
   def toKilogramsPerCubicMeter = to(KilogramsPerCubicMeter)
 }

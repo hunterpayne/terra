@@ -5,7 +5,7 @@ package space
 import scala.reflect.ClassTag
 
 import time.TimeLike
-import mass.MassLike
+import mass.{ MassLike, DensityLike }
 
 /**
   *
@@ -20,14 +20,22 @@ final class SpecificVolumeLike[C <: TypeContext](
   import ops.massOps.Mass
   import ops.timeOps.Time
   import ops.volumeOps.CubicMeters
+  import ops.densityOps.KilogramsPerCubicMeter
 
   type Mass = MassLike[C]
   type Volume = VolumeLike[C]
+  type Density = DensityLike[C]
 
   def dimension: Dimension[SpecificVolumeLike[C], C#T, C] = SpecificVolume
 
   def *(that: Mass)(implicit ops: TerraOps[C]): Volume = 
     CubicMeters(ops.num.times(this.toCubicMetersPerKilogram, that.toKilograms))
+
+  def inv(implicit ops: TerraOps[C]): Density = {
+    implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
+    KilogramsPerCubicMeter(ops.div[C#T](
+      ops.convDouble(1.0), toCubicMetersPerKilogram))
+  }
 
   def toCubicMetersPerKilogram = to(CubicMetersPerKilogram)
   def toMillilitresPerGram = to(MillilitresPerGram)

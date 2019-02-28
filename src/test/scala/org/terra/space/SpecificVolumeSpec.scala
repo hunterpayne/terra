@@ -54,6 +54,10 @@ class SpecificVolumeSpec extends FlatSpec with Matchers {
     CubicMetersPerKilogram(1) * Kilograms(1) should be(CubicMeters(1))
   }
 
+  it should "return Density when inverted" in {
+    CubicMetersPerKilogram(0.1).inv should be(KilogramsPerCubicMeter(10))
+  }
+
   behavior of "SpecificVolumeConversions"
 
   it should "provide aliases for single unit values" in {

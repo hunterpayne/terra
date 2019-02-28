@@ -214,12 +214,12 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
 
   val energyOps: EnergyOps[C] = this
   val energyDensityOps: EnergyDensityOps[C] = this
+  val energyAreaDensityOps: EnergyAreaDensityOps[C] = this
   val molarEnergyOps: MolarEnergyOps[C] = this
   val powerOps: PowerOps[C] = this
   val powerDensityOps: PowerDensityOps[C] = this
   val powerRampOps: PowerRampOps[C] = this
   val specificEnergyOps: SpecificEnergyOps[C] = this
-  val energyAreaDensityOps: EnergyAreaDensityOps[C] = this
 
   val areaDensityOps: AreaDensityOps[C] = this
   val chemicalAmountOps: ChemicalAmountOps[C] = this

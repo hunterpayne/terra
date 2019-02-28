@@ -12,7 +12,7 @@ package mass
 import org.scalatest.{ FlatSpec, Matchers }
 
 import standard._
-import standard.space.CubicMeters
+import standard.space.{ CubicMeters, CubicMetersPerKilogram }
 import standard.mass._
 
 /**
@@ -45,6 +45,10 @@ class DensitySpec extends FlatSpec with Matchers {
 
   it should "return Mass when multiplied by Volume" in {
     KilogramsPerCubicMeter(1) * CubicMeters(1) should be(Kilograms(1))
+  }
+
+  it should "return SpecificVolume when inverted" in {
+    KilogramsPerCubicMeter(0.1).inv should be(CubicMetersPerKilogram(10))
   }
 
   behavior of "DensityConversion"
