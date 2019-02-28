@@ -4,10 +4,10 @@ package mass
 
 import scala.reflect.ClassTag
 
-import space.VolumeLike
+import space.{ VolumeLike, MolarVolumeLike }
 
 /**
-  * This is molar concentration.  Mass concentration is Density
+  * This is molar concentration.  Molarity is in molarity.
   */
 final class ConcentrationLike[C <: TypeContext](
   val value: C#T, val unit: ConcentrationUnit[C])(
@@ -16,14 +16,22 @@ final class ConcentrationLike[C <: TypeContext](
 
   import ops.concentrationOps._
   import ops.chemicalAmountOps.Moles
+  import ops.molarVolumeOps.CubicMetersPerMole
 
   type Volume = VolumeLike[C]
   type ChemicalAmount = ChemicalAmountLike[C]
+  type MolarVolume = MolarVolumeLike[C]
 
   def dimension: Dimension[ConcentrationLike[C], C#T, C] = Concentration
 
   def *(that: Volume)(implicit ops: TerraOps[C]): ChemicalAmount =
     Moles(ops.num.times(toMolesPerCubicMeter, that.toCubicMeters))
+
+  // inverse of MolarVolume
+  def inv(implicit ops: TerraOps[C]): MolarVolume = {
+    implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
+    CubicMetersPerMole(ops.div[C#T](ops.convDouble(1.0), toMolesPerCubicMeter))
+  }
 
   def toMolesPerCubicMeter = to(MolesPerCubicMeter)
 }

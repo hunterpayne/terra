@@ -6,7 +6,7 @@ import org.scalatest.{ FlatSpec, Matchers }
 
 import standard._
 import standard.mass._
-import standard.space.CubicMeters
+import standard.space.{ CubicMeters, CubicMetersPerMole }
 
 class ConcentrationSpec extends FlatSpec with Matchers {
 
@@ -33,6 +33,10 @@ class ConcentrationSpec extends FlatSpec with Matchers {
 
   it should "when multiplied by a Volume return a ChemicalAmount" in {
     MolesPerCubicMeter(1) * CubicMeters(1) should be(Moles(1))
+  }
+
+  it should "return MolarVolume when inverted" in {
+    MolesPerCubicMeter(0.1).inv should be(CubicMetersPerMole(10))
   }
 
   behavior of "ConcentrationConversions"

@@ -41,6 +41,10 @@ class MolarMassSpec extends FlatSpec with Matchers {
     KilogramsPerMole(1) * Moles(1) should be(Kilograms(1))
   }
 
+  it should "return Molarity when inverted" in {
+    KilogramsPerMole(10).inv should be(MolesPerKilogram(0.1))
+  }
+
   behavior of "MolarMassConversions"
 
   it should "provide aliases for single unit values" in {

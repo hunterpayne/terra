@@ -192,6 +192,25 @@ trait MassSymbols[Tuple <: TypeContext] {
 
   val MolarMass = ops.molarMassOps.MolarMass
 
+  type Molarity = MolarityLike[Tuple]
+  lazy val MolesPerKilogram = ops.molarityOps.MolesPerKilogram
+
+  object MolarityConversions {
+    import ops.molarityOps.{ MolarityConversions => Convs }
+
+    lazy val molePerKilogram = Convs.molePerKilogram
+
+    implicit class MolarityConversions[A](a: A)(
+      implicit num: Numeric[A])
+        extends Convs.MolarityConversions[A](a)
+
+    implicit object MolarityNumeric
+        extends AbstractQuantityNumeric[MolarityLike[Tuple], Tuple](
+      Molarity)
+  }
+
+  val Molarity = ops.molarityOps.Molarity
+
   type Concentration = ConcentrationLike[Tuple]
   lazy val MolesPerCubicMeter = ops.concentrationOps.MolesPerCubicMeter
 

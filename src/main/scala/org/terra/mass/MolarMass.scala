@@ -14,14 +14,22 @@ final class MolarMassLike[C <: TypeContext](
   import ops.molarMassOps._
   import ops.massOps.Kilograms
   import ops.chemicalAmountOps.Moles
+  import ops.molarityOps.MolesPerKilogram
 
   type Mass = MassLike[C]
   type ChemicalAmount = ChemicalAmountLike[C]
+  type Molarity = MolarityLike[C]
 
   def dimension: Dimension[MolarMassLike[C], C#T, C] = MolarMass
 
   def *(that: ChemicalAmount)(implicit ops: TerraOps[C]): Mass =
     Kilograms(ops.num.times(this.toKilogramsPerMole, that.toMoles))
+
+  // inverse of Molarity
+  def inv(implicit ops: TerraOps[C]): Molarity = {
+    implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
+    MolesPerKilogram(ops.div[C#T](ops.convDouble(1.0), toKilogramsPerMole))
+  }
 
   def toKilogramsPerMole = to(KilogramsPerMole)
   def toGramsPerMole = to(GramsPerMole)

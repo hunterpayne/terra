@@ -4,7 +4,7 @@ package space
 
 import scala.reflect.ClassTag
 
-import mass.ChemicalAmountLike
+import mass.{ ChemicalAmountLike, ConcentrationLike }
 
 /**
  */
@@ -17,14 +17,22 @@ final class MolarVolumeLike[C <: TypeContext](
   import ops.volumeOps.CubicMeters
   import ops.chemicalAmountOps.Moles
   import ops.volumeOps.CubicMeters
+  import ops.concentrationOps.MolesPerCubicMeter
 
   type Volume = VolumeLike[C]
   type ChemicalAmount = ChemicalAmountLike[C]
+  type Concentration = ConcentrationLike[C]
 
   def dimension: Dimension[MolarVolumeLike[C], C#T, C] = MolarVolume
 
   def *(that: ChemicalAmount)(implicit ops: TerraOps[C]): Volume =
     CubicMeters(ops.num.times(this.toCubicMetersPerMole, that.toMoles))
+
+  // inverse of Concentration which needs to be added
+  def inv(implicit ops: TerraOps[C]): Concentration = {
+    implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
+    MolesPerCubicMeter(ops.div[C#T](ops.convDouble(1.0), toCubicMetersPerMole))
+  }
 
   def toCubicMetersPerMole = to(CubicMetersPerMole)
 }
