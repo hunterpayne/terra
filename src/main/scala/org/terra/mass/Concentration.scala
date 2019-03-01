@@ -34,6 +34,8 @@ final class ConcentrationLike[C <: TypeContext](
   }
 
   def toMolesPerCubicMeter = to(MolesPerCubicMeter)
+  def toMolesPerLitre = to(MolesPerLitre)
+  def toMolesPerMillilitre = to(MolesPerMillilitre)
 }
 
 trait ConcentrationUnit[C <: TypeContext] 
@@ -60,11 +62,11 @@ trait ConcentrationOps[C <: TypeContext] {
     val name = "Concentration"
     def primaryUnit = MolesPerCubicMeter
     def siUnit = MolesPerCubicMeter
-    def units = Set(MolesPerCubicMeter)
+    def units = Set(MolesPerCubicMeter, MolesPerLitre, MolesPerMillilitre)
     def dimensionSymbol = "cᵢ"
   }
 
-  import ops.volumeOps.CubicMeters
+  import ops.volumeOps.{ CubicMeters, Litres, Millilitres }
   import ops.chemicalAmountOps.Moles
 
   object MolesPerCubicMeter extends ConcentrationUnitT with PrimaryUnit[C#T, C] 
@@ -72,11 +74,25 @@ trait ConcentrationOps[C <: TypeContext] {
     val symbol = Moles.symbol + "/" + CubicMeters.symbol
   }
 
+  object MolesPerLitre extends ConcentrationUnitT {
+    val symbol = Moles.symbol + "/" + Litres.symbol
+    val conversionFactor = Litres.conversionFactor
+  }
+
+  object MolesPerMillilitre extends ConcentrationUnitT {
+    val symbol = Moles.symbol + "/" + Millilitres.symbol
+    val conversionFactor = Millilitres.conversionFactor
+  }
+
   object ConcentrationConversions {
     lazy val molePerCubicMeter = MolesPerCubicMeter(1)
+    lazy val molePerLitre = MolesPerLitre(1)
+    lazy val molePerMillilitre = MolesPerMillilitre(1)
 
     implicit class ConcentrationConversions[A](a: A)(implicit n: Numeric[A]) {
       def molesPerCubicMeter = MolesPerCubicMeter(a)
+      def molesPerLitre = MolesPerLitre(a)
+      def molesPerMillilitre = MolesPerMillilitre(a)
     }
   }
 }

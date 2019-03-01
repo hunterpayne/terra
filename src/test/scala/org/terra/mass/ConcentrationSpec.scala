@@ -14,10 +14,14 @@ class ConcentrationSpec extends FlatSpec with Matchers {
 
   it should "create values using UOM factories" in {
     MolesPerCubicMeter(1).toMolesPerCubicMeter should be(1)
+    MolesPerLitre(1).toMolesPerLitre should be(1)
+    MolesPerMillilitre(1).toMolesPerMillilitre should be(1)
   }
 
   it should "create values from properly formatted Strings" in {
     Concentration("10.22 mol/m³").get should be(MolesPerCubicMeter(10.22))
+    Concentration("10.22 mol/L").get should be(MolesPerLitre(10.22))
+    Concentration("10.22 mol/ml").get should be(MolesPerMillilitre(10.22))
     Concentration("10.45 zz").failed.get should be(QuantityParseException("Unable to parse Concentration", "10.45 zz"))
     Concentration("zz mol/m³").failed.get should be(QuantityParseException("Unable to parse Concentration", "zz mol/m³"))
   }
@@ -25,10 +29,14 @@ class ConcentrationSpec extends FlatSpec with Matchers {
   it should "properly convert to all supported Units of Measure" in {
     val x = MolesPerCubicMeter(1)
     x.toMolesPerCubicMeter should be(1)
+    x.toMolesPerLitre should be(1000)
+    x.toMolesPerMillilitre should be(1000000)
   }
 
   it should "return properly formatted strings for all supported Units of Measure" in {
     MolesPerCubicMeter(1).toString(MolesPerCubicMeter) should be("1.0 mol/m³")
+    MolesPerLitre(1).toString(MolesPerLitre) should be("1.0 mol/L")
+    MolesPerMillilitre(1).toString(MolesPerMillilitre) should be("1.0 mol/ml")
   }
 
   it should "when multiplied by a Volume return a ChemicalAmount" in {
@@ -45,6 +53,8 @@ class ConcentrationSpec extends FlatSpec with Matchers {
     import ConcentrationConversions._
 
     molePerCubicMeter should be(MolesPerCubicMeter(1))
+    molePerLitre should be(MolesPerLitre(1))
+    molePerMillilitre should be(MolesPerMillilitre(1))
   }
 
   it should "provide implicit conversion from Double" in {
@@ -52,6 +62,8 @@ class ConcentrationSpec extends FlatSpec with Matchers {
 
     val d = 10d
     d.molesPerCubicMeter should be(MolesPerCubicMeter(d))
+    d.molesPerLitre should be(MolesPerLitre(d))
+    d.molesPerMillilitre should be(MolesPerMillilitre(d))
   }
 
   it should "provide Numeric support" in {

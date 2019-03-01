@@ -213,11 +213,15 @@ trait MassSymbols[Tuple <: TypeContext] {
 
   type Concentration = ConcentrationLike[Tuple]
   lazy val MolesPerCubicMeter = ops.concentrationOps.MolesPerCubicMeter
+  lazy val MolesPerLitre = ops.concentrationOps.MolesPerLitre
+  lazy val MolesPerMillilitre = ops.concentrationOps.MolesPerMillilitre
 
   object ConcentrationConversions {
     import ops.concentrationOps.{ ConcentrationConversions => Convs }
 
     lazy val molePerCubicMeter = Convs.molePerCubicMeter
+    lazy val molePerLitre = Convs.molePerLitre
+    lazy val molePerMillilitre = Convs.molePerMillilitre
 
     implicit class ConcentrationConversions[A](a: A)(
       implicit num: Numeric[A])
