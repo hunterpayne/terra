@@ -10,7 +10,6 @@ package org.terra
 package thermal
 
 import scala.util.{ Failure, Success, Try }
-import scala.reflect.ClassTag
 
 /**
  * Represents a quantity of temperature
@@ -163,13 +162,11 @@ final class TemperatureLike[C <: TypeContext](
 sealed trait TemperatureScale[C <: TypeContext] 
     extends UnitOfMeasure[TemperatureLike[C], C#T, C] {
   def self: TemperatureScale[C]
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) =
-    new TemperatureLike(t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new TemperatureLike(t, this)
 }
 
 trait TemperatureOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait TemperatureUnitT extends TemperatureScale[C]
@@ -257,13 +254,13 @@ trait TemperatureOps[C <: TypeContext] {
      */
     def celsiusToFahrenheitDegrees(celsius: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(celsius, ops.convDouble(9d)), ops.convDouble(5d))
     }
     def fahrenheitToCelsiusDegrees(fahrenheit: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(fahrenheit, ops.convDouble(5d)), ops.convDouble(9d))
     }
@@ -271,25 +268,25 @@ trait TemperatureOps[C <: TypeContext] {
     def kelvinToCelsiusDegrees(kelvin: C#T) = kelvin
     def fahrenheitToKelvinDegrees(fahrenheit: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(fahrenheit, ops.convDouble(5d)), ops.convDouble(9d))
     }
     def kelvinToFahrenheitDegrees(kelvin: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(kelvin, ops.convDouble(9d)), ops.convDouble(5d))
     }
     def celsiusToRankineDegrees(celsius: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(celsius, ops.convDouble(9d)), ops.convDouble(5d))
     }
     def rankineToCelsiusDegrees(rankine: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(rankine, ops.convDouble(5d)), ops.convDouble(9d))
     }
@@ -297,13 +294,13 @@ trait TemperatureOps[C <: TypeContext] {
     def rankineToFahrenheitDegrees(rankine: C#T) = rankine
     def kelvinToRankineDegrees(kelvin: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(kelvin, ops.convDouble(9d)), ops.convDouble(5d))
     }
     def rankineToKelvinDegrees(rankine: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(rankine, ops.convDouble(5d)), ops.convDouble(9d))
     }
@@ -315,7 +312,7 @@ trait TemperatureOps[C <: TypeContext] {
      */
     def celsiusToFahrenheitScale(celsius: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.num.plus(
         ops.div[C#T](
           ops.num.times(celsius, ops.convDouble(9d)), 
@@ -324,7 +321,7 @@ trait TemperatureOps[C <: TypeContext] {
     }
     def fahrenheitToCelsiusScale(fahrenheit: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](ops.num.times(
         ops.num.minus(fahrenheit, ops.convDouble(32d)),
         ops.convDouble(5d)), ops.convDouble(9d))
@@ -335,7 +332,7 @@ trait TemperatureOps[C <: TypeContext] {
       ops.num.minus(kelvin, ops.convDouble(273.15))
     def fahrenheitToKelvinScale(fahrenheit: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(
           ops.num.plus(fahrenheit, ops.convDouble(459.67d)),
@@ -344,7 +341,7 @@ trait TemperatureOps[C <: TypeContext] {
     }
     def kelvinToFahrenheitScale(kelvin: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.num.minus(
         ops.div[C#T](
           ops.num.times(kelvin, ops.convDouble(9d)), ops.convDouble(5d)),
@@ -352,7 +349,7 @@ trait TemperatureOps[C <: TypeContext] {
     }
     def celsiusToRankineScale(celsius: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(
           ops.num.plus(celsius, ops.convDouble(273.15)), ops.convDouble(9d)),
@@ -360,7 +357,7 @@ trait TemperatureOps[C <: TypeContext] {
     }
     def rankineToCelsiusScale(rankine: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(
           ops.num.minus(rankine, ops.convDouble(491.67)), 
@@ -373,13 +370,13 @@ trait TemperatureOps[C <: TypeContext] {
       ops.num.minus(rankine, ops.convDouble(459.67))
     def kelvinToRankineScale(kelvin: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(kelvin, ops.convDouble(9d)), ops.convDouble(5d))
     }
     def rankineToKelvinScale(rankine: C#T) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.div[C#T](
         ops.num.times(rankine, ops.convDouble(5d)), ops.convDouble(9d))
     }

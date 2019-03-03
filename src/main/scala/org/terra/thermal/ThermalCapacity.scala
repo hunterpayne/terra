@@ -9,8 +9,6 @@
 package org.terra
 package thermal
 
-import scala.reflect.ClassTag
-
 import energy.EnergyLike
 
 /**
@@ -45,15 +43,13 @@ final class ThermalCapacityLike[C <: TypeContext](
 trait ThermalCapacityUnit[C <: TypeContext] 
     extends UnitOfMeasure[ThermalCapacityLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new ThermalCapacityLike[C](t, this)
 }
 
 trait ThermalCapacityOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait ThermalCapacityUnitT extends ThermalCapacityUnit[C]
 

@@ -3,7 +3,6 @@ package org.terra
 
 import scala.math.BigDecimal.RoundingMode
 import scala.math.BigDecimal.RoundingMode.RoundingMode
-import scala.reflect.ClassTag
 
 import time._
 import information._
@@ -77,19 +76,25 @@ trait TerraOps[C <: TypeContext] {
   type TC = C#TC // currency type
   type TT = C#TT // time type
 
-  implicit val num: Numeric[T]
+  implicit val num: Fractional[T]
   implicit val numL: Numeric[TL]
-  implicit val numC: Numeric[TC]
+  implicit val numC: Fractional[TC]
   implicit val numT: Numeric[TT]
   implicit val ops: TerraOps[C] = this
 
-  def nt[T1](implicit tag: ClassTag[T1]): Numeric[T1]
+  //def nt[T1](implicit tag: ClassTag[T1]): Numeric[T1]
   def makeEnsureType[T1](test: Any): HasEnsureType[T1]
 
-  def getClassTagT: ClassTag[T]
-  def getClassTagTL: ClassTag[TL]
-  def getClassTagTT: ClassTag[TT]
-  def getClassTagTC: ClassTag[TC]
+  //def getClassTagT: ClassTag[T]
+  //def getClassTagTL: ClassTag[TL]
+  //def getClassTagTT: ClassTag[TT]
+  //def getClassTagTC: ClassTag[TC]
+
+  def nt[T1](implicit tag: PseudoClassTag[T1]): Numeric[T1]
+  def getClassTagT: PseudoClassTag[T]
+  def getClassTagTL: PseudoClassTag[TL]
+  def getClassTagTT: PseudoClassTag[TT]
+  def getClassTagTC: PseudoClassTag[TC]
 
   // scope to import containing the implicitly defined HasConverter
   // definations
@@ -225,10 +230,14 @@ trait TerraOps[C <: TypeContext] {
   val employeeOps: EmployeeOps[C]
   val laborOps: LaborOps[C]
 
+  //def div[T](dividend: T, divisor: T)(
+    //implicit e: HasEnsureType[T], tag: ClassTag[T]): T
+  //def mod[T](dividend: T, divisor: T)(
+    //implicit e: HasEnsureType[T], tag: ClassTag[T]): T
   def div[T](dividend: T, divisor: T)(
-    implicit e: HasEnsureType[T], tag: ClassTag[T]): T
+    implicit e: HasEnsureType[T], tag: PseudoClassTag[T]): T
   def mod[T](dividend: T, divisor: T)(
-    implicit e: HasEnsureType[T], tag: ClassTag[T]): T
+    implicit e: HasEnsureType[T], tag: PseudoClassTag[T]): T
   def floorT[T](t: T)(implicit e: HasEnsureType[T]): T
   def ceilT[T](t: T)(implicit e: HasEnsureType[T]): T
   def rintT[T](t: T)(implicit e: HasEnsureType[T]): T

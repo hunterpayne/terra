@@ -2,8 +2,6 @@
 package org.terra
 package motion
 
-import scala.reflect.ClassTag
-
 import mass.MomentOfInertiaLike
 import space.LengthLike
 import org.terra.time.{ TimeLike, TimeDerivative }
@@ -69,15 +67,14 @@ final class AngularAccelerationLike[C <: TypeContext](
 trait AngularAccelerationUnit[C <: TypeContext]
     extends UnitOfMeasure[AngularAccelerationLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) =
+  def apply(t: C#T)(implicit ops: TerraOps[C]) =
     new AngularAccelerationLike[C](t, this)
 }
 
 trait AngularAccelerationOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait AngularAccelerationUnitT extends AngularAccelerationUnit[C]
 

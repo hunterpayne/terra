@@ -9,8 +9,6 @@
 package org.terra
 package radio
 
-import scala.reflect.ClassTag
-
 import org.terra.mass.MassLike
 import org.terra.energy.EnergyLike
 import org.terra.time.TimeLike
@@ -52,15 +50,12 @@ final class DoseLike[C <: TypeContext](val value: C#T, val unit: DoseUnit[C])(
 }
 
 trait DoseUnit[C <: TypeContext] extends UnitOfMeasure[DoseLike[C], C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new DoseLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new DoseLike[C](t, this)
 }
 
 trait DoseOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait DoseUnitT extends DoseUnit[C]
 

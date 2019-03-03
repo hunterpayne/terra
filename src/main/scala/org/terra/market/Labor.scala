@@ -2,7 +2,6 @@
 package org.terra
 package market
 
-import scala.reflect.ClassTag
 import scala.util.Try
 
 import org.terra.time.{ TimeLike, TimeIntegral }
@@ -46,15 +45,12 @@ final class LaborLike[C <: TypeContext](
 
 trait LaborUnit[C <: TypeContext] extends UnitOfMeasure[LaborLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new LaborLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new LaborLike[C](t, this)
 }
 
 trait LaborOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   import ops.employeeOps.People
 
@@ -63,9 +59,9 @@ trait LaborOps[C <: TypeContext] {
   object Labor extends Dimension[LaborLike[C], C#T, C] {
     private[market] def apply[A](a: A, unit: LaborUnit[C])(
       implicit num: Numeric[A]): LaborLike[C] =
-      new LaborLike[C](convDouble(num.toDouble(a)), unit)
+      new LaborLike[C](ops.convDouble(num.toDouble(a)), unit)
     def apply(i: EmployeeLike[C], t: TimeLike[C]) = {
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       PersonHours(ops.num.times(ops.rconv(i.toPeople), ops.rconvT(t.toHours)))
     }
     def apply(value: Any)(implicit ops: TerraOps[C]): Try[LaborLike[C]] =

@@ -9,8 +9,6 @@
 package org.terra
 package information
 
-import scala.reflect.ClassTag
-
 import org.terra.time.{ TimeLike, TimeIntegral }
 
 /**
@@ -38,7 +36,7 @@ case class InformationLike[C <: TypeContext](
     ops.converters.tltcConverter.asInstanceOf[HasConverter[C#TL, C#TC]]
 
   override def getNumeric: Numeric[C#TL] = ops.numL
-  override def getTag: ClassTag[C#TL] = ops.getClassTagTL
+  override def getTag: PseudoClassTag[C#TL] = ops.getClassTagTL
 
   import ops.informationOps._
   import ops.dataRateOps.BytesPerSecond
@@ -89,14 +87,11 @@ case class InformationLike[C <: TypeContext](
 
 trait InformationUnit[C <: TypeContext] 
     extends UnitOfMeasure[InformationLike[C], C#TL, C] with UnitConverter[C#TL, C] {
-  def apply(t: C#TL)(
-    implicit tag: ClassTag[C#TL], ops: TerraOps[C]): InformationLike[C] =
+  def apply(t: C#TL)(implicit ops: TerraOps[C]): InformationLike[C] =
     new InformationLike[C](t, this)
   override def apply[A](a: A)(
-    implicit num: Numeric[A], ops: TerraOps[C]): InformationLike[C] = {
-    implicit val tag = getTag
+    implicit num: Numeric[A], ops: TerraOps[C]): InformationLike[C] =
     new InformationLike[C](ops.convLong(num.toLong(a)), this)
-  }
 
   override def makeEnsureType(implicit ops: TerraOps[C]): HasEnsureType[C#TL] =
     ops.converters.ensureTL
@@ -108,17 +103,14 @@ trait InformationUnit[C <: TypeContext]
     implicit ops: TerraOps[C]): HasConverter[Long, C#TL] = 
     ops.converters.ltlConverter.asInstanceOf[HasConverter[Long, C#TL]]
     //idConverter.asInstanceOf[HasConverter[Long, C#TL]]
-  override def getTag(implicit ops: TerraOps[C]): ClassTag[C#TL] =
+  override def getTag(implicit ops: TerraOps[C]): PseudoClassTag[C#TL] =
     ops.getClassTagTL
 }
 
 trait InformationOps[C <: TypeContext] {
 
   implicit val ops: TerraOps[C]
-
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
-  def convLong(l: Long)(implicit ops: TerraOps[C]): C#TL
-  implicit val tagTL: ClassTag[C#TL] = ops.getClassTagTL
+  implicit val tagTL: PseudoClassTag[C#TL] = ops.getClassTagTL
 
   trait InformationUnitT extends InformationUnit[C]
 
@@ -130,7 +122,7 @@ trait InformationOps[C <: TypeContext] {
 
     private[information] def apply[A](a: A, unit: InformationUnit[C])(
       implicit n: Numeric[A]) =
-      new InformationLike[C](convLong(n.toLong(a)), unit)
+      new InformationLike[C](ops.convLong(n.toLong(a)), unit)
     def apply(value: Any) = parseL(value)
     def name = "Information"
     def primaryUnit = Bytes

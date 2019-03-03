@@ -2,8 +2,6 @@
 package org.terra
 package motion
 
-import scala.reflect.ClassTag
-
 import org.terra.mass.MomentOfInertiaLike
 
 /**
@@ -37,15 +35,13 @@ final class TorqueLike[C <: TypeContext](val value: C#T, val unit: TorqueUnit[C]
 
 trait TorqueUnit[C <: TypeContext] extends UnitOfMeasure[TorqueLike[C], C#T, C]
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) =
-    new TorqueLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new TorqueLike[C](t, this)
 }
 
 trait TorqueOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait TorqueUnitT extends TorqueUnit[C]
 

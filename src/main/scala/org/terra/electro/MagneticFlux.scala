@@ -9,8 +9,6 @@
 package org.terra
 package electro
 
-import scala.reflect.ClassTag
-
 import space.AreaLike
 import time.TimeIntegral
 
@@ -67,13 +65,12 @@ final class MagneticFluxLike[C <: TypeContext](
 trait MagneticFluxUnit[C <: TypeContext] 
     extends UnitOfMeasure[MagneticFluxLike[C], C#T, C]
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new MagneticFluxLike[C](t, this)
 }
 
 trait MagneticFluxOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait MagneticFluxUnitT extends MagneticFluxUnit[C]

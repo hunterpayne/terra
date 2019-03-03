@@ -9,7 +9,7 @@
 package org.terra
 
 import scala.util.{ Failure, Success, Try }
-import scala.reflect.ClassTag
+//import scala.reflect.ClassTag
 
 /**
  * Represents a Dimension or Quantity Type
@@ -57,7 +57,7 @@ trait Dimension[A <: Quantity[A, T, C], T, C <: TypeContext] {
    * @param value the source string (ie, "10 kW") or tuple (ie, (10, "kW"))
    * @return Try[A]
    */
-  private[terra] def parse(value: Any)(implicit ops: TerraOps[C]): Try[A] = 
+  private[terra] def parse(value: Any)(implicit ops: TerraOps[C]): Try[A] =
     value match {
       case s: String              ⇒ parseString(s)
       case (v: Byte, u: String)   ⇒ parseTuple[Byte]((v, u))
@@ -70,14 +70,15 @@ trait Dimension[A <: Quantity[A, T, C], T, C <: TypeContext] {
         s"Unable to parse $name", value.toString))
     }
 
-  protected def parseL(value: Any)(implicit ops: TerraOps[C]): Try[A] = value match {
-    case s: String              ⇒ parseString(s)
-    case (v: Byte, u: String)   ⇒ parseTupleL[Byte]((v, u))
-    case (v: Short, u: String)  ⇒ parseTupleL[Short]((v, u))
-    case (v: Int, u: String)    ⇒ parseTupleL[Int]((v, u))
-    case (v: Long, u: String)   ⇒ parseTupleL[Long]((v, u))
-    case _ ⇒ Failure(QuantityParseException(s"Unable to parse $name", value.toString))
-  }
+  protected def parseL(value: Any)(implicit ops: TerraOps[C]): Try[A] =
+    value match {
+      case s: String              ⇒ parseString(s)
+      case (v: Byte, u: String)   ⇒ parseTupleL[Byte]((v, u))
+      case (v: Short, u: String)  ⇒ parseTupleL[Short]((v, u))
+      case (v: Int, u: String)    ⇒ parseTupleL[Int]((v, u))
+      case (v: Long, u: String)   ⇒ parseTupleL[Long]((v, u))
+      case _ ⇒ Failure(QuantityParseException(s"Unable to parse $name", value.toString))
+    }
 
   def parseString(s: String)(implicit ops: TerraOps[C]): Try[A] = {
     s match {
@@ -88,23 +89,29 @@ trait Dimension[A <: Quantity[A, T, C], T, C <: TypeContext] {
   private lazy val QuantityString = ("^([-+]?[0-9]*\\.?[0-9]+(?:[eE][-+]?[0-9]+)?) *(" + units.map { u: UnitOfMeasure[A, _, _] ⇒ u.symbol }.reduceLeft(_ + "|" + _) + ")$").r
 
   def parseTuple[N](t: (N, String))(
-    implicit num: Numeric[N], tag: ClassTag[N], ops: TerraOps[C]): Try[A] = {
-    val value = t._1
+    implicit num: Numeric[N], ops: TerraOps[C]): Try[A] = {
+    implicit val tag = primaryUnit.getTag
+    implicit val n = ops.num
+    val value = ops.convDouble(num.toDouble(t._1))
     val symbol = t._2
     symbolToUnit(symbol) match {
       case Some(unit) ⇒ Success(unit(value))
-      case None       ⇒ Failure(QuantityParseException(s"Unable to identify $name unit ${symbol}", s"(${num.toDouble(value)},${symbol})"))
+      case None       ⇒ Failure(QuantityParseException(
+        s"Unable to identify $name unit ${symbol}", s"($value, $symbol)"))
 //      case None       ⇒ Failure(QuantityParseException(s"Unable to identify $name unit ${symbol}", s"(${Platform.crossFormat(num.toDouble(value))},${symbol})"))
     }
   }
 
   def parseTupleL[N](t: (N, String))(
-    implicit num: Numeric[N], tag: ClassTag[N], ops: TerraOps[C]): Try[A] = {
-    val value = t._1
+    implicit num: Numeric[N], ops: TerraOps[C]): Try[A] = {
+    implicit val tag = primaryUnit.getTag
+    implicit val n = ops.num
+    val value = ops.convDouble(num.toDouble(t._1))
     val symbol = t._2
     symbolToUnit(symbol) match {
       case Some(unit) ⇒ Success(unit(value))
-      case None       ⇒ Failure(QuantityParseException(s"Unable to identify $name unit ${symbol}", s"(${num.toDouble(value)},${symbol})"))
+      case None       ⇒ Failure(QuantityParseException(
+        s"Unable to identify $name unit ${symbol}", s"($value, $symbol)"))
 //      case None       ⇒ Failure(QuantityParseException(s"Unable to identify $name unit ${symbol}", s"(${Platform.crossFormat(num.toDouble(value))},${symbol})"))
     }
   }

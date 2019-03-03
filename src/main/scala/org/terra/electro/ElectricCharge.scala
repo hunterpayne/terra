@@ -9,8 +9,6 @@
 package org.terra
 package electro
 
-import scala.reflect.ClassTag
-
 import time.TimeIntegral
 import energy.EnergyLike
 import space.{ AreaLike, VolumeLike, LengthLike }
@@ -98,13 +96,12 @@ final class ElectricChargeLike[C <: TypeContext](
 trait ElectricChargeUnit[C <: TypeContext] 
     extends UnitOfMeasure[ElectricChargeLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new ElectricChargeLike[C](t, this)
 }
 
 trait ElectricChargeOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait ElectricChargeUnitT extends ElectricChargeUnit[C]
@@ -117,8 +114,9 @@ trait ElectricChargeOps[C <: TypeContext] {
     def name = "ElectricCharge"
     def primaryUnit = Coulombs
     def siUnit = Coulombs
-    def units = Set(Coulombs, Picocoulombs, Nanocoulombs, Microcoulombs, Millicoulombs, Abcoulombs,
-      AmpereHours, MilliampereHours, MilliampereSeconds)
+    def units = Set(
+      Coulombs, Picocoulombs, Nanocoulombs, Microcoulombs, Millicoulombs, 
+      Abcoulombs, AmpereHours, MilliampereHours, MilliampereSeconds)
   }
 
 

@@ -9,8 +9,6 @@
 package org.terra
 package motion
 
-import scala.reflect.ClassTag
-
 import time._
 import mass.MassLike
 import space.LengthLike
@@ -69,13 +67,11 @@ final class VelocityLike[C <: TypeContext](
 
 trait VelocityUnit[C <: TypeContext] 
     extends UnitOfMeasure[VelocityLike[C], C#T, C] with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new VelocityLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new VelocityLike[C](t, this)
 }
 
 trait VelocityOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
   def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
@@ -87,7 +83,7 @@ trait VelocityOps[C <: TypeContext] {
       new VelocityLike[C](ops.convDouble(n.toDouble(a)), unit)
     def apply(l: LengthLike[C], t: TimeLike[C]) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val ptag: PseudoClassTag[C#T] = ops.getClassTagT
       MetersPerSecond(ops.div[C#T](l.toMeters, ops.rconvT(t.toSeconds)))
     }
     def apply(value: Any) = parse(value)

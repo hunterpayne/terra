@@ -9,8 +9,6 @@
 package org.terra
 package mass
 
-import scala.reflect.ClassTag
-
 import time.{ TimeIntegral, TimeLike }
 import energy.{ EnergyLike, SpecificEnergyLike }
 import space.{ LengthLike, AreaLike, VolumeLike }
@@ -138,15 +136,13 @@ final class MassLike[C <: TypeContext](val value: C#T, val unit: MassUnit[C])(
  */
 trait MassUnit[C <: TypeContext] extends UnitOfMeasure[MassLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new MassLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new MassLike[C](t, this)
 }
 
 trait MassOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait MassUnitT extends MassUnit[C]
 

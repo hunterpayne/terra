@@ -9,8 +9,6 @@
 package org.terra
 package energy
 
-import scala.reflect.ClassTag
-
 import mass.{ MassLike, ChemicalAmountLike }
 import motion.{ TorqueLike, ForceLike }
 import thermal.{ ThermalCapacityLike, TemperatureLike }
@@ -186,13 +184,12 @@ final class EnergyLike[C <: TypeContext](
  */
 trait EnergyUnit[C <: TypeContext] extends UnitOfMeasure[EnergyLike[C], C#T, C]
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new EnergyLike[C](t, this)
 }
 
 trait EnergyOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait EnergyUnitT extends EnergyUnit[C]

@@ -8,7 +8,6 @@
 
 package org.terra
 
-import scala.reflect._
 import scala.util.Success
 
 /**
@@ -90,6 +89,6 @@ abstract class AbstractQuantityNumericT[A <: Quantity[A, C#TT, C], C <: TypeCont
 
   val unit = dimension.primaryUnit
   implicit val ops: TerraOps[C] = opsArg
-  implicit val tag: ClassTag[C#TT] = ops.getClassTagTT
+  implicit val tag: PseudoClassTag[C#TT] = ops.getClassTagTT
   implicit val n: Numeric[C#TT] = ops.numT
 }

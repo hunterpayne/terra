@@ -9,8 +9,6 @@
 package org.terra
 package motion
 
-import scala.reflect.ClassTag
-
 import org.terra.time.{ SecondTimeDerivative, TimeDerivative, TimeSquaredLike }
 
 /**
@@ -44,15 +42,12 @@ final class YankLike[C <: TypeContext](val value: C#T, val unit: YankUnit[C])(
 
 trait YankUnit[C <: TypeContext] extends UnitOfMeasure[YankLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new YankLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new YankLike[C](t, this)
 }
 
 trait YankOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait YankUnitT extends YankUnit[C]
 

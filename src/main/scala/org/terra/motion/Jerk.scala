@@ -9,8 +9,6 @@
 package org.terra
 package motion
 
-import scala.reflect.ClassTag
-
 import org.terra.time.{ SecondTimeDerivative, TimeDerivative, TimeSquaredLike }
 
 /**
@@ -48,15 +46,13 @@ final class JerkLike[C <: TypeContext](val value: C#T, val unit: JerkUnit[C])(
 
 trait JerkUnit[C <: TypeContext] extends UnitOfMeasure[JerkLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new JerkLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new JerkLike[C](t, this)
 }
 
 trait JerkOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait JerkUnitT extends JerkUnit[C]
 

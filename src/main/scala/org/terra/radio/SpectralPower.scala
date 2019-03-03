@@ -9,8 +9,6 @@
 package org.terra
 package radio
 
-import scala.reflect.ClassTag
-
 import energy.PowerLike
 import space.LengthLike
 
@@ -46,15 +44,13 @@ final class SpectralPowerLike[C <: TypeContext](
 
 trait SpectralPowerUnit[C <: TypeContext] 
     extends UnitOfMeasure[SpectralPowerLike[C], C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new SpectralPowerLike[C](t, this)
 }
 
 trait SpectralPowerOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait SpectralPowerUnitT extends SpectralPowerUnit[C]
 

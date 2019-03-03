@@ -9,8 +9,6 @@
 package org.terra
 package photo
 
-import scala.reflect.ClassTag
-
 import space.{ SolidAngleLike, AreaLike }
 import time.TimeDerivative
 
@@ -67,15 +65,14 @@ final class LuminousFluxLike[C <: TypeContext](
 trait LuminousFluxUnit[C <: TypeContext] 
     extends UnitOfMeasure[LuminousFluxLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new LuminousFluxLike[C](t, this)
 }
 
 trait LuminousFluxOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait LuminousFluxUnitT extends LuminousFluxUnit[C]
 

@@ -8,8 +8,6 @@
 
 package org.terra
 
-import scala.reflect.ClassTag
-
 /**
  * A Unit of Measure is used to define the scale of a quantity measurement
  *
@@ -27,17 +25,18 @@ trait UnitOfMeasure[A <: Quantity[A, T, C], T, C <: TypeContext]
   type TL = C#TL
   type TT = C#TT
 
-  def getTag(implicit ops: TerraOps[C]): ClassTag[T] = 
-    ops.getClassTagT.asInstanceOf[ClassTag[T]]
+  //def getTag(implicit ops: TerraOps[C]): ClassTag[T] = 
+    //ops.getClassTagT.asInstanceOf[ClassTag[T]]
+  def getTag(implicit ops: TerraOps[C]): PseudoClassTag[T] =
+    ops.getClassTagT.asInstanceOf[PseudoClassTag[T]]
 
   /**
    * Factory method for creating instances of a Quantity in this UnitOfMeasure
    * @param n N - the Quantity's value in terms of this UnitOfMeasure
    * @return
     */
-  def apply(t: T)(implicit tag: ClassTag[T], ops: TerraOps[C]): A
+  def apply(t: T)(implicit ops: TerraOps[C]): A
   def apply[N](a: N)(implicit n: Numeric[N], ops: TerraOps[C]): A = {
-    implicit val tag: ClassTag[T] = getTag
     val t: C#T = ops.convDouble(n.toDouble(a))
     apply(t.asInstanceOf[T]) // this method must be overridden when C#T != T
   }
@@ -126,8 +125,10 @@ trait UnitConverter[T, C <: TypeContext] { uom: UnitOfMeasure[_, T, C] ⇒
     implicit val ensureT: HasEnsureType[T] = makeEnsureType
     implicit val ensureCT: HasEnsureType[C#T] = ops.converters.ensureT
     implicit val otherEnsureT = ops.converters.ensureT
-    implicit val cTag: ClassTag[C#T] = ops.getClassTagT
-    implicit val tag: ClassTag[T] = getTag
+    //implicit val cTag: ClassTag[C#T] = ops.getClassTagT
+    //implicit val tag: ClassTag[T] = getTag
+    implicit val pctag: PseudoClassTag[C#T] = ops.getClassTagT
+    implicit val ptag: PseudoClassTag[T] = getTag
     value ⇒ {
       ops.ensureType[T](ops.div[C#T](
         ops.ensureType[C#T](value),
@@ -143,7 +144,8 @@ trait UnitConverter[T, C <: TypeContext] { uom: UnitOfMeasure[_, T, C] ⇒
     implicit val ensureCT: HasEnsureType[C#T] = ops.converters.ensureT
     implicit val ensureT: HasEnsureType[T] = makeEnsureType
     implicit val otherEnsureT = ops.converters.ensureT
-    implicit val tag: ClassTag[T] = getTag
+    //implicit val tag: ClassTag[T] = getTag
+    implicit val tag: PseudoClassTag[T] = getTag
     value ⇒ {
       ops.ensureType[T](ops.num.times(
         ops.ensureType[C#T](value), 

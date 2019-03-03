@@ -2,8 +2,6 @@
 package org.terra
 package mass
 
-import scala.reflect.ClassTag
-
 import time.TimeDerivative
 
 /**
@@ -40,15 +38,14 @@ final class CatalyticActivityLike[C <: TypeContext](
 trait CatalyticActivityUnit[C <: TypeContext] 
     extends UnitOfMeasure[CatalyticActivityLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new CatalyticActivityLike[C](t, this)
 }
 
 trait CatalyticActivityOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait CatalyticActivityUnitT extends CatalyticActivityUnit[C]
 

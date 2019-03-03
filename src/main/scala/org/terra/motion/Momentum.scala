@@ -9,9 +9,8 @@
 package org.terra
 package motion
 
-import scala.reflect.ClassTag
-
-import org.terra.time.{ SecondTimeIntegral, TimeIntegral, TimeSquaredLike, TimeLike }
+import org.terra.time.{ 
+  SecondTimeIntegral, TimeIntegral, TimeSquaredLike, TimeLike }
 import org.terra.mass.MassLike
 
 /**
@@ -60,15 +59,13 @@ final class MomentumLike[C <: TypeContext](val value: C#T, val unit: MomentumUni
 
 trait MomentumUnit[C <: TypeContext] 
     extends UnitOfMeasure[MomentumLike[C], C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new MomentumLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new MomentumLike[C](t, this)
 }
 
 trait MomentumOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait MomentumUnitT extends MomentumUnit[C]
 

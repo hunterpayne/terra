@@ -26,9 +26,9 @@ package object classic extends TypeScope[ClassicTuple] {
   implicit object ClassicTerraOps
       extends AbstractDoubleTerraOps[ClassicTuple] {
 
-    implicit val num: Numeric[T] = doubleNumeric
+    implicit val num: Fractional[T] = doubleNumeric
     implicit val numL: Numeric[TL] = doubleNumeric
-    implicit val numC: Numeric[TC] = bigDecimalNumeric
+    implicit val numC: Fractional[TC] = bigDecimalNumeric
     implicit val numT: Numeric[TT] = doubleNumeric
 
     val converters = ClassicConverters
@@ -162,6 +162,8 @@ package object classic extends TypeScope[ClassicTuple] {
   }
 
   implicit val ops = ClassicTerraOps
+  implicit val tag = ops.getClassTagT
+  implicit val dtag = tag.asInstanceOf[PseudoClassTag[Double]]
 
   trait SymbolMixin {
     implicit val ops: TerraOps[ClassicTuple] = ClassicTerraOps

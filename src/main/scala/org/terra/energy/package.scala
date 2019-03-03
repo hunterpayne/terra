@@ -8,8 +8,6 @@
 
 package org.terra
 
-import scala.reflect.ClassTag
-
 import mass.MassLike
 import motion.{ VelocityLike, MomentumLike }
 import energy.EnergyLike
@@ -37,7 +35,7 @@ package object energy {
     def apply(mass: MassLike[C], momentum: MomentumLike[C])(
       implicit ops: TerraOps[C]): EnergyLike[C] = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       ops.energyOps.Joules(
         ops.div[C#T](
           momentum.toNewtonSeconds, 

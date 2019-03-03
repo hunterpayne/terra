@@ -6,7 +6,7 @@ import scala.math.BigDecimal
 import scala.math.BigDecimal.RoundingMode
 import scala.math.BigDecimal.RoundingMode.RoundingMode
 
-import scala.reflect.{ ClassTag, classTag }
+//import scala.reflect.{ ClassTag, classTag }
 
 import time._
 import information._
@@ -27,7 +27,8 @@ import market._
   * mathematical operations).
   */
 abstract class AbstractDoubleTerraOps[C <: TypeContext](
-  implicit n: Numeric[Double], nl: Numeric[Long], nc: Numeric[BigDecimal])
+  implicit n: Fractional[Double], nl: Integral[Long], 
+  nc: Fractional[BigDecimal])
     extends TerraOps[C]
     with DimensionlessOps[C]
     with InformationOps[C]
@@ -117,9 +118,10 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
     with EmployeeOps[C]
     with LaborOps[C] {
 
-  val doubleNumeric: Numeric[Double] = n
-  val longNumeric: Numeric[Long] = nl
-  val bigDecimalNumeric: Numeric[BigDecimal] = nc
+  val doubleNumeric: Fractional[Double] = n
+  val longNumeric: Integral[Long] = nl
+  val bigDecimalNumeric: Fractional[BigDecimal] = nc
+  /*
   val DoubleTag = classTag[Double]
   val LongTag = classTag[Long]
   val IntTag = classTag[Int]
@@ -153,6 +155,23 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
         num.asInstanceOf[Numeric[T1]]
       }
     }
+   */
+
+  def getClassTagT: PseudoClassTag[T] = pseudoClassTagT[T]
+  def getClassTagTL: PseudoClassTag[TL] = pseudoClassTagTL[TL]
+  def getClassTagTT: PseudoClassTag[TT] = pseudoClassTagTT[TT]
+  def getClassTagTC: PseudoClassTag[TC] = pseudoClassTagTC[TC]
+
+  def nt[T1](implicit tag: PseudoClassTag[T1]): Numeric[T1] = {
+    import ClassTagType._
+    tag.typ match {
+      case TE => num.asInstanceOf[Numeric[T1]]
+      case TLE => numL.asInstanceOf[Numeric[T1]]
+      case TCE => numC.asInstanceOf[Numeric[T1]]
+      case TTE => numT.asInstanceOf[Numeric[T1]]
+      case _ => assert(false); num.asInstanceOf[Numeric[T1]]
+    }
+  }
 
   def convTime(t: Any)(implicit ops: TerraOps[C]): TT = t match {
     case d: Double => {
@@ -282,6 +301,7 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
   val employeeOps: EmployeeOps[C] = this
   val laborOps: LaborOps[C] = this
 
+  /*
   def div[T](dividend: T, divisor: T)(
     implicit e: HasEnsureType[T], tag: ClassTag[T]): T =
     dividend match {
@@ -314,6 +334,27 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
       case bi: BigInt => (bi % divisor.asInstanceOf[BigInt]).asInstanceOf[T]
       case bd: BigDecimal =>
         (bd % divisor.asInstanceOf[BigDecimal]).asInstanceOf[T]
+    }
+   */
+  def div[T1](dividend: T1, divisor: T1)(
+    implicit e: HasEnsureType[T1], tag: PseudoClassTag[T1]): T1 =
+    nt[T1] match {
+      case f: Fractional[T1] => e.ensureType(f.div(dividend, divisor))
+      case i: Integral[T1] => e.ensureType(i.quot(dividend, divisor))
+      case _ => assert(false); ???
+    }
+
+  def mod[T1](dividend: T1, divisor: T1)(
+    implicit e: HasEnsureType[T1], tag: PseudoClassTag[T1]): T1 =
+    nt[T1] match {
+      case f: Fractional[T1] => 
+        // dividend - (floor(dividend / divisor) * divisor)
+        f.plus(dividend, f.negate(
+          f.times(
+            floorT[T1](e.ensureType(f.div(dividend, divisor))),
+            divisor)))
+      case i: Integral[T1] => e.ensureType(i.rem(dividend, divisor))
+      case _ => assert(false); ???
     }
 
   def floorT[T](t: T)(implicit e: HasEnsureType[T]): T = t match {
@@ -447,6 +488,10 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
 trait TypeScope[Tuple <: TypeContext] {
 
   implicit val ops: TerraOps[Tuple]
+  implicit val tag: PseudoClassTag[Tuple#T]
+  //implicit val dtag: PseudoClassTag[Double]
+  //implicit val pctag: PseudoClassTag[Tuple#TC] = ops.pgetClassTagTC
+  //implicit val pttag: PseudoClassTag[Tuple#TT] = ops.pgetClassTagTT
 
   type QuantitySeries[A <: Quantity[A, T, Tuple], T] =
     IndexedSeq[QuantityRange[A, T, Tuple]]

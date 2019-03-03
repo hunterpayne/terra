@@ -9,8 +9,6 @@
 package org.terra
 package space
 
-import scala.reflect.ClassTag
-
 import electro.{ MagneticFluxLike, MagneticFluxDensityLike }
 import mass.{ AreaDensityLike, MassLike }
 import photo.{ LuminanceLike, IlluminanceLike, LuminousIntensityLike, LuminousFluxLike }
@@ -125,15 +123,12 @@ final class AreaLike[C <: TypeContext](val value: C#T, val unit: AreaUnit[C])(
 
 trait AreaUnit[C <: TypeContext] extends UnitOfMeasure[AreaLike[C], C#T, C]
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new AreaLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new AreaLike[C](t, this)
 }
 
 trait AreaOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait AreaUnitT extends AreaUnit[C]
 

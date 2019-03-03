@@ -8,8 +8,6 @@
 
 package org.terra
 
-import scala.reflect.ClassTag
-
 import org.terra.time._
 import org.terra.information._
 
@@ -35,7 +33,7 @@ final class DimensionlessLike[C <: TypeContext](
   import ops.frequencyOps.Hertz
   import ops.timeOps.Seconds
 
-  implicit val tagT = getTag
+  override implicit val tag = getTag
 
   protected def timeDerived = Hertz(toEach)
   protected[terra] def time = Seconds(1)
@@ -47,7 +45,7 @@ final class DimensionlessLike[C <: TypeContext](
   def *[B <: Quantity[B, T, C]](that: B)(implicit ops: TerraOps[C]): B =
     that * toEach
   def +(that: T)(implicit ops: TerraOps[C]): Dimensionless = {
-    implicit val tagT = getTag
+    implicit val tag = getTag
     plus(Each(that))
   }
 
@@ -69,14 +67,12 @@ trait DimensionlessUnit[C <: TypeContext]
 
   type Dimensionless = DimensionlessLike[C]
 
-  def apply(t: C#T)(
-    implicit tag: ClassTag[C#T], ops: TerraOps[C]): Dimensionless =
+  def apply(t: C#T)(implicit ops: TerraOps[C]): Dimensionless =
     new Dimensionless(t, this)
 }
 
 trait DimensionlessOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
   implicit val tag = ops.getClassTagT
 

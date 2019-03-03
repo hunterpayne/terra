@@ -2,8 +2,6 @@
 package org.terra
 package space
 
-import scala.reflect.ClassTag
-
 import time.TimeLike
 import mass.{ MassLike, DensityLike }
 
@@ -45,13 +43,12 @@ final class SpecificVolumeLike[C <: TypeContext](
 
 trait SpecificVolumeUnit[C <: TypeContext] 
     extends UnitOfMeasure[SpecificVolumeLike[C], C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new SpecificVolumeLike[C](t, this)
 }
 
 trait SpecificVolumeOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait SpecificVolumeUnitT extends SpecificVolumeUnit[C]

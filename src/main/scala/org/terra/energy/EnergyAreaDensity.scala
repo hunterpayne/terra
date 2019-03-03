@@ -2,8 +2,6 @@
 package org.terra
 package energy
 
-import scala.reflect.ClassTag
-
 import space.AreaLike
 
 /**
@@ -31,13 +29,12 @@ final class EnergyAreaDensityLike[C <: TypeContext](
 trait EnergyAreaDensityUnit[C <: TypeContext] 
     extends UnitOfMeasure[EnergyAreaDensityLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) =
+  def apply(t: C#T)(implicit ops: TerraOps[C]) =
     new EnergyAreaDensityLike[C](t, this)
 }
 
 trait EnergyAreaDensityOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait EnergyAreaDensityUnitT extends EnergyAreaDensityUnit[C]

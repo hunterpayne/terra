@@ -9,8 +9,6 @@
 package org.terra
 package mass
 
-import scala.reflect.ClassTag
-
 import space.{ VolumeLike, SpecificVolumeLike }
 
 /**
@@ -49,15 +47,13 @@ final class DensityLike[C <: TypeContext](
 trait DensityUnit[C <: TypeContext] 
     extends UnitOfMeasure[DensityLike[C], C#T, C]
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new DensityLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new DensityLike[C](t, this)
 }
 
 trait DensityOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait DensityUnitT extends DensityUnit[C]
 
@@ -68,7 +64,7 @@ trait DensityOps[C <: TypeContext] {
     def apply(m: MassLike[C], v: VolumeLike[C])(
       implicit ops: TerraOps[C]): DensityLike[C] = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       KilogramsPerCubicMeter(ops.div[C#T](m.toKilograms, v.toCubicMeters))
     }
     def apply(value: Any) = parse(value)

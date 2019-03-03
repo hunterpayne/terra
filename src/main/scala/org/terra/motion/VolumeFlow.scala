@@ -9,8 +9,6 @@
 package org.terra
 package motion
 
-import scala.reflect.ClassTag
-
 import time._
 import space.VolumeLike
 
@@ -45,15 +43,13 @@ final class VolumeFlowLike[C <: TypeContext](val value: C#T, val unit: VolumeFlo
 trait VolumeFlowRateUnit[C <: TypeContext] 
     extends UnitOfMeasure[VolumeFlowLike[C], C#T, C]
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new VolumeFlowLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new VolumeFlowLike[C](t, this)
 }
 
 trait VolumeFlowOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait VolumeFlowRateUnitT extends VolumeFlowRateUnit[C]
 

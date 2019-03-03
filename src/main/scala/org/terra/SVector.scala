@@ -8,8 +8,6 @@
 
 package org.terra
 
-import scala.reflect.ClassTag
-
 import space.{ AngleLike, AngleUnit }
 
 /**
@@ -50,12 +48,13 @@ trait SVector[A, T, C <: TypeContext] {
     implicit ops: TerraOps[C]): AngleLike[C]
 
   /**
-   * The polar coordinates (r, theta) of the two Cartesian coordinates at the supplied indices
-   * @param coordinateX index of the abscissa coordinate (defaults to 0)
-   * @param coordinateY index of the ordinate coordinate (defaults to 1)
-   * @param unit unit for the angle (theta) component (defaults to Radians)
-   * @return (A, Angle)
-   */
+    * The polar coordinates (r, theta) of the two Cartesian coordinates at the 
+    * supplied indices
+    * @param coordinateX index of the abscissa coordinate (defaults to 0)
+    * @param coordinateY index of the ordinate coordinate (defaults to 1)
+    * @param unit unit for the angle (theta) component (defaults to Radians)
+    * @return (A, Angle)
+    */
   def polar2(coordinateX: Int = 0, coordinateY: Int = 1)(
     implicit ops: TerraOps[C]): (A, AngleLike[C]) =
     polar(coordinateX, coordinateY, ops.angleOps.Radians)
@@ -123,7 +122,7 @@ trait SVector[A, T, C <: TypeContext] {
 object SVector {
 
   def apply[C <: TypeContext](coordinates: C#T*)(
-    implicit tag: ClassTag[C#T], ops: TerraOps[C]): ValueVector[C#T, C] = {
+    implicit tag: PseudoClassTag[C#T], ops: TerraOps[C]): ValueVector[C#T, C] = {
     implicit val e: HasEnsureType[C#T] = ops.makeEnsureType[C#T](coordinates(0))
     new ValueVector[C#T, C](coordinates: _*)
   }
@@ -140,7 +139,7 @@ object SVector {
    */
   def apply[C <: TypeContext](radius: C#T, theta: AngleLike[C])(
     implicit ops: TerraOps[C]): ValueVector[C#T, C] = {
-    implicit val tag: ClassTag[C#T] = theta.getTag
+    implicit val tag: PseudoClassTag[C#T] = theta.getTag
     apply[C](
       ops.num.times(radius, theta.cos), ops.num.times(radius, theta.sin))
   }
@@ -169,7 +168,7 @@ object SVector {
  * @param coordinates T*
  */
 class ValueVector[T, C <: TypeContext](val coordinates: T*)(
-  implicit e: HasEnsureType[T], tag: ClassTag[T], ops: TerraOps[C])
+  implicit e: HasEnsureType[T], tag: PseudoClassTag[T], ops: TerraOps[C])
     extends SVector[T, T, C] {
 
   import ops.angleOps.Radians
@@ -260,7 +259,8 @@ case class QuantityVector[A <: Quantity[A, T, C], T, C <: TypeContext](
   type SVectorType = QuantityVector[A, T, C]
   type Angle = AngleLike[C]
 
-  implicit val tag: ClassTag[T] = coordinates(0).tag
+  //implicit val tag: ClassTag[T] = coordinates(0).tag
+  implicit val tag: PseudoClassTag[T] = coordinates(0).tag
   implicit val n: Numeric[T] = ops.nt[T]
 
   val valueUnit = coordinates(0).unit
@@ -279,7 +279,7 @@ case class QuantityVector[A <: Quantity[A, T, C], T, C <: TypeContext](
   def angle(coordinateX: Int = 0, coordinateY: Int = 1, unit: AngleUnit[C])(
     implicit ops: TerraOps[C]): Angle = {
     implicit val ensure: HasEnsureType[C#T] = ops.converters.ensureT
-    implicit val tag: ClassTag[C#T] = ops.getClassTagT
+    implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
     //unit.makeEnsureType.asInstanceOf[HasEnsureType[T]]
     Radians(
       ops.atanT(coordinates(coordinateY) / coordinates(coordinateX))) in unit

@@ -9,8 +9,6 @@
 package org.terra
 package electro
 
-import scala.reflect.ClassTag
-
 import space.LengthLike
 
 /**
@@ -55,13 +53,12 @@ final class ElectricalConductanceLike[C <: TypeContext](
 trait ElectricalConductanceUnit[C <: TypeContext] 
     extends UnitOfMeasure[ElectricalConductanceLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) =
+  def apply(t: C#T)(implicit ops: TerraOps[C]) =
     new ElectricalConductanceLike[C](t, this)
 }
 
 trait ElectricalConductanceOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait ElectricalConductanceUnitT extends ElectricalConductanceUnit[C]

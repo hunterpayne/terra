@@ -9,8 +9,6 @@
 package org.terra
 package radio
 
-import scala.reflect.ClassTag
-
 import org.terra.space.AreaLike
 import org.terra.time.TimeLike
 
@@ -49,15 +47,12 @@ final class AreaTimeLike[C <: TypeContext](
 
 trait AreaTimeUnit[C <: TypeContext] 
     extends UnitOfMeasure[AreaTimeLike[C], C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new AreaTimeLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new AreaTimeLike[C](t, this)
 }
 
 trait AreaTimeOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait AreaTimeUnitT extends AreaTimeUnit[C]
 

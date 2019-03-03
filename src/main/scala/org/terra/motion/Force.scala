@@ -9,8 +9,6 @@
 package org.terra
 package motion
 
-import scala.reflect.ClassTag
-
 import space.{ LengthLike, AreaLike }
 import org.terra.time.{ TimeDerivative, TimeIntegral }
 import org.terra.energy.EnergyLike
@@ -88,15 +86,13 @@ final class ForceLike[C <: TypeContext](val value: C#T, val unit: ForceUnit[C])(
 
 trait ForceUnit[C <: TypeContext] extends UnitOfMeasure[ForceLike[C], C#T, C]
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new ForceLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new ForceLike[C](t, this)
 }
 
 trait ForceOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait ForceUnitT extends ForceUnit[C]
 

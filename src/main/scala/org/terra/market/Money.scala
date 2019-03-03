@@ -9,7 +9,6 @@
 package org.terra
 package market
 
-import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 import scala.language.implicitConversions
 import scala.math.BigDecimal.RoundingMode
@@ -56,7 +55,7 @@ final class MoneyLike[C <: TypeContext](
   type MoneyContext = MoneyContextLike[C]
   type Currency = CurrencyLike[C]
 
-  override def getTag: ClassTag[C#TC] = ops.getClassTagTC
+  override def getTag: PseudoClassTag[C#TC] = ops.getClassTagTC
   override def getNumeric: Numeric[C#TC] = ops.numC
 
   def unit = currency
@@ -82,7 +81,7 @@ final class MoneyLike[C <: TypeContext](
    * @return String
    */
   override def toString: String = {
-    implicit val n: Numeric[C#TC] = ops.numC
+    implicit val num: Numeric[C#TC] = ops.numC
     crossFormat[C#TC](value) + " " + currency.code
   }
 
@@ -263,13 +262,11 @@ case class CurrencyLike[C <: TypeContext](
   type Money = MoneyLike[C]
   type MoneyContext = MoneyContextLike[C]
 
-  override def getTag(implicit ops: TerraOps[C]): ClassTag[C#TC] =
+  override def getTag(implicit ops: TerraOps[C]): PseudoClassTag[C#TC] =
     ops.getClassTagTC
 
-  def apply(d: C#TC)(implicit tag: ClassTag[C#TC], ops: TerraOps[C]): Money =
-    new Money(d, this)
+  def apply(d: C#TC)(implicit ops: TerraOps[C]): Money = new Money(d, this)
   override def apply[A](a: A)(implicit n: Numeric[A], ops: TerraOps[C]) = {
-    implicit val tag = getTag
     new Money(ops.convCurrency(n.toDouble(a)), this)
   }
 
@@ -344,7 +341,6 @@ class MoneyDim[C <: TypeContext](
 
 trait MoneyOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   type Money = MoneyLike[C]
@@ -471,7 +467,7 @@ trait MoneyOps[C <: TypeContext] {
         context.dimension(a, context.currency("USD"))
       def cents(implicit context: MoneyContext) = {
         implicit val e: HasEnsureType[C#TC] = ops.converters.ensureTC
-        implicit val tag: ClassTag[C#TC] = ops.getClassTagTC
+        implicit val tag: PseudoClassTag[C#TC] = ops.getClassTagTC
         implicit val num: Numeric[C#TC] = ops.numC
         context.dimension(
           ops.div[C#TC](

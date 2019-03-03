@@ -9,8 +9,6 @@
 package org.terra
 package energy
 
-import scala.reflect.ClassTag
-
 import time._
 
 /**
@@ -52,13 +50,12 @@ final class PowerRampLike[C <: TypeContext](
 
 trait PowerRampUnit[C <: TypeContext] 
     extends UnitOfMeasure[PowerRampLike[C], C#T, C] with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new PowerRampLike[C](t, this)
 }
 
 trait PowerRampOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait PowerRampUnitT extends PowerRampUnit[C]
@@ -70,7 +67,8 @@ trait PowerRampOps[C <: TypeContext] {
     def apply(change: PowerLike[C], time: TimeLike[C]): 
         PowerRampLike[C] = {
       implicit val ensureT: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
+      implicit val n: Numeric[C#T] = ops.num
       apply(ops.div[C#T](change.toWatts, ops.rconvT(time.toHours)), WattsPerHour)
     }
     def apply(value: Any) = parse(value)

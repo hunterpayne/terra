@@ -9,8 +9,6 @@
 package org.terra
 package time
 
-import scala.reflect.ClassTag
-
 import space.AreaLike
 import radio.AreaTimeLike
 
@@ -40,7 +38,7 @@ final class TimeLike[C <: TypeContext](val value: C#TT, val unit: TimeUnit[C])(
   def dimension: Dimension[TimeLike[C], C#TT, C] = Time
 
   override def getNumeric: Numeric[C#TT] = ops.numT
-  override def getTag: ClassTag[C#TT] = ops.getClassTagTT
+  override def getTag: PseudoClassTag[C#TT] = ops.getClassTagTT
   override def makeEnsureType(implicit ops: TerraOps[C]): HasEnsureType[C#TT] =
     ops.converters.ensureTT
   override def makeFromCurrencyConverter(
@@ -81,12 +79,9 @@ final class TimeLike[C <: TypeContext](val value: C#TT, val unit: TimeUnit[C])(
 
 trait TimeUnit[C <: TypeContext] 
     extends UnitOfMeasure[TimeLike[C], C#TT, C] with UnitConverter[C#TT, C] {
-  def apply(t: C#TT)(implicit tag: ClassTag[C#TT], ops: TerraOps[C]) =
-    new TimeLike[C](t, this)
-  override def apply[A](a: A)(implicit num: Numeric[A], ops: TerraOps[C]) = {
-    implicit val tag = getTag
+  def apply(t: C#TT)(implicit ops: TerraOps[C]) = new TimeLike[C](t, this)
+  override def apply[A](a: A)(implicit num: Numeric[A], ops: TerraOps[C]) = 
     new TimeLike[C](ops.convTime(num.toDouble(a)), this)
-  }
 
   override private[terra] def makeDoubleConverter(
     implicit ops: TerraOps[C]): HasConverter[Double, C#TT] =
@@ -97,15 +92,14 @@ trait TimeUnit[C <: TypeContext]
 
   override def makeEnsureType(implicit ops: TerraOps[C]): HasEnsureType[C#TT] =
     ops.converters.ensureTT
-  override def getTag(implicit ops: TerraOps[C]): ClassTag[C#TT] =
+  override def getTag(implicit ops: TerraOps[C]): PseudoClassTag[C#TT] =
     ops.getClassTagTT
 }
 
 trait TimeOps[C <: TypeContext] {
 
-  implicit val numT: Numeric[C#TT]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait TimeUnitT extends TimeUnit[C]
 
@@ -212,14 +206,17 @@ trait TimeOps[C <: TypeContext] {
       * @param time
       * @return
       */
-    implicit def timeToScalaDuration(time: TimeLike[C]): Duration = time.unit match {
-      case Nanoseconds  ⇒ Duration(numT.toLong(time.value), NANOSECONDS)
-      case Microseconds ⇒ Duration(numT.toLong(time.value), MICROSECONDS)
-      case Milliseconds ⇒ Duration(numT.toLong(time.value), MILLISECONDS)
-      case Seconds      ⇒ Duration(numT.toLong(time.value), SECONDS)
-      case Minutes      ⇒ Duration(numT.toLong(time.value), MINUTES)
-      case Hours        ⇒ Duration(numT.toLong(time.value), HOURS)
-      case Days         ⇒ Duration(numT.toLong(time.value), DAYS)
+    implicit def timeToScalaDuration(time: TimeLike[C]): Duration = {
+      val numT = ops.numT
+      time.unit match {
+        case Nanoseconds  ⇒ Duration(numT.toLong(time.value), NANOSECONDS)
+        case Microseconds ⇒ Duration(numT.toLong(time.value), MICROSECONDS)
+        case Milliseconds ⇒ Duration(numT.toLong(time.value), MILLISECONDS)
+        case Seconds      ⇒ Duration(numT.toLong(time.value), SECONDS)
+        case Minutes      ⇒ Duration(numT.toLong(time.value), MINUTES)
+        case Hours        ⇒ Duration(numT.toLong(time.value), HOURS)
+        case Days         ⇒ Duration(numT.toLong(time.value), DAYS)
+      }
     }
 
     implicit def scalaDurationToTime(duration: Duration)(

@@ -9,8 +9,6 @@
 package org.terra
 package energy
 
-import scala.reflect.ClassTag
-
 import radio.{ IrradianceLike, RadiantIntensityLike, SpectralPowerLike }
 import space.{ SolidAngleLike, LengthLike, AreaLike, VolumeLike }
 import time.{ TimeDerivative, TimeIntegral, TimeLike }
@@ -113,13 +111,11 @@ final class PowerLike[C <: TypeContext](val value: C#T, val unit: PowerUnit[C])(
 
 trait PowerUnit[C <: TypeContext] extends UnitOfMeasure[PowerLike[C], C#T, C]
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new PowerLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new PowerLike[C](t, this)
 }
 
 trait PowerOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait PowerUnitT extends PowerUnit[C]
@@ -133,7 +129,7 @@ trait PowerOps[C <: TypeContext] {
       new PowerLike[C](ops.convDouble(n.toDouble(a)), unit)
     def apply(energy: EnergyLike[C], time: TimeLike[C]): PowerLike[C] = {
       implicit val ensureT: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       new PowerLike[C](
         ops.div[C#T](energy.toWattHours, ops.rconvT(time.toHours)), Watts)
     }

@@ -11,7 +11,6 @@ package org.terra
 import scala.math.BigDecimal
 import scala.math.BigDecimal.RoundingMode
 import scala.util.{ Failure, Try }
-import scala.reflect.ClassTag
 
 import org.scalatest.{ FlatSpec, Matchers, TryValues }
 
@@ -41,7 +40,8 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
   }
 
   object Thingee extends Dimension[Thingee, Double, Tuple] {
-    private[terra] def apply[A](n: A, unit: ThingeeUnit)(implicit num: Numeric[A]) = new Thingee(num.toDouble(n), unit)
+    private[terra] def apply[A](n: A, unit: ThingeeUnit)(
+      implicit num: Numeric[A]) = new Thingee(num.toDouble(n), unit)
     def apply(value: Any) = parse(value)
     def name = "Thingee"
     def primaryUnit = Thangs
@@ -49,12 +49,13 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     def units = Set(Thangs, Kilothangs)
   }
 
-  trait ThingeeUnit extends UnitOfMeasure[Thingee, Double, Tuple] with UnitConverter[Double, Tuple] {
-    def apply(t: Double)(implicit tag: ClassTag[Double], ops: TerraOps[Tuple]) =
-      Thingee(t, this)
+  trait ThingeeUnit extends UnitOfMeasure[Thingee, Double, Tuple] 
+      with UnitConverter[Double, Tuple] {
+    def apply(t: Double)(implicit ops: TerraOps[Tuple]) = Thingee(t, this)
   }
 
-  object Thangs extends ThingeeUnit with PrimaryUnit[Double, Tuple] with SiUnit {
+  object Thangs extends ThingeeUnit with PrimaryUnit[Double, Tuple] 
+      with SiUnit {
     val symbol = "th"
   }
 
@@ -142,7 +143,7 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
   }
 
   it should "return failure on an improperly formatted Tuple" in {
-    Thingee((10.22, "xx")) should be(Failure(QuantityParseException("Unable to identify Thingee unit xx", "(10.22,xx)")))
+    Thingee((10.22, "xx")) should be(Failure(QuantityParseException("Unable to identify Thingee unit xx", "(10.22, xx)")))
   }
 
   it should "equal an equivalent like value" in {
@@ -673,7 +674,7 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     t.success.value should be(Minutes(100d))
     th.success.value should be(Thangs(100d))
     m.failure.exception shouldBe a[QuantityParseException]
-    m.failure.exception should have message("Unable to identify Mass unit m:(100.0,m)")
+    m.failure.exception should have message("Unable to identify Mass unit m:(100.0, m)")
   }
 
   it should "Parse a Tuple with an Int into a Quantity based on the supplied Type parameter" in {
@@ -698,7 +699,7 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     t.success.value should be(Minutes(100))
     th.success.value should be(Thangs(100))
     m.failure.exception shouldBe a[QuantityParseException]
-    m.failure.exception should have message("Unable to identify Mass unit m:(100.0,m)")
+    m.failure.exception should have message("Unable to identify Mass unit m:(100.0, m)")
   }
 
   it should "return consistent hashcode" in {

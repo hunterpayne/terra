@@ -9,8 +9,6 @@
 package org.terra
 package space
 
-import scala.reflect.ClassTag
-
 import org.terra.electro._
 import org.terra.energy.{ PowerLike, EnergyLike }
 import org.terra.motion.{ VelocityLike, AccelerationLike, ForceLike, SurfaceTensionLike }
@@ -141,15 +139,12 @@ final class LengthLike[C <: TypeContext](val value: C#T, val unit: LengthUnit[C]
  */
 trait LengthUnit[C <: TypeContext] extends UnitOfMeasure[LengthLike[C], C#T, C]
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) =
-    new LengthLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new LengthLike[C](t, this)
 }
 
 trait LengthOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait LengthUnitT extends LengthUnit[C]
 

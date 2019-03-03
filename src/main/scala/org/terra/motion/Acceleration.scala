@@ -9,8 +9,6 @@
 package org.terra
 package motion
 
-import scala.reflect.ClassTag
-
 import time._
 import mass.MassLike
 import space.LengthLike
@@ -91,15 +89,14 @@ final class AccelerationLike[C <: TypeContext](
 trait AccelerationUnit[C <: TypeContext] 
     extends UnitOfMeasure[AccelerationLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) =
+  def apply(t: C#T)(implicit ops: TerraOps[C]) =
     new AccelerationLike[C](t, this)
 }
 
 trait AccelerationOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait AccelerationUnitT extends AccelerationUnit[C]
 

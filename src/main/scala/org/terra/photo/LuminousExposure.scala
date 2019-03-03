@@ -9,8 +9,6 @@
 package org.terra
 package photo
 
-import scala.reflect.ClassTag
-
 import time.TimeIntegral
 
 /**
@@ -40,15 +38,13 @@ final class LuminousExposureLike[C <: TypeContext](
 trait LuminousExposureUnit[C <: TypeContext] 
     extends UnitOfMeasure[LuminousExposureLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new LuminousExposureLike[C](t, this)
 }
 
 trait LuminousExposureOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait LuminousExposureUnitT extends LuminousExposureUnit[C]
 

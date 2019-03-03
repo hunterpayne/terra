@@ -2,8 +2,6 @@
 package org.terra
 package electro
 
-import scala.reflect.ClassTag
-
 import space.{ VolumeLike, LengthLike, AreaLike }
 
 /**
@@ -46,21 +44,18 @@ final class ElectricChargeDensityLike[C <: TypeContext](
 trait ElectricChargeDensityUnit[C <: TypeContext] 
     extends UnitOfMeasure[ElectricChargeDensityLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) =
+  def apply(t: C#T)(implicit ops: TerraOps[C]) =
     new ElectricChargeDensityLike[C](t, this)
 }
 
 trait ElectricChargeDensityOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  //def convDouble(d: Double)(implicit n: Numeric[C#T]): C#T
 
-  trait ElectricChargeDensityUnitT extends ElectricChargeDensityUnit[C] {
-    //def fromDouble(d: Double)(implicit n: Numeric[T]): T = convDouble(d)
-  }
+  trait ElectricChargeDensityUnitT extends ElectricChargeDensityUnit[C]
 
-  object ElectricChargeDensity extends Dimension[ElectricChargeDensityLike[C], C#T, C] {
+  object ElectricChargeDensity 
+      extends Dimension[ElectricChargeDensityLike[C], C#T, C] {
     private[electro] def apply[A](a: A, unit: ElectricChargeDensityUnit[C])(
       implicit n: Numeric[A]) = 
       new ElectricChargeDensityLike[C](ops.convDouble(n.toDouble(a)), unit)

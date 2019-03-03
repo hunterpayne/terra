@@ -9,8 +9,6 @@
 package org.terra
 package radio
 
-import scala.reflect.ClassTag
-
 import org.terra.energy.PowerLike
 import space.{ SolidAngleLike, LengthLike, AreaLike }
 
@@ -70,15 +68,13 @@ final class RadiantIntensityLike[C <: TypeContext](
 
 trait RadiantIntensityUnit[C <: TypeContext] 
     extends UnitOfMeasure[RadiantIntensityLike[C], C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new RadiantIntensityLike[C](t, this)
 }
 
 trait RadiantIntensityOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait RadiantIntensityUnitT extends RadiantIntensityUnit[C]
 

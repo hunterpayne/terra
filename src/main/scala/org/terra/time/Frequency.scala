@@ -9,8 +9,6 @@
 package org.terra
 package time
 
-import scala.reflect.ClassTag
-
 import electro._
 import energy._
 import information.{ InformationLike, DataRateLike }
@@ -108,16 +106,14 @@ case class FrequencyLike[C <: TypeContext](
 
 trait FrequencyUnit[C <: TypeContext] 
     extends UnitOfMeasure[FrequencyLike[C], C#T, C] with UnitConverter[C#T, C] {
-  def apply(t: C#T)(
-    implicit tag: ClassTag[C#T], ops: TerraOps[C]): FrequencyLike[C] =
+  def apply(t: C#T)(implicit ops: TerraOps[C]): FrequencyLike[C] =
     new FrequencyLike[C](t, this)
 }
 
 trait FrequencyOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait FrequencyUnitT extends FrequencyUnit[C]
 

@@ -9,7 +9,6 @@
 package org.terra
 
 import java.util.Objects
-import scala.reflect._
 
 import scala.math.BigDecimal.RoundingMode
 import scala.math.BigDecimal.RoundingMode.RoundingMode
@@ -27,10 +26,12 @@ abstract class Quantity[A <: Quantity[A, T, C], T, C <: TypeContext](
 
   val terraOps: TerraOps[C] = ops
 
-  //type TARGET = T
-  def getTag: ClassTag[T] = ops.getClassTagT.asInstanceOf[ClassTag[T]]
+  //def getTag: ClassTag[T] = ops.getClassTagT.asInstanceOf[ClassTag[T]]
+  def getTag: PseudoClassTag[T] = 
+    ops.getClassTagT.asInstanceOf[PseudoClassTag[T]]
   def getNumeric: Numeric[T] = ops.num.asInstanceOf[Numeric[T]]
-  implicit val tag: ClassTag[T] = getTag
+  //implicit val tag: ClassTag[T] = getTag
+  implicit val tag: PseudoClassTag[T] = getTag
   implicit val num: Numeric[T] = getNumeric
 
   def makeEnsureType(implicit ops: TerraOps[C]): HasEnsureType[T] =
@@ -114,7 +115,7 @@ abstract class Quantity[A <: Quantity[A, T, C], T, C <: TypeContext](
    */
   def divide(that: A)(implicit ops: TerraOps[C]): C#T = {
     implicit val ensure: HasEnsureType[C#T] = ops.converters.ensureT
-    implicit val tag: ClassTag[C#T] = ops.getClassTagT
+    implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
     ops.div[C#T](
       ops.ensureType[C#T](this.value), ops.ensureType[C#T](that.to(unit)))
   }

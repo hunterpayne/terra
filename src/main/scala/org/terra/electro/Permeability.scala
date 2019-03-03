@@ -9,8 +9,6 @@
 package org.terra
 package electro
 
-import scala.reflect.ClassTag
-
 import space.LengthLike
 
 /**
@@ -46,13 +44,12 @@ final class PermeabilityLike[C <: TypeContext](
 trait PermeabilityUnit[C <: TypeContext] 
     extends UnitOfMeasure[PermeabilityLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new PermeabilityLike[C](t, this)
 }
 
 trait PermeabilityOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait PermeabilityUnitT extends PermeabilityUnit[C]

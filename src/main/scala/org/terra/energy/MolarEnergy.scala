@@ -2,8 +2,6 @@
 package org.terra
 package energy
 
-import scala.reflect.ClassTag
-
 import mass.ChemicalAmountLike
 
 /**
@@ -35,13 +33,12 @@ final class MolarEnergyLike[C <: TypeContext](
 trait MolarEnergyUnit[C <: TypeContext] 
     extends UnitOfMeasure[MolarEnergyLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new MolarEnergyLike[C](t, this)
 }
 
 trait MolarEnergyOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait MolarEnergyUnitT extends MolarEnergyUnit[C]

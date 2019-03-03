@@ -2,8 +2,6 @@
 package org.terra
 package electro
 
-import scala.reflect.ClassTag
-
 import space.LengthLike
 
 /**
@@ -36,13 +34,12 @@ final class MagneticFieldStrengthLike[C <: TypeContext](
 trait MagneticFieldStrengthUnit[C <: TypeContext] 
     extends UnitOfMeasure[MagneticFieldStrengthLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) =
+  def apply(t: C#T)(implicit ops: TerraOps[C]) =
     new MagneticFieldStrengthLike[C](t, this)
 }
 
 trait MagneticFieldStrengthOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait MagneticFieldStrengthUnitT extends MagneticFieldStrengthUnit[C]

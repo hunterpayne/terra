@@ -2,8 +2,6 @@
 package org.terra
 package mass
 
-import scala.reflect.ClassTag
-
 import space.{ VolumeLike, MolarVolumeLike }
 
 /**
@@ -41,15 +39,14 @@ final class ConcentrationLike[C <: TypeContext](
 trait ConcentrationUnit[C <: TypeContext] 
     extends UnitOfMeasure[ConcentrationLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new ConcentrationLike[C](t, this)
 }
 
 trait ConcentrationOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait ConcentrationUnitT extends ConcentrationUnit[C]
 

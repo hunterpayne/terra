@@ -9,8 +9,6 @@
 package org.terra
 package radio
 
-import scala.reflect.ClassTag
-
 /**
  * @author  florianNussberger
  * @since   0.6
@@ -37,15 +35,13 @@ final class SpectralIrradianceLike[C <: TypeContext](
 trait SpectralIrradianceUnit[C <: TypeContext]
     extends UnitOfMeasure[SpectralIrradianceLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new SpectralIrradianceLike[C](t, this)
 }
 
 trait SpectralIrradianceOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait SpectralIrradianceUnitT extends SpectralIrradianceUnit[C]
 

@@ -9,8 +9,6 @@
 package org.terra
 package electro
 
-import scala.reflect.ClassTag
-
 import energy.{ EnergyLike, PowerLike }
 import time.TimeDerivative
 import space.LengthLike
@@ -80,13 +78,12 @@ final class ElectricPotentialLike[C <: TypeContext](
 trait ElectricPotentialUnit[C <: TypeContext] 
     extends UnitOfMeasure[ElectricPotentialLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new ElectricPotentialLike[C](t, this)
 }
 
 trait ElectricPotentialOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait ElectricPotentialUnitT extends ElectricPotentialUnit[C]

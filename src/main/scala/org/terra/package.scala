@@ -3,7 +3,6 @@ package org
 
 import scala.math.BigDecimal.RoundingMode
 import scala.math.BigDecimal.RoundingMode.RoundingMode
-import scala.reflect.{ ClassTag, classTag }
 
 /*                                                                      *\
 ** Squants                                                              **
@@ -45,4 +44,18 @@ package object terra {
   private[terra] def crossFormat[T](d: T)(implicit n: Numeric[T]): String = 
     if (n.toLong(d).toDouble == n.toDouble(d)) n.toLong(d).toString + ".0"
     else n.toDouble(d).toString
+
+  import ClassTagType._
+
+  def pseudoClassTagT[T]: PseudoClassTag[T] =
+    new PseudoClassTag[T] { val typ = TE }
+
+  def pseudoClassTagTL[T]: PseudoClassTag[T] =
+    new PseudoClassTag[T] { val typ = TLE }
+
+  def pseudoClassTagTT[T]: PseudoClassTag[T] =
+    new PseudoClassTag[T] { val typ = TTE }
+
+  def pseudoClassTagTC[T]: PseudoClassTag[T] =
+    new PseudoClassTag[T] { val typ = TCE }
 }

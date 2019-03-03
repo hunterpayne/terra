@@ -9,8 +9,6 @@
 package org.terra
 package motion
 
-import scala.reflect.ClassTag
-
 import org.terra.time.TimeDerivative
 
 /**
@@ -45,15 +43,14 @@ final class PressureChangeLike[C <: TypeContext](
 trait PressureChangeUnit[C <: TypeContext] 
     extends UnitOfMeasure[PressureChangeLike[C], C#T, C] 
     with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new PressureChangeLike[C](t, this)
 }
 
 trait PressureChangeOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait PressureChangeUnitT extends PressureChangeUnit[C]
 

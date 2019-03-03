@@ -9,8 +9,6 @@
 package org.terra
 package mass
 
-import scala.reflect.ClassTag
-
 import space.AreaLike
 
 /**
@@ -43,15 +41,13 @@ final class AreaDensityLike[C <: TypeContext](
 
 trait AreaDensityUnit[C <: TypeContext] 
     extends UnitOfMeasure[AreaDensityLike[C], C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) =
-    new AreaDensityLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new AreaDensityLike[C](t, this)
 }
 
 trait AreaDensityOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait AreaDensityUnitT extends AreaDensityUnit[C]
 
@@ -64,7 +60,7 @@ trait AreaDensityOps[C <: TypeContext] {
       new AreaDensityLike[C](ops.convDouble(n.toDouble(a)), unit)
     def apply(mass: MassLike[C], area: AreaLike[C]): AreaDensityLike[C] = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       KilogramsPerSquareMeter(ops.div[C#T](mass.toKilograms, area.toSquareMeters))
     }
     def apply(value: Any) = parse(value)
@@ -99,7 +95,7 @@ trait AreaDensityOps[C <: TypeContext] {
     import ops.massOps.MassConversions.{ pound, kilogram }
     import ops.areaOps.AreaConversions.{ acre, squareMeter }
     implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-    implicit val tag: ClassTag[C#T] = ops.getClassTagT
+    implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
     val conversionFactor =
       ops.num.toDouble(ops.div[C#T]((pound / kilogram), (acre / squareMeter)))
   }

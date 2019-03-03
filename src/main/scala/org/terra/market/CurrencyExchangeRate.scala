@@ -9,8 +9,6 @@
 package org.terra
 package market
 
-import scala.reflect.ClassTag
-
 /**
  * Represent the rate of exchange between two currencies
  *
@@ -33,7 +31,7 @@ case class CurrencyExchangeRate[C <: TypeContext](
     */
   def rate: C#TC = {
     implicit val e: HasEnsureType[C#TC] = ops.converters.ensureTC
-    implicit val tag: ClassTag[C#TC] = ops.getClassTagTC
+    implicit val tag: PseudoClassTag[C#TC] = ops.getClassTagTC
     ops.div[C#TC](counter.value, base.value)
   }
 

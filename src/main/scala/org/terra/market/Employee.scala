@@ -2,8 +2,6 @@
 package org.terra
 package market
 
-import scala.reflect.ClassTag
-
 import org.terra.time.{ TimeLike, TimeDerivative }
 
 /**
@@ -30,7 +28,7 @@ case class EmployeeLike[C <: TypeContext](
     ops.converters.tltcConverter
 
   override def getNumeric: Numeric[C#TL] = ops.numL
-  override def getTag: ClassTag[C#TL] = ops.getClassTagTL
+  override def getTag: PseudoClassTag[C#TL] = ops.getClassTagTL
 
   import ops.employeeOps._
   import ops.laborOps.PersonHours
@@ -47,8 +45,7 @@ case class EmployeeLike[C <: TypeContext](
 
 trait EmployeeUnit[C <: TypeContext] 
     extends UnitOfMeasure[EmployeeLike[C], C#TL, C] with UnitConverter[C#TL, C] {
-  def apply(t: C#TL)(
-    implicit tag: ClassTag[C#TL], ops: TerraOps[C]): EmployeeLike[C] =
+  def apply(t: C#TL)(implicit ops: TerraOps[C]): EmployeeLike[C] =
     new EmployeeLike[C](t, this)
   override def apply[A](a: A)(
     implicit num: Numeric[A], ops: TerraOps[C]): EmployeeLike[C] = {
@@ -65,7 +62,7 @@ trait EmployeeUnit[C <: TypeContext]
   override private[terra] def makeLongConverter(
     implicit ops: TerraOps[C]): HasConverter[Long, C#TL] = 
     ops.converters.ltlConverter.asInstanceOf[HasConverter[Long, C#TL]]
-  override def getTag(implicit ops: TerraOps[C]): ClassTag[C#TL] =
+  override def getTag(implicit ops: TerraOps[C]): PseudoClassTag[C#TL] =
     ops.getClassTagTL
 }
 
@@ -73,8 +70,8 @@ trait EmployeeOps[C <: TypeContext] {
 
   implicit val ops: TerraOps[C]
 
-  def convLong(l: Long)(implicit ops: TerraOps[C]): C#TL
-  implicit val tagTL: ClassTag[C#TL]
+  //def convLong(l: Long)(implicit ops: TerraOps[C]): C#TL
+  //implicit val tagTL: ClassTag[C#TL]
 
   trait EmployeeUnitT extends EmployeeUnit[C]
 
@@ -86,7 +83,7 @@ trait EmployeeOps[C <: TypeContext] {
 
     private[market] def apply[A](a: A, unit: EmployeeUnit[C])(
       implicit n: Numeric[A]) =
-      new EmployeeLike[C](convLong(n.toLong(a)), unit)
+      new EmployeeLike[C](ops.convLong(n.toLong(a)), unit)
     def apply(value: Any) = parseL(value)
     def name = "Employee"
     def primaryUnit = People

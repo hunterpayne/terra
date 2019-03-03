@@ -9,8 +9,6 @@
 package org.terra
 package space
 
-import scala.reflect.ClassTag
-
 import energy.{ PowerLike }
 import photo.{ LuminousFluxLike, LuminousIntensityLike }
 import radio.RadiantIntensityLike
@@ -48,15 +46,12 @@ final class SolidAngleLike[C <: TypeContext](
 
 trait SolidAngleUnit[C <: TypeContext] 
     extends UnitOfMeasure[SolidAngleLike[C], C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new SolidAngleLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new SolidAngleLike[C](t, this)
 }
 
 trait SolidAngleOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait SolidAngleUnitT extends SolidAngleUnit[C]
 

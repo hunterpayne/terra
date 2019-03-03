@@ -3,7 +3,7 @@ package org.terra
 package information
 
 import scala.util.Try
-import scala.reflect.ClassTag
+//import scala.reflect.ClassTag
 
 import org.terra.time._
 
@@ -21,8 +21,6 @@ final class DataRateLike[C <: TypeContext](
 
   override implicit val tttiConverter: HasConverter[C#TT, C#TL] =
     ops.converters.tttlConverter
-
-  override implicit val num: Numeric[C#T] = ops.num
 
   def dimension: Dimension[DataRateLike[C], C#T, C] = DataRate
 
@@ -69,15 +67,13 @@ final class DataRateLike[C <: TypeContext](
 }
 
 trait DataRateUnit[C <: TypeContext] extends UnitOfMeasure[DataRateLike[C], C#T, C] with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new DataRateLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new DataRateLike[C](t, this)
 }
 
 trait DataRateOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  implicit val tag: PseudoClassTag[C#T]
 
   import ops.dataRateOps.BytesPerSecond
 
@@ -86,16 +82,18 @@ trait DataRateOps[C <: TypeContext] {
   object DataRate extends Dimension[DataRateLike[C], C#T, C] {
     private[information] def apply[A](a: A, unit: DataRateUnit[C])(
       implicit num: Numeric[A]): DataRateLike[C] =
-      new DataRateLike[C](convDouble(num.toDouble(a)), unit)
+      new DataRateLike[C](ops.convDouble(num.toDouble(a)), unit)
 
     def apply(i: InformationLike[C], t: TimeLike[C]) = {
       implicit val e: HasEnsureType[C#T] = ops.converters.ensureT
-      implicit val tag: ClassTag[C#T] = ops.getClassTagT
+      implicit val tag: PseudoClassTag[C#T] = ops.getClassTagT
       BytesPerSecond(ops.div[C#T](
         ops.rconv(i.toBytes), ops.rconvT(t.toSeconds)))
     }
-    def apply(value: Any)(implicit ops: TerraOps[C]): Try[DataRateLike[C]] =
+    def apply(value: Any)(implicit ops: TerraOps[C]): Try[DataRateLike[C]] = {
+      implicit val tag = ops.getClassTagT
       parse(value)
+    }
     def name = "DataRate"
     def primaryUnit = BytesPerSecond
     def siUnit = BytesPerSecond

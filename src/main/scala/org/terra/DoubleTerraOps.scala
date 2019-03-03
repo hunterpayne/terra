@@ -1,8 +1,6 @@
 
 package org.terra
 
-import scala.reflect.ClassTag
-
 /**
   * The types used by the DoubleTerraOps version of Terra.  Specifies use of
   * <ul>
@@ -30,14 +28,15 @@ package object double extends TypeScope[DoubleTuple] {
     */
   implicit object DoubleTerraOps extends AbstractDoubleTerraOps[DoubleTuple] {
 
-    implicit val num: Numeric[T] = doubleNumeric
+    implicit val num: Fractional[T] = doubleNumeric
     implicit val numL: Numeric[TL] = doubleNumeric
-    implicit val numC: Numeric[TC] = doubleNumeric
+    implicit val numC: Fractional[TC] = doubleNumeric
     implicit val numT: Numeric[TT] = doubleNumeric
 
     val converters = DoubleConverters
-    override def getClassTagTL: ClassTag[TL] =
-      DoubleTag.asInstanceOf[ClassTag[TL]]
+    override def getClassTagTL: PseudoClassTag[TL] =
+      getClassTagT.asInstanceOf[PseudoClassTag[TL]]
+    //DoubleTag.asInstanceOf[ClassTag[TL]]
 
     object DoubleConverters extends Converters[DoubleTuple] {
       class IdConverter[A, B] extends HasConverter[A, B] {
@@ -109,6 +108,8 @@ package object double extends TypeScope[DoubleTuple] {
   }
 
   implicit val ops = DoubleTerraOps
+  implicit val tag = ops.getClassTagT
+  implicit val dtag = tag.asInstanceOf[PseudoClassTag[Double]]
 
   trait SymbolMixin {
     implicit val ops: TerraOps[DoubleTuple] = DoubleTerraOps

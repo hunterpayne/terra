@@ -1,8 +1,6 @@
 
 package org.terra
 
-import scala.reflect.ClassTag
-
 /**
   * The types used by the CommonTerraOps version of Terra.  Specifies use of
   * <ul>
@@ -26,13 +24,14 @@ package object common extends TypeScope[CommonTuple] {
     */
   implicit object CommonTerraOps extends AbstractDoubleTerraOps[CommonTuple] {
 
-    implicit val num: Numeric[T] = doubleNumeric
+    implicit val num: Fractional[T] = doubleNumeric
     implicit val numL: Numeric[TL] = longNumeric
-    implicit val numC: Numeric[TC] = bigDecimalNumeric
+    implicit val numC: Fractional[TC] = bigDecimalNumeric
     implicit val numT: Numeric[TT] = longNumeric
 
-    override def getClassTagTT: ClassTag[TT] =
-      LongTag.asInstanceOf[ClassTag[TT]]
+    override def getClassTagTT: PseudoClassTag[TT] =
+      getClassTagTL.asInstanceOf[PseudoClassTag[TT]]
+      //LongTag.asInstanceOf[ClassTag[TT]]
 
     val converters = CommonConverters
 
@@ -178,7 +177,9 @@ package object common extends TypeScope[CommonTuple] {
     override def rconvT(d: TT): T = d.toDouble
   }
 
-  val ops = CommonTerraOps
+  implicit val ops = CommonTerraOps
+  implicit val tag = ops.getClassTagT
+  implicit val dtag = tag.asInstanceOf[PseudoClassTag[Double]]
 
   trait SymbolMixin {
     implicit val ops: TerraOps[CommonTuple] = CommonTerraOps

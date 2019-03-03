@@ -26,9 +26,9 @@ package object standard extends TypeScope[StandardTuple] {
   implicit object StandardTerraOps
       extends AbstractDoubleTerraOps[StandardTuple] {
 
-    implicit val num: Numeric[T] = doubleNumeric
+    implicit val num: Fractional[T] = doubleNumeric
     implicit val numL: Numeric[TL] = longNumeric
-    implicit val numC: Numeric[TC] = bigDecimalNumeric
+    implicit val numC: Fractional[TC] = bigDecimalNumeric
     implicit val numT: Numeric[TT] = doubleNumeric
 
     val converters = StandardConverters
@@ -175,6 +175,8 @@ package object standard extends TypeScope[StandardTuple] {
   }
 
   implicit val ops = StandardTerraOps
+  implicit val tag = ops.getClassTagT
+  implicit val dtag = tag.asInstanceOf[PseudoClassTag[Double]]
 
   trait SymbolMixin {
     implicit val ops: TerraOps[StandardTuple] = StandardTerraOps

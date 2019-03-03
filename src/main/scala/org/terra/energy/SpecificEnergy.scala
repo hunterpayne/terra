@@ -9,8 +9,6 @@
 package org.terra
 package energy
 
-import scala.reflect.ClassTag
-
 import time.TimeLike
 import mass.MassLike
 
@@ -44,13 +42,12 @@ final class SpecificEnergyLike[C <: TypeContext](
 
 trait SpecificEnergyUnit[C <: TypeContext] 
     extends UnitOfMeasure[SpecificEnergyLike[C], C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = 
     new SpecificEnergyLike[C](t, this)
 }
 
 trait SpecificEnergyOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
 
   trait SpecificEnergyUnitT extends SpecificEnergyUnit[C]

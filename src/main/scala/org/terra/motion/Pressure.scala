@@ -9,8 +9,6 @@
 package org.terra
 package motion
 
-import scala.reflect.ClassTag
-
 import space.AreaLike
 import time.{ TimeIntegral, TimeDerivative, TimeLike }
 
@@ -66,15 +64,13 @@ final class PressureLike[C <: TypeContext](val value: C#T, val unit: PressureUni
 
 trait PressureUnit[C <: TypeContext] 
     extends UnitOfMeasure[PressureLike[C], C#T, C] with UnitConverter[C#T, C] {
-  def apply(t: C#T)(implicit tag: ClassTag[C#T], ops: TerraOps[C]) = 
-    new PressureLike[C](t, this)
+  def apply(t: C#T)(implicit ops: TerraOps[C]) = new PressureLike[C](t, this)
 }
 
 trait PressureOps[C <: TypeContext] {
 
-  implicit val num: Numeric[C#T]
   implicit val ops: TerraOps[C]
-  def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
+  //def convDouble(d: Double)(implicit ops: TerraOps[C]): C#T
 
   trait PressureUnitT extends PressureUnit[C]
 

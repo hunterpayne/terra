@@ -9,8 +9,6 @@
 package org.terra
 package market
 
-import scala.reflect.ClassTag
-
 /**
  * Represents a price
  *
@@ -68,7 +66,7 @@ case class Price[A <: Quantity[A, T, C], T, C <: TypeContext](
   def /(that: C#TC)(implicit ops: TerraOps[C]): PriceT = divide(that)
   def divide(that: PriceT)(implicit ops: TerraOps[C]): C#TC = {
     implicit val e: HasEnsureType[C#TC] = ops.converters.ensureTC
-    implicit val tag: ClassTag[C#TC] = ops.getClassTagTC
+    implicit val tag: PseudoClassTag[C#TC] = ops.getClassTagTC
     ops.div[C#TC](this.money.value, that.money.value)
   }
   def /(that: PriceT)(implicit ops: TerraOps[C]): C#TC = divide(that)

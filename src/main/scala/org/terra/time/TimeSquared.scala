@@ -9,8 +9,6 @@
 package org.terra
 package time
 
-import scala.reflect.ClassTag
-
 /**
   * Represents an intermediate value used in 2nd derivative time calculations
   *
@@ -41,7 +39,7 @@ case class TimeSquaredLike[C <: TypeContext](
 
   def squareRoot = {
     implicit val e: HasEnsureType[C#TT] = ops.converters.ensureTT
-    implicit val tag: ClassTag[C#TT] = ops.getClassTagTT
+    implicit val tag: PseudoClassTag[C#TT] = ops.getClassTagTT
     implicit val num: Numeric[C#TT] = ops.numT
     time1.unit(ops.ensureType[C#TT](
       ops.sqrtT[C#TT](ops.nt[C#TT].times(time1.value, time2.to(time1.unit)))))
@@ -53,8 +51,7 @@ case class TimeSquaredLike[C <: TypeContext](
 
 trait TimeSquaredUnit[C <: TypeContext] {
   protected def timeUnit: TimeUnit[C]
-  def apply(value: C#TT)(
-    implicit tag: ClassTag[C#TT], ops: TerraOps[C]): TimeSquaredLike[C] = {
+  def apply(value: C#TT)(implicit ops: TerraOps[C]): TimeSquaredLike[C] = {
     implicit val num: Numeric[C#TT] = ops.numT
     new TimeSquaredLike[C](timeUnit(value), timeUnit(value))
   }
@@ -62,7 +59,6 @@ trait TimeSquaredUnit[C <: TypeContext] {
 
 trait TimeSquaredOps[C <: TypeContext] {
 
-  implicit val numT: Numeric[C#TT]
   implicit val ops: TerraOps[C]
 
   object TimeSquared {
