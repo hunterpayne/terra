@@ -381,10 +381,10 @@ abstract class AbstractDoubleTerraOps[C <: TypeContext](
   def roundT[T](t: T, scale: Int, mode: RoundingMode = RoundingMode.HALF_EVEN)(
     implicit e: HasEnsureType[T]): T = 
     t match {
-      case f: Float =>
-        ensureType[T](BigDecimal(f.toDouble).setScale(scale, mode).toFloat)
       case d: Double =>
         ensureType[T](BigDecimal(d).setScale(scale, mode).toDouble)
+      case f: Float =>
+        ensureType[T](BigDecimal(f.toDouble).setScale(scale, mode).toFloat)
       case bd: BigDecimal => ensureType[T](bd.setScale(scale, mode))
       case o => o
     }

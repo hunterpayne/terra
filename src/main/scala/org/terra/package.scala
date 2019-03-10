@@ -40,9 +40,14 @@ package object terra {
     override def conv(in: A): A = in
   }
 
-  // TODO JS/Native support
+  lazy val isNative: Boolean = false 
+  //System.getProperty("java.vm.name") == "Scala.Native"
+
+  // making double to string behave similarily between JVM/JS/Native platforms
   private[terra] def crossFormat[T](d: T)(implicit n: Numeric[T]): String = 
-    if (n.toLong(d).toDouble == n.toDouble(d)) n.toLong(d).toString + ".0"
+    if (isNative) n.toDouble(d).toString
+    else if (n.toLong(d).toDouble == n.toDouble(d))
+      "%.1f".format(n.toDouble(d))
     else n.toDouble(d).toString
 
   import ClassTagType._

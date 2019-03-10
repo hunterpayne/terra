@@ -1,10 +1,10 @@
 /*                                                                      *\
-** Squants                                                              **
-**                                                                      **
-** Scala Quantities and Units of Measure Library and DSL                **
-** (c) 2013-2015, Gary Keorkunian                                       **
-**                                                                      **
-\*                                                                      */
+ ** Squants                                                              **
+ **                                                                      **
+ ** Scala Quantities and Units of Measure Library and DSL                **
+ ** (c) 2013-2015, Gary Keorkunian                                       **
+ **                                                                      **
+ **                                                                      */
 
 package org.terra
 
@@ -25,7 +25,8 @@ import standard.space.{ Length, Meters }
  * @since   0.1
  *
  */
-class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryValues {
+class QuantitySpec extends FlatSpec with Matchers with CustomMatchers 
+    with TryValues {
 
   type Tuple = StandardTuple
 
@@ -143,7 +144,7 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
   }
 
   it should "return failure on an improperly formatted Tuple" in {
-    Thingee((10.22, "xx")) should be(Failure(QuantityParseException("Unable to identify Thingee unit xx", "(10.22, xx)")))
+    Thingee((10.22, "xx")) should be(Failure(QuantityParseException("Unable to identify Thingee unit xx", "(10.22,xx)")))
   }
 
   it should "equal an equivalent like value" in {
@@ -674,7 +675,7 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     t.success.value should be(Minutes(100d))
     th.success.value should be(Thangs(100d))
     m.failure.exception shouldBe a[QuantityParseException]
-    m.failure.exception should have message("Unable to identify Mass unit m:(100.0, m)")
+    m.failure.exception should have message("Unable to identify Mass unit m:(100.0,m)")
   }
 
   it should "Parse a Tuple with an Int into a Quantity based on the supplied Type parameter" in {
@@ -699,7 +700,7 @@ class QuantitySpec extends FlatSpec with Matchers with CustomMatchers with TryVa
     t.success.value should be(Minutes(100))
     th.success.value should be(Thangs(100))
     m.failure.exception shouldBe a[QuantityParseException]
-    m.failure.exception should have message("Unable to identify Mass unit m:(100.0, m)")
+    m.failure.exception should have message("Unable to identify Mass unit m:(100.0,m)")
   }
 
   it should "return consistent hashcode" in {

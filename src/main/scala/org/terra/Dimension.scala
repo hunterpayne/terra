@@ -96,9 +96,11 @@ trait Dimension[A <: Quantity[A, T, C], T, C <: TypeContext] {
     val symbol = t._2
     symbolToUnit(symbol) match {
       case Some(unit) ⇒ Success(unit(value))
-      case None       ⇒ Failure(QuantityParseException(
-        s"Unable to identify $name unit ${symbol}", s"($value, $symbol)"))
-//      case None       ⇒ Failure(QuantityParseException(s"Unable to identify $name unit ${symbol}", s"(${Platform.crossFormat(num.toDouble(value))},${symbol})"))
+      case None       ⇒ {
+        val quant = crossFormat[C#T](value)
+        Failure(QuantityParseException(
+          s"Unable to identify $name unit $symbol", s"($quant,$symbol)"))
+      }
     }
   }
 
@@ -110,9 +112,11 @@ trait Dimension[A <: Quantity[A, T, C], T, C <: TypeContext] {
     val symbol = t._2
     symbolToUnit(symbol) match {
       case Some(unit) ⇒ Success(unit(value))
-      case None       ⇒ Failure(QuantityParseException(
-        s"Unable to identify $name unit ${symbol}", s"($value, $symbol)"))
-//      case None       ⇒ Failure(QuantityParseException(s"Unable to identify $name unit ${symbol}", s"(${Platform.crossFormat(num.toDouble(value))},${symbol})"))
+      case None       ⇒ {
+        val quant = crossFormat[C#T](value)
+        Failure(QuantityParseException(
+          s"Unable to identify $name unit $symbol", s"($quant,$symbol)"))
+      }
     }
   }
 }
