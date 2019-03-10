@@ -71,30 +71,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <dependency>
-      <groupId>org.scalactic</groupId>
-      <artifactId>scalactic_${version.scalajs.library}</artifactId>
-      <version>${version.scalatest}</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.scala-lang</groupId>
-          <artifactId>scala-reflect</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_${version.scalajs.library}</artifactId>
-      <version>${version.scalajstest}</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.scala-lang</groupId>
-          <artifactId>scala-reflect</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
     <!--
         Enable JUnit Scala.js testing:
         Provides custom JUnit runners, which run JUnit 4 tests inside JS-VM.

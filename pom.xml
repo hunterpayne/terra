@@ -50,8 +50,7 @@
     <maven.compiler.target>${version.java}</maven.compiler.target><!-- Used by M2E. -->
 
     <!-- scalatest -->
-    <version.scalatest>3.0.6-SNAPSHOT</version.scalatest>
-    <version.scalajstest>3.0.6-SNAPSHOT</version.scalajstest>
+    <version.scalatest>3.0.6</version.scalatest>
 
     <!-- JUnit 4 Testing for JS -->
     <version.junit4>4.12</version.junit4>
