@@ -7,11 +7,9 @@ domain models and more.  All types are immutable and thread-safe.
 This library is a rewrite of Squants but fixes bug, adds additional quantities
 and adds the ability to swap out the types used by the library to do its
 calculations.  Scala 2.11, 2.12 and 2.13 are supported.  However, due to
-the significant increase in the complexity of the code, currently scala-js
-and scala-native support isn't possible.  At some point in the future when
-those projects mature, we can revisit providing support for them.  However,
-for JS there isn't much point to using Terra instead of Squants anyway and
-users needing JS support should continue to use Squants.
+the significant increase in the complexity of the code, currently 
+scala-native support isn't possible.  At some point in the future when
+this project matures, we can revisit providing support for it.
 
 ## How to use Terra 
 
