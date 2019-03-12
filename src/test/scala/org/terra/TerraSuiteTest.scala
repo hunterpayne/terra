@@ -1,17 +1,12 @@
 
 package org.terra
 
-import org.scalatest._
-import org.scalatest.events._
-
-import org.junit.{ BeforeClass, Test }
-import org.junit.runner.{ RunWith, Result, Runner, Description }
-import org.junit.runners.{ Suite => JUnit4Suite, ParentRunner }
-import org.junit.runners.model.{ RunnerBuilder, Statement }
-import org.junit.runner.notification.{ RunNotifier, Failure }
+import org.junit.BeforeClass
+import org.junit.runner.RunWith
+import org.junit.runners.{ Suite => JUnit4Suite }
 
 import com.carrotgarden.sjs.junit.{ 
-  LinkerImpl, SuiteSetupImpl, TestInit, ScalaJS_Suite }
+  LinkerImpl, SuiteSetupImpl, TestInit, ScalaJS_ScalatestSuite }
 import TerraSuiteTest._
 
 object Linker extends LinkerImpl
@@ -179,6 +174,7 @@ object TerraSuiteTest {
   class DoubleSuite
 }
 
+/*
 class ScalaJS_ScalatestSuite(klaz: Class[_], builder: RunnerBuilder) 
     extends JUnit4Suite(klaz, builder) {
 
@@ -221,3 +217,4 @@ class ScalaJS_ScalatestSuite(klaz: Class[_], builder: RunnerBuilder)
     override def toString(): String = s"ScalatestRunner[${clazz.getName()}]"
   }
 }
+ */

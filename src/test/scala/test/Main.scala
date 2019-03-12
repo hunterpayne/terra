@@ -4,8 +4,8 @@ package test
 import scala.concurrent.duration.{ DAYS, Duration, HOURS, MICROSECONDS, MILLISECONDS, MINUTES, NANOSECONDS, SECONDS }
 
 import caseapp._
-import org.scalatest._
-import org.scalatest.events._
+//import org.scalatest._
+//import org.scalatest.events._
 
 import org.terra.{ QuantityParseException, MetricSystem }
 import org.terra.standard._
