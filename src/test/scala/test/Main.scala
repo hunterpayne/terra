@@ -189,5 +189,6 @@ object Main extends CaseApp[TerraOptions] {
     assert(Hertz(100) * Pascals(100) == PascalsPerSecond(10000))
     assert(Hertz(100) * MetersPerSecond(100) == MetersPerSecondSquared(10000))
     assert(Hertz(100) * CubicMeters(100) == CubicMetersPerSecond(10000))    
+    println("FrequencySpec worked")    
   }
 }

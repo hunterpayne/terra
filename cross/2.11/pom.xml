@@ -288,9 +288,10 @@
               <goal>compile-macro</goal>
               <goal>compile-main</goal>
               <goal>compile-test</goal>
-
+	      <!-- this works now, so uncomment if you have clang setup 
               <goal>scala-native-link-test</goal>	      
               <goal>scala-native-pack-test</goal>
+	      -->
 
 	      <!-- scala-js -->
 	      <goal>scala-js-link-main</goal>

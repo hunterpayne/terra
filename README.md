@@ -6,10 +6,7 @@ relationships.  The API supports typesafe dimensional analysis, improved
 domain models and more.  All types are immutable and thread-safe.
 This library is a rewrite of Squants but fixes bug, adds additional quantities
 and adds the ability to swap out the types used by the library to do its
-calculations.  Scala 2.11, 2.12 and 2.13 are supported.  However, due to
-the significant increase in the complexity of the code, currently 
-scala-native support isn't possible.  At some point in the future when
-this project matures, we can revisit providing support for it.
+calculations.  Scala 2.11, 2.12 and 2.13 are supported.
 
 ## How to use Terra 
 
