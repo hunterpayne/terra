@@ -289,12 +289,7 @@
               <goal>compile-main</goal>
               <goal>compile-test</goal>
 
-	      <!-- doesn't seem to want to compile, seems to be missing basic
-		   JVM stuff it needs -->
-              <goal>scala-native-link-main</goal>
-              <goal>scala-native-link-test</goal>
-	      
-              <goal>scala-native-pack-main</goal>
+              <goal>scala-native-link-test</goal>	      
               <goal>scala-native-pack-test</goal>
 
 	      <!-- scala-js -->
