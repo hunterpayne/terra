@@ -35,7 +35,19 @@
       <artifactId>scala-library</artifactId>
       <version>${version.scala.release}</version>
     </dependency>
-    <!--
+
+    <dependency>
+      <groupId>org.scala-native</groupId>
+      <artifactId>nativelib_${version.scalanat.library}</artifactId>
+      <version>${version.scalanat.release}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.scala-native</groupId>
+      <artifactId>javalib_${version.scalanat.library}</artifactId>
+      <version>${version.scalanat.release}</version>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>org.scala-native</groupId>
       <artifactId>scalalib_${version.scalanat.library}</artifactId>
@@ -50,9 +62,21 @@
           <groupId>org.scala-lang</groupId>
           <artifactId>scala-library</artifactId>
         </exclusion>
-      </exclusions> 
+      </exclusions>
     </dependency>
-    -->
+    <dependency>
+      <groupId>org.scala-native</groupId>
+      <artifactId>auxlib_${version.scalanat.library}</artifactId>
+      <version>${version.scalanat.release}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.alexarchambault</groupId>
+      <artifactId>case-app_${version.scalanat.library}</artifactId>
+      <version>2.0.0-M3</version>
+      <scope>provided</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.scala-js</groupId>
       <artifactId>scalajs-library_${version.scala.epoch}</artifactId>
@@ -205,6 +229,17 @@
             </dependency>
           </defineCompiler>
 
+          <nativeLogBuildStats>true</nativeLogBuildStats>
+          <nativeLogBuildTimes>true</nativeLogBuildTimes>
+	  
+	  <zincOptionsScala>
+            -Xsource:${version.scala.epoch}
+            -withVersionClasspathValidator:false
+            -compileorder:Mixed
+	    -language:implicitConversions
+	    -usejavacp
+          </zincOptionsScala>
+
           <definePluginList>
             <!-- Support for macro type provider. -->
             <dependency>
@@ -212,13 +247,13 @@
               <artifactId>paradise_${version.scala.release}</artifactId>
               <version>${version.scala.plugin.macro}</version>
             </dependency>
-            <!-- Generate Scala.native *.nir classes. 
+            <!-- Generate Scala.native *.nir classes. -->
             <dependency>
               <groupId>org.scala-native</groupId>
               <artifactId>nscplugin_${version.scala.release}</artifactId>
               <version>${version.scalanat.release}</version>
             </dependency>
-	    -->
+
 	    <!--
                 Generate Scala.js *.sjsir classes.
             -->
@@ -256,13 +291,11 @@
 
 	      <!-- doesn't seem to want to compile, seems to be missing basic
 		   JVM stuff it needs -->
-	      <!--
               <goal>scala-native-link-main</goal>
               <goal>scala-native-link-test</goal>
 	      
               <goal>scala-native-pack-main</goal>
               <goal>scala-native-pack-test</goal>
-	      -->
 
 	      <!-- scala-js -->
 	      <goal>scala-js-link-main</goal>

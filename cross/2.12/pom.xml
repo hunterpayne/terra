@@ -192,6 +192,7 @@
 	<version>1.4.2.20180508161326</version>
 
         <configuration>
+	  <compileRegexScalaExclude>.*(Main).*</compileRegexScalaExclude>
           <defineCompiler>
             <dependency>
               <groupId>org.scala-lang</groupId>

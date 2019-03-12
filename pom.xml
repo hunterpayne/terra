@@ -131,8 +131,7 @@
         <artifactId>scalor-maven-plugin_2.12</artifactId>
 	<!-- <version>1.4.2.20180508161326</version> -->
 	
-        <configuration>
-	  
+        <configuration>	  
           <!-- <skipLogReason>true</skipLogReason> -->
 	  
           <!-- <nativeLogClassPath>true</nativeLogClassPath> -->
