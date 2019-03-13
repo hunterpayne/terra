@@ -523,10 +523,6 @@ import space.Meters
 // etc...
 ```
 
-## How to roll your own terra
-
-
-
 ## How to use Terra interactively
 To use Terra interactively, run mvn scala:console in the terra directory:
 
@@ -537,3 +533,24 @@ mvn scala:console
 ```
 
 scala> import org.terra.standard._
+
+## How to roll your own terra
+
+To make your own version of Terra with your own special set of types, you
+need to implement a class that extends TypeContext like StandardTuple does.
+In this class you define four type aliases: T, TL, TC and TT which are the
+types used for floating point, integer, currency and time types.  Then you
+need to define a package object which extends TypeScope[C] where C is the 
+class containing the type aliases.  Inside the TypeScope class, you define
+the following:
+* an implicit object which extends TerraOps[C] where C is the TypeContext
+* 3 implicit vals
+** ops: TerraOps[C]
+** tag: ops.getClassTagT
+** dtag: tag.asInstanceOf[PseudoClassTag[C#T]]
+* objects representing each package
+* implicit classes which convert Double, Long, Int and BigDecimals to support
+lifting to quantity types
+
+Look at [StandardTerraOps.scala](https://github.com/hunterpayne/terra/tree/master/src/main/scala/org/terra/StandardTerraOps.scala), [ClassicTerraOps.scala](https://github.com/hunterpayne/terra/tree/master/src/main/scala/org/terra/ClassicTerraOps.scala), [CommonTerraOps.scala](https://github.com/hunterpayne/terra/tree/master/src/main/scala/org/terra/CommonTerraOps.scala), or [DoubleTerraOps.scala](https://github.com/hunterpayne/terra/tree/master/src/main/scala/org/terra/DoubleTerraOps.scala) for examples.
+
