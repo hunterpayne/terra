@@ -545,9 +545,9 @@ class containing the type aliases.  Inside the TypeScope class, you define
 the following:
 * an implicit object which extends TerraOps[C] where C is the TypeContext
 * 3 implicit vals
-** ops: TerraOps[C]
-** tag: ops.getClassTagT
-** dtag: tag.asInstanceOf[PseudoClassTag[C#T]]
+- ops: TerraOps[C]
+- tag: ops.getClassTagT
+- dtag: tag.asInstanceOf[PseudoClassTag[C#T]]
 * objects representing each package
 * implicit classes which convert Double, Long, Int and BigDecimals to support
 lifting to quantity types
