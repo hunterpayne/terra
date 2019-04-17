@@ -523,18 +523,22 @@ import space.Meters
 // etc...
 ```
 
-<!---
 ## How to use Terra interactively
-To use Terra interactively, run mvn scala:console in the terra directory:
+To use Terra interactively, run mvn org.scala-tools:maven-scala-plugin:console 
+in one of the terra cross build directories, either 2.11, 2.12 or 2.13.  For
+example, to run the console for 2.11 do this:
 
 ```script 
 git clone https://github.com/hunterpayne/terra.git terra/
-cd terra
-mvn scala:console
+cd terra/cross/2.11
+mvn org.scala-tools:maven-scala-plugin:console
 ```
---->
 
 scala> import org.terra.standard._
+
+Note: Currently only the 2.11 console works.  Apparently there is a problem
+with the maven-scala-plugin and something we are doing breaks the console
+goals by calling a method that isn't in the scala tools jar anymore.
 
 ## How to roll your own terra
 
